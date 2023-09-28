@@ -42,13 +42,36 @@ export const authProvider: AuthProvider = {
   },
   // called when the user clicks on the logout button
   // It is a good place to notify the authentication backend that the user credentials are no longer valid after logout
-  logout: () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("permissions");
-    localStorage.removeItem("uid");
-    localStorage.removeItem("username");
-    localStorage.removeItem("role");
-    return Promise.resolve();
+  logout: async () => {
+    const token = JSON.parse(localStorage.getItem("token") as string),
+        uid = JSON.parse(localStorage.getItem("uid") as string),
+        username = JSON.parse(localStorage.getItem("username") as string),
+      request = new Request(apiUrl + "/logout", {
+        method: "POST",
+        body: JSON.stringify({
+          'userId': uid,
+          'username': username
+        }),
+        headers: new Headers({ 'authorization': token }),
+      });
+    return fetch(request)
+      .then((response) => {
+        if (response.status < 200 || response.status >= 300) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((res) => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("permissions");
+        localStorage.removeItem("uid");
+        localStorage.removeItem("username");
+        localStorage.removeItem("role");
+        return Promise.resolve();
+      })
+      .catch(() => {
+        throw new Error("Network error");
+      });
   },
   getIdentity: () => {
     try {

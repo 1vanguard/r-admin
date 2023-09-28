@@ -34,9 +34,9 @@ export const App = () => {
       loginPage={CabLogin}
       dashboard={Dashboard}
     >
-      {/* {(permissions) => (
+      {permissions => (
         <>
-          {permissions === 'admin' ? (
+          {permissions.role === 'admin' ? (
             <Resource
               name="users"
               create={UserCreate}
@@ -44,14 +44,11 @@ export const App = () => {
               show={ShowGuesser}
               edit={UserEdit}
               recordRepresentation="username"
-              icon={UserIcon}
             />
           ) : null}
         </>
       )}
-
-      <Resource name="offices" list={OfficesList} /> */}
-      <ResourcesList />
+      <Resource name="offices" list={OfficesList} />
       <CustomRoutes noLayout>
         <Route path="/registration" element={<CabRegistration />} />
       </CustomRoutes>

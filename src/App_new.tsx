@@ -8,18 +8,17 @@ import {
   DataProvider,
   localStorageStore,
   Resource,
-  ListGuesser,
   Loading,
-  Login,
   useDataProvider,
   usePermissions,
 } from "react-admin";
 
+// Providers
 import { i18nProvider } from "./i18nProvider";
-
 import { authProvider } from "./authProvider";
 import CabDataProvider from "./dataProvider";
 
+// Pages
 import CabLogin from "./resources/cabinet/CabLoginPage";
 import CabRegistration from "./resources/cabinet/CabRegistrationPage";
 import { Dashboard } from "./resources/cabinet/Dashboard";
@@ -45,7 +44,7 @@ function App() {
   );
 }
 
-interface MyDataProvider extends DataProvider {
+interface CabDataProvider extends DataProvider {
   getResources: () => Promise<{ name: string }[]>;
 }
 
@@ -53,10 +52,9 @@ function AsyncResources() {
   const [resources, setResources] = useState<Array<{ name: string }>>(
     [] as Array<{ name: string }>
   );
-  const dataProvider = useDataProvider<MyDataProvider>();
+  const dataProvider = useDataProvider<CabDataProvider>();
 
   useEffect(() => {
-    // Note that the `getResources` is not provided by react-admin. You have to implement your own custom verb.
     dataProvider.getResources().then((r) => setResources(r));
   }, []);
 
@@ -66,9 +64,6 @@ function AsyncResources() {
     console.log(permissions);
     return (
       <AdminUI ready={Loading} loginPage={CabLogin} dashboard={Dashboard}>
-        {/* {resources.map((resourcde) => (
-        <Resource name={resource.name} key={resource.name} list={ListGuesser} />
-      ))} */}
       {permissions.role === "admin" ? (
         <Resource
           name="users"
@@ -83,6 +78,11 @@ function AsyncResources() {
         </CustomRoutes>
       </AdminUI>
     );
+  } else {
+    return (
+      <AdminUI ready={Loading} loginPage={CabLogin} dashboard={Dashboard}>
+      </AdminUI>
+    )
   }
 }
 
