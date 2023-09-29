@@ -100,13 +100,23 @@ export default {
   },
 
   create: async (resource, params) => {
+    const { token } = await authProvider.getIdentity(),
+      headers = new Headers();
+
+    headers.set("authorization", token);
     let endPoint = resource;
+
     if (resource === "users") {
       endPoint = "register";
     }
+    if (resource === "offices") {
+      endPoint = "createoffice";
+    }
+
     const { json } = await httpClient(`${apiUrl}/${endPoint}`, {
       method: "POST",
       body: JSON.stringify(params.data),
+      headers: headers,
     });
     return {
       data: { ...params.data, id: json.id },
@@ -116,6 +126,7 @@ export default {
   delete: async (resource, params) => {
     const { token } = await authProvider.getIdentity(),
       headers = new Headers();
+
     headers.set("authorization", token);
 
     httpClient(`${apiUrl}/${resource}/${params.id}?token=${token}`, {

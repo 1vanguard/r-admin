@@ -11,7 +11,7 @@ import {
 import BtnDelete from "../../layouts/btnDelete";
 // import MyUrlField from "./MyUrlField";
 
-export const OfficesList = () => {
+export const ExchangesList = () => {
   const { isLoading, permissions } = usePermissions();
   const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
 
@@ -27,16 +27,15 @@ export const OfficesList = () => {
           {isSmall ? (
             <SimpleList
               primaryText={(record) => record.title}
-              secondaryText={(record) => record.address}
-              tertiaryText={(record) => record.phone}
+              secondaryText={(record) => record.state}
+              tertiaryText={(record) => record.currencies}
             />
           ) : (
             <Datagrid>
               <TextField source="id" />
               <TextField source="title" />
-              <TextField source="address" />
-              <TextField source="phone" />
               <TextField source="state" />
+              <TextField source="currencies" />
             </Datagrid>
           )}
         </List>

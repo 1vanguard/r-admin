@@ -11,7 +11,7 @@ import {
 import BtnDelete from "../../layouts/btnDelete";
 // import MyUrlField from "./MyUrlField";
 
-export const OfficesList = () => {
+export const BotsList = () => {
   const { isLoading, permissions } = usePermissions();
   const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
 
@@ -21,22 +21,23 @@ export const OfficesList = () => {
     const role = permissions.role;
     console.log(role);
 
-    if (role === 'admin') {
+    if (role === 'admin' || role === 'manager') {
       return (
         <List>
           {isSmall ? (
             <SimpleList
               primaryText={(record) => record.title}
-              secondaryText={(record) => record.address}
-              tertiaryText={(record) => record.phone}
+              secondaryText={(record) => record.state}
+              tertiaryText={(record) => record.currencies}
             />
           ) : (
             <Datagrid>
               <TextField source="id" />
-              <TextField source="title" />
-              <TextField source="address" />
-              <TextField source="phone" />
+              <TextField source="user_id" />
+              <TextField source="exchange_id" />
               <TextField source="state" />
+              <TextField source="office_id" />
+              <TextField source="pause_until" />
             </Datagrid>
           )}
         </List>
