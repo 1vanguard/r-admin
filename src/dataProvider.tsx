@@ -40,31 +40,47 @@ export default {
     headers.set("authorization", token);
     return await httpClient(`${apiUrl}/${resource}/${params.id}`, {
       headers,
-    }).then(({ json }) => ({ data: json }));
+    }).then(({ json }) => {
+      console.log(json);
+      return{ data: json }
+    });
   },
 
-  getMany: (resource, params) => {
+  getMany: async (resource, params) => {
+    console.log("Работает dataProvider getMany");
     const query = {
-      filter: JSON.stringify({ id: params.ids }),
-    };
-    const url = `${apiUrl}/${resource}?${stringify(query)}`;
-    return httpClient(url).then(({ json }) => ({ data: json }));
+        filter: JSON.stringify({ id: params.ids }),
+      },
+      { token } = await authProvider.getIdentity(),
+      url = `${apiUrl}/${resource}?${stringify(query)}`,
+      headers = new Headers();
+
+    headers.set("authorization", token);
+    return await httpClient(url, { headers }).then(({ json }) => {
+      // console.log(json);
+      return { data: json };
+    });
   },
 
-  getManyReference: (resource, params) => {
-    const { page, perPage } = params.pagination;
-    const { field, order } = params.sort;
-    const query = {
-      sort: JSON.stringify([field, order]),
-      range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-      filter: JSON.stringify({
-        ...params.filter,
-        [params.target]: params.id,
-      }),
-    };
-    const url = `${apiUrl}/${resource}?${stringify(query)}`;
+  getManyReference: async (resource, params) => {
+    console.log("Работает dataProvider getManyReference");
+    const { page, perPage } = params.pagination,
+      { field, order } = params.sort,
+      query = {
+        sort: JSON.stringify([field, order]),
+        range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
+        filter: JSON.stringify({
+          ...params.filter,
+          [params.target]: params.id,
+        }),
+      },
+      { token } = await authProvider.getIdentity(),
+      url = `${apiUrl}/${resource}?${stringify(query)}`,
+      headers = new Headers();
 
-    return httpClient(url).then(({ headers, json }) => ({
+    headers.set("authorization", token);
+
+    return httpClient(url, { headers }).then(({ headers, json }) => ({
       data: json,
       total: parseInt(
         (headers.get("content-range") || "0").split("/").pop() || 0,
@@ -90,6 +106,7 @@ export default {
   },
 
   updateMany: (resource, params) => {
+    console.log("Работает dataProvider updateMany");
     const query = {
       filter: JSON.stringify({ id: params.ids }),
     };
@@ -100,14 +117,20 @@ export default {
   },
 
   create: async (resource, params) => {
+    console.log("Работает dataProvider create");
     const { token } = await authProvider.getIdentity(),
       headers = new Headers();
 
     headers.set("authorization", token);
     let endPoint = resource;
 
+    console.log(params);
+
     if (resource === "users") {
       endPoint = "register";
+      if (params.meta.creator_role === "admin") {
+        endPoint = "create-user";
+      }
     }
     if (resource === "offices") {
       endPoint = "createoffice";
@@ -124,6 +147,7 @@ export default {
   },
 
   delete: async (resource, params) => {
+    console.log("Работает dataProvider delete");
     const { token } = await authProvider.getIdentity(),
       headers = new Headers();
 
@@ -138,6 +162,7 @@ export default {
   },
 
   deleteMany: (resource, params) => {
+    console.log("Работает dataProvider deleteMany");
     const query = {
       filter: JSON.stringify({ id: params.ids }),
     };

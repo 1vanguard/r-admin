@@ -1,17 +1,25 @@
-import { Create, SimpleForm, TextInput, SelectInput } from "react-admin";
+import {
+  Create,
+  SimpleForm,
+  TextInput,
+  SelectInput,
+  required,
+} from "react-admin";
+import stateValues from "../../helpers/stateValues";
 
 export const OfficeCreate = (props) => {
-  const stateChoises = [
-    { id: "active", name: "active" },
-    { id: "disabled", name: "disabled" }
-  ];
   return (
     <Create {...props}>
       <SimpleForm>
-        <TextInput source="title" />
-        <TextInput source="address" />
-        <TextInput source="phone" />
-        <SelectInput source="state" choices={ stateChoises } defaultValue={ "active"} />
+        <TextInput source="title" validate={required()} />
+        <TextInput source="address" validate={required()} />
+        <TextInput source="phone" validate={required()} />
+        <SelectInput
+          source="state"
+          choices={stateValues}
+          defaultValue={"active"}
+          validate={required()}
+        />
       </SimpleForm>
     </Create>
   );

@@ -4,23 +4,27 @@ import { Route } from "react-router-dom";
 import {
   Admin,
   CustomRoutes,
-  Resource,
-  ShowGuesser
+  Resource
 } from "react-admin";
+
+// Providers
 import { authProvider } from "./authProvider";
 import dataProvider from "./dataProvider";
 import { i18nProvider } from "./i18nProvider";
-import { Permissions } from "./types";
+// import { Permissions } from "./types";
 
+// Pages
 import CabLogin from "./resources/cabinet/CabLoginPage";
 import CabRegistration from "./resources/cabinet/CabRegistrationPage";
 import { Dashboard } from "./resources/cabinet/Dashboard";
 
+// Resources
 import { UsersList } from "./resources/users/usersList";
 import { UserEdit } from "./resources/users/userEdit";
 import { UserCreate } from "./resources/users/userCreate";
 import { OfficesList } from "./resources/offices/officesList";
 import { OfficeCreate } from "./resources/offices/officeCreate";
+import { OfficeEdit } from "./resources/offices/officeEdit";
 import { ExchangesList } from "./resources/exchanges/exchangesList";
 import { BotsList } from "./resources/bots/botsList";
 
@@ -38,8 +42,8 @@ export const App = () => {
           {permissions.role === "admin" ? (
             <Resource
               name="users"
-              create={UserCreate}
               list={UsersList}
+              create={UserCreate}
               edit={UserEdit}
               recordRepresentation="username"
             />
@@ -49,6 +53,7 @@ export const App = () => {
               name="offices"
               list={OfficesList}
               create={OfficeCreate}
+              edit={OfficeEdit}
             />
           ) : null}
           {permissions.role === "admin" ? (

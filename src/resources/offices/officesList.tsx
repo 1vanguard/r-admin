@@ -5,6 +5,7 @@ import {
   SimpleList,
   Datagrid,
   TextField,
+  ReferenceField,
   usePermissions,
 } from "react-admin";
 
@@ -31,7 +32,7 @@ export const OfficesList = () => {
               tertiaryText={(record) => record.phone}
             />
           ) : (
-            <Datagrid>
+            <Datagrid rowClick="edit">
               <TextField source="id" />
               <TextField source="title" />
               <TextField source="address" />

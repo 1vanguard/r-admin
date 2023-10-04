@@ -5,12 +5,12 @@ import {
   Datagrid,
   TextField,
   ReferenceField,
+  FunctionField,
   EmailField,
   DateField,
-  EditButton
+  EditButton,
 } from "react-admin";
-import BtnDelete from "../../layouts/btnDelete";
-// import MyUrlField from "./MyUrlField";
+// import BtnDelete from "../../layouts/btnDelete";
 
 export const UsersList = () => {
   const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
@@ -26,7 +26,6 @@ export const UsersList = () => {
         <Datagrid>
           <TextField source="id" />
           <TextField source="username" />
-          {/* <ReferenceField source="username" reference="users" link="edit"/> */}
           <TextField source="role" />
           <TextField source="firstName" />
           <TextField source="lastName" />
@@ -56,8 +55,11 @@ export const UsersList = () => {
               second: "2-digit",
             }}
           />
+          <ReferenceField label="Office" source="office_id" reference="office">
+            <FunctionField render={record => record.title} />
+          </ReferenceField>
           <EditButton />
-          <BtnDelete resource="users" />
+          {/* <BtnDelete resource="users" /> */}
         </Datagrid>
       )}
     </List>

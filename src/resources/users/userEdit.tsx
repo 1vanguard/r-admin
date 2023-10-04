@@ -1,28 +1,51 @@
 import * as React from "react";
-import { Edit, SimpleForm, TextInput, DateInput, ReferenceManyField, Datagrid, TextField, DateField, EditButton, required } from 'react-admin';
-import RichTextInput from 'ra-input-rich-text';
+import {
+  Loading,
+  Edit,
+  SimpleForm,
+  TextInput,
+  ReferenceInput,
+  SelectInput,
+  required,
+  useRecordContext,
+} from "react-admin";
 
-export const UserEdit = () => (
+const Editform = () => {
+  const record = useRecordContext();
+
+  if (!record) {
+    return <Loading />;
+  }
+
+  return (
+    <SimpleForm>
+      <TextInput disabled label="Id" source="id" />
+      <TextInput disabled source="username" defaultValue={record.username} />
+      <TextInput source="firstName" defaultValue={record.firstName} />
+      <TextInput source="lastName" defaultValue={record.lastName} />
+      <TextInput
+        source="email"
+        type="email"
+        validate={required()}
+        defaultValue={record.email}
+      />
+      <TextInput source="telegram" defaultValue={record.telegram} />
+      <TextInput disabled source="role" />
+      <ReferenceInput label="Office" source="office_id" reference="offices">
+        <SelectInput
+          optionText="title"
+          optionValue="id"
+          validate={required()}
+        />
+      </ReferenceInput>
+    </SimpleForm>
+  );
+};
+
+export const UserEdit = () => {
+  return (
     <Edit>
-        <SimpleForm>
-            <TextInput disabled label="Id" source="id" />
-            <TextInput disabled source="username" />
-            <TextInput source="firstName" />
-            <TextInput source="lastName" />
-            <TextInput source="email" type="email" validate={required()} />
-            <TextInput source="telegram"/>
-            <TextInput disabled source="role"/>
-
-            {/* <TextInput multiline source="teaser" validate={required()} />
-            <RichTextInput source="body" validate={required()} />
-            <DateInput label="Publication date" source="published_at" />
-            <ReferenceManyField label="Comments" reference="comments" target="post_id">
-                <Datagrid>
-                    <TextField source="body" />
-                    <DateField source="created_at" />
-                    <EditButton />
-                </Datagrid>
-            </ReferenceManyField> */}
-        </SimpleForm>
+      <Editform />
     </Edit>
-);
+  );
+};
