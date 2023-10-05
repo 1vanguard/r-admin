@@ -10,7 +10,6 @@ import {
   DateField,
   EditButton,
 } from "react-admin";
-// import BtnDelete from "../../layouts/btnDelete";
 
 export const UsersList = () => {
   const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
@@ -59,7 +58,6 @@ export const UsersList = () => {
             <FunctionField render={record => record.title} />
           </ReferenceField>
           <EditButton />
-          {/* <BtnDelete resource="users" /> */}
         </Datagrid>
       )}
     </List>

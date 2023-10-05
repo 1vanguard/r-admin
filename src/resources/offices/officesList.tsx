@@ -9,7 +9,6 @@ import {
   usePermissions,
 } from "react-admin";
 
-import BtnDelete from "../../layouts/btnDelete";
 // import MyUrlField from "./MyUrlField";
 
 export const OfficesList = () => {
@@ -37,7 +36,9 @@ export const OfficesList = () => {
               <TextField source="title" />
               <TextField source="address" />
               <TextField source="phone" />
-              <TextField source="state" />
+              <ReferenceField source="state" reference="states">
+                <TextField source="name" />
+              </ReferenceField>
             </Datagrid>
           )}
         </List>

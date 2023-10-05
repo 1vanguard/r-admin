@@ -1,26 +1,72 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import {
+  Loading,
   Edit,
   SimpleForm,
   TextInput,
   SelectInput,
-  required
+  required,
+  useRecordContext,
 } from "react-admin";
-import stateValues from "../../helpers/stateValues";
+import { getStates } from "../../helpers/stateUtils";
 
-export const OfficeEdit = () => (
-  <Edit>
-    <SimpleForm>
-      <TextInput disabled label="Id" source="id" />
-      <TextInput source="title" validate={required()} />
-      <TextInput source="address" validate={required()} />
-      <TextInput source="phone" validate={required()} />
-        <SelectInput
-          source="state"
-          choices={stateValues}
-          defaultValue={"active"}
-          validate={required()}
-        />
-    </SimpleForm>
-  </Edit>
-);
+const Editform = () => {
+  const record = useRecordContext();
+
+  if (!record) {
+    return <Loading />;
+  }
+
+  const [states, setStates] = useState([]);
+
+  useEffect(() => {
+    const fetchStates = async () => {
+      const states = await getStates();
+      setStates(states);
+    };
+
+    fetchStates();
+  }, []);
+
+  return (
+    <>
+      {states.length > 0 ? (
+        <SimpleForm>
+          <TextInput disabled label="Id" source="id" />
+          <TextInput
+            source="title"
+            defaultValue={record.title}
+            validate={required()}
+          />
+          <TextInput
+            source="address"
+            defaultValue={record.address}
+            validate={required()}
+          />
+          <TextInput
+            source="phone"
+            defaultValue={record.phone}
+            validate={required()}
+          />
+          <SelectInput
+            source="state"
+            choices={states}
+            validate={required()}
+            defaultValue={record.state}
+          />
+        </SimpleForm>
+      ) : (
+        <Loading />
+      )}
+    </>
+  );
+};
+
+export const OfficeEdit = () => {
+  return (
+    <Edit>
+      <Editform />
+    </Edit>
+  );
+};

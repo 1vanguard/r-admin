@@ -26,13 +26,14 @@ export const UserCreate = (props) => {
       {...props}
     >
       <SimpleForm>
-        <TextInput source="username" />
-        <TextInput source="email" type="email" />
-        <TextInput source="password" type="password" />
+        <TextInput source="username" validate={required()} />
+        <TextInput source="email" type="email" validate={required()} />
+        <TextInput source="password" type="password" validate={required()} />
         <SelectInput
           source="role"
           choices={rolesChoices}
           defaultValue={"manager"}
+          validate={required()}
         />
         <ReferenceInput label="Office" source="office_id" reference="offices">
           <SelectInput

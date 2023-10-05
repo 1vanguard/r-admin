@@ -57,7 +57,7 @@ export default {
 
     headers.set("authorization", token);
     return await httpClient(url, { headers }).then(({ json }) => {
-      // console.log(json);
+      console.log(json);
       return { data: json };
     });
   },
