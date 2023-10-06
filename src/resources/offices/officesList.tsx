@@ -5,6 +5,7 @@ import {
   SimpleList,
   Datagrid,
   TextField,
+  EditButton,
   ReferenceField,
   usePermissions,
 } from "react-admin";
@@ -21,7 +22,7 @@ export const OfficesList = () => {
     const role = permissions.role;
     console.log(role);
 
-    if (role === 'admin') {
+    if (role === 1) {
       return (
         <List>
           {isSmall ? (
@@ -31,14 +32,16 @@ export const OfficesList = () => {
               tertiaryText={(record) => record.phone}
             />
           ) : (
-            <Datagrid rowClick="edit">
+            <Datagrid>
               <TextField source="id" />
               <TextField source="title" />
               <TextField source="address" />
               <TextField source="phone" />
+              <TextField source="url" />
               <ReferenceField source="state" reference="states">
                 <TextField source="name" />
               </ReferenceField>
+              <EditButton />
             </Datagrid>
           )}
         </List>

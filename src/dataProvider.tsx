@@ -128,12 +128,12 @@ export default {
 
     if (resource === "users") {
       endPoint = "register";
-      if (params.meta.creator_role === "admin") {
+      if (params.meta.creator_role === 1) {
         endPoint = "create-user";
       }
     }
-    if (resource === "offices") {
-      endPoint = "createoffice";
+    if (resource === "offices" && params.meta.creator_role === 1) {
+      endPoint = "create-office";
     }
 
     const { json } = await httpClient(`${apiUrl}/${endPoint}`, {

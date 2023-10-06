@@ -1,3 +1,4 @@
+import { parse } from "path";
 import { AuthProvider } from "react-admin";
 
 const apiUrl = import.meta.env.VITE_JSON_SERVER_URL;
@@ -86,7 +87,8 @@ export const authProvider: AuthProvider = {
   // called when the user navigates to a new location, to check for permissions / roles
   getPermissions: () => {
     try {
-      const role = localStorage.getItem("role" as string)?.replace(/"/g, ""),
+      // const role = localStorage.getItem("role" as string)?.replace(/"/g, ""),
+      const role: number = parseInt(localStorage.getItem("role") || '0'),
         permissions = localStorage.getItem("permissions" as string)?.replace(/"/g, "");
       return Promise.resolve({ role, permissions });
     } catch (error) {

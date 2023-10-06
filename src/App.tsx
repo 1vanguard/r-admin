@@ -39,7 +39,7 @@ export const App = () => {
     >
       {permissions => (
         <>
-          {permissions.role === "admin" ? (
+          {permissions.role === 1 ? (
             <Resource
               name="users"
               list={UsersList}
@@ -48,7 +48,7 @@ export const App = () => {
               recordRepresentation="username"
             />
           ) : null}
-          {permissions.role === "admin" ? (
+          {permissions.role === 1 ? (
             <Resource
               name="offices"
               list={OfficesList}
@@ -56,7 +56,7 @@ export const App = () => {
               edit={OfficeEdit}
             />
           ) : null}
-          {permissions.role === "admin" ? (
+          {permissions.role === 1 ? (
             <Resource name="exchanges" list={ExchangesList} />
           ) : null}
         </>

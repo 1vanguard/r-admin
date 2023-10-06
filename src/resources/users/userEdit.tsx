@@ -11,6 +11,7 @@ import {
   useRecordContext,
 } from "react-admin";
 import { getStates } from "../../helpers/stateUtils";
+import { getRoles } from "../../helpers/roleUtils";
 
 const Editform = () => {
   const record = useRecordContext();
@@ -20,6 +21,7 @@ const Editform = () => {
   }
 
   const [states, setStates] = useState([]);
+  const [roles, setRoles] = useState([]);
 
   useEffect(() => {
     const fetchStates = async () => {
@@ -28,11 +30,18 @@ const Editform = () => {
     };
 
     fetchStates();
+
+    const fetchRoles = async () => {
+      const roles = await getRoles();
+      setRoles(roles);
+    };
+
+    fetchRoles();
   }, []);
 
   return (
     <>
-      {states.length > 0 ? (
+      {states.length > 0 && roles.length > 0 ? (
         <SimpleForm>
           <TextInput disabled label="Id" source="id" />
           <TextInput
@@ -49,8 +58,15 @@ const Editform = () => {
             defaultValue={record.email}
           />
           <TextInput source="telegram" defaultValue={record.telegram} />
-          <TextInput disabled source="role" />
-          <ReferenceInput label="Office" source="office_id" reference="offices">
+          <ReferenceInput label="Role" source="role" reference="roles">
+            <SelectInput
+              source="role"
+              choices={roles}
+              validate={required()}
+              defaultValue={"2"}
+            />
+          </ReferenceInput>
+          <ReferenceInput label="Office" source="officeId" reference="offices">
             <SelectInput
               optionText="title"
               optionValue="id"

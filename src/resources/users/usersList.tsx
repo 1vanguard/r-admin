@@ -25,7 +25,6 @@ export const UsersList = () => {
         <Datagrid>
           <TextField source="id" />
           <TextField source="username" />
-          <TextField source="role" />
           <TextField source="firstName" />
           <TextField source="lastName" />
           <EmailField source="email" />
@@ -54,8 +53,14 @@ export const UsersList = () => {
               second: "2-digit",
             }}
           />
-          <ReferenceField label="Office" source="office_id" reference="office">
+          <ReferenceField label="Role" source="role" reference="roles">
+            <FunctionField render={record => record.name} />
+          </ReferenceField>
+          <ReferenceField label="Office" source="officeId" reference="office">
             <FunctionField render={record => record.title} />
+          </ReferenceField>
+          <ReferenceField label="State" source="state" reference="states">
+            <FunctionField render={record => record.name} />
           </ReferenceField>
           <EditButton />
         </Datagrid>

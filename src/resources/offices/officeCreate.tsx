@@ -1,26 +1,62 @@
+import * as React from "react";
+import { useEffect, useState } from "react";
 import {
+  Loading,
   Create,
   SimpleForm,
   TextInput,
   SelectInput,
   required,
+  usePermissions,
 } from "react-admin";
-import StateValues from "../../helpers/stateValues";
+import { getStates } from "../../helpers/stateUtils";
 
-export const OfficeCreate = (props) => {
+const CreateForm = () => {
+  const [states, setStates] = useState([]);
+
+  useEffect(() => {
+    const fetchStates = async () => {
+      const states = await getStates();
+      setStates(states);
+    };
+
+    fetchStates();
+  }, []);
+
   return (
-    <Create {...props}>
-      <SimpleForm>
-        <TextInput source="title" validate={required()} />
-        <TextInput source="address" validate={required()} />
-        <TextInput source="phone" validate={required()} />
-        {/* <SelectInput
-          source="state"
-          choices={StateValues}
-          defaultValue={"active"}
-          validate={required()}
-        /> */}
-      </SimpleForm>
+    <>
+      {states.length > 0 ? (
+        <SimpleForm>
+          <TextInput source="title" validate={required()} />
+          <TextInput source="address" validate={required()} />
+          <TextInput source="phone" validate={required()} />
+          <TextInput source="url" />
+          <SelectInput
+            source="state"
+            choices={states}
+            validate={required()}
+            defaultValue={1}
+          />
+        </SimpleForm>
+      ) : (
+        <Loading />
+      )}
+    </>
+  );
+};
+
+export const OfficeCreate = () => {
+  const { isLoading, permissions } = usePermissions(),
+    role = permissions.role;
+  return (
+    <Create mutationOptions={{ meta: { creator_role: role } }} redirect="list">
+      <>
+        {role === 1 ? (
+          <CreateForm />
+        ) : (
+          <div>Only admins can create offices</div>
+        )}
+      </>
     </Create>
   );
 };
