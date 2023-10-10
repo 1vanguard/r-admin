@@ -5,10 +5,11 @@ import {
   SimpleList,
   Datagrid,
   TextField,
+  FunctionField,
+  ReferenceField,
   usePermissions,
 } from "react-admin";
 
-import BtnDelete from "../../layouts/btnDelete";
 // import MyUrlField from "./MyUrlField";
 
 export const ExchangesList = () => {
@@ -21,7 +22,7 @@ export const ExchangesList = () => {
     const role = permissions.role;
     console.log(role);
 
-    if (role === 'admin') {
+    if (role === 1) {
       return (
         <List>
           {isSmall ? (
@@ -34,7 +35,9 @@ export const ExchangesList = () => {
             <Datagrid>
               <TextField source="id" />
               <TextField source="title" />
-              <TextField source="state" />
+              <ReferenceField label="State" source="state" reference="states">
+                <FunctionField render={(record) => record.name} />
+              </ReferenceField>
               <TextField source="currencies" />
             </Datagrid>
           )}

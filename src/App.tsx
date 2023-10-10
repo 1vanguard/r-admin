@@ -27,6 +27,7 @@ import { OfficeCreate } from "./resources/offices/officeCreate";
 import { OfficeEdit } from "./resources/offices/officeEdit";
 import { ExchangesList } from "./resources/exchanges/exchangesList";
 import { BotsList } from "./resources/bots/botsList";
+import { BotEdit } from "./resources/bots/botEdit";
 
 export const App = () => {
   return (
@@ -61,7 +62,7 @@ export const App = () => {
           ) : null}
         </>
       )}
-      <Resource name="bots" list={BotsList} />
+      <Resource name="bots" list={BotsList} edit={BotEdit} />
       <CustomRoutes noLayout>
         <Route path="/registration" element={<CabRegistration />} />
       </CustomRoutes>

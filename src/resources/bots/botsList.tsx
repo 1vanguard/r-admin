@@ -4,12 +4,13 @@ import {
   List,
   SimpleList,
   Datagrid,
+  DateField,
+  FunctionField,
   TextField,
+  ReferenceField,
+  EditButton,
   usePermissions,
 } from "react-admin";
-
-import BtnDelete from "../../layouts/btnDelete";
-// import MyUrlField from "./MyUrlField";
 
 export const BotsList = () => {
   const { isLoading, permissions } = usePermissions();
@@ -21,9 +22,9 @@ export const BotsList = () => {
     const role = permissions.role;
     console.log(role);
 
-    if (role === 'admin' || role === 'manager') {
+    if (role === 1 || role === 2) {
       return (
-        <List>
+        <List perPage={10}>
           {isSmall ? (
             <SimpleList
               primaryText={(record) => record.title}
@@ -33,11 +34,48 @@ export const BotsList = () => {
           ) : (
             <Datagrid>
               <TextField source="id" />
-              <TextField source="user_id" />
-              <TextField source="exchange_id" />
-              <TextField source="state" />
+              <TextField source="title" />
+              <ReferenceField label="State" source="state" reference="states">
+                <FunctionField render={(record) => record.name} />
+              </ReferenceField>
+              <DateField
+                source="pause_until"
+                showTime
+                options={{
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                }}
+              />
+              <ReferenceField
+                label="Exchange"
+                source="exchange_id"
+                reference="exchanges"
+              >
+                <FunctionField render={(record) => record.title} />
+              </ReferenceField>
               <TextField source="office_id" />
-              <TextField source="pause_until" />
+              <ReferenceField
+                label="Client"
+                source="client_id"
+                reference="users"
+              />
+              <DateField
+                source="created"
+                showTime
+                options={{
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                }}
+              />
+              <EditButton />
             </Datagrid>
           )}
         </List>

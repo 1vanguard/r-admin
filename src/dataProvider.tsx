@@ -23,6 +23,9 @@ export default {
       url = `${apiUrl}/${resource}?${stringify(query)}`,
       headers = new Headers();
     headers.set("authorization", token);
+    
+    console.log("page: " + page);
+    console.log("perPage: " + perPage);
 
     const response = await httpClient(url, { headers }),
       resHeaders = response.headers,
