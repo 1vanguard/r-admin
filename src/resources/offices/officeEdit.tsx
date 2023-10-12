@@ -10,6 +10,7 @@ import {
   useRecordContext,
 } from "react-admin";
 import { getStates } from "../../helpers/stateUtils";
+import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 
 const Editform = () => {
   const record = useRecordContext();
@@ -32,7 +33,7 @@ const Editform = () => {
   return (
     <>
       {states.length > 0 ? (
-        <SimpleForm>
+        <SimpleForm toolbar={<PrymaryEditToolbar/>}>
           <TextInput disabled label="Id" source="id" />
           <TextInput
             source="title"

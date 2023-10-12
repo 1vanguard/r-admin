@@ -12,6 +12,7 @@ import {
 } from "react-admin";
 import { getStates } from "../../helpers/stateUtils";
 import { getRoles } from "../../helpers/roleUtils";
+import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 
 const Editform = () => {
   const record = useRecordContext();
@@ -42,7 +43,7 @@ const Editform = () => {
   return (
     <>
       {states.length > 0 && roles.length > 0 ? (
-        <SimpleForm>
+        <SimpleForm toolbar={<PrymaryEditToolbar/>}>
           <TextInput disabled label="Id" source="id" />
           <TextInput
             disabled
