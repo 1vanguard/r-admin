@@ -12,9 +12,7 @@ import {
   NumberInput,
   AutocompleteInput,
   BooleanInput,
-  useGetList,
 } from "react-admin";
-import { useWatch } from 'react-hook-form';
 
 import { getStates } from "../../helpers/stateUtils";
 import { getTimeFrames } from "../../helpers/timeframesUtils";
@@ -24,31 +22,12 @@ import { timeFrame } from "../../types";
 
 import Grid from "@mui/material/Grid";
 
-
-
-
-/* const CityInput = (props) => {
-  const country = useWatch({ name: "timeframes" });
-  return (
-    <SelectInput
-      choices={country ? toChoices(cities[country]) : []}
-      {...props}
-    />
-  );
-}; */
-
-
-
-
-
 const Editform = () => {
   const record = useRecordContext();
 
   if (!record) {
     return <Loading />;
   }
-
-  const { data, isLoading } = useGetList("timeframes");
 
   const calculateTf = (timeFrames, filter, label) => {
     return timeFrames
@@ -68,12 +47,12 @@ const Editform = () => {
   const autoSellTfToFilter = [0, 5, 15, 30, 60, 240, 1440];
 
   const [states, setStates] = useState([]);
-  /* const [timeFrames, setTimeFrames] = useState([]);
+  const [timeFrames, setTimeFrames] = useState([]);
 
   const [autoPairTf, setAutoPairTf] = useState([]);
   const [autoShortTf, setAutoShortTf] = useState([]);
   const [autoLongTf, setAutoLongTf] = useState([]);
-  const [autoSellTf, setAutoSellTf] = useState([]); */
+  const [autoSellTf, setAutoSellTf] = useState([]);
 
   useEffect(() => {
     const fetchStates = async () => {
@@ -82,19 +61,19 @@ const Editform = () => {
     };
     fetchStates();
 
-    /* const fetchTimeFrames = async () => {
+    const fetchTimeFrames = async () => {
       const timeFrames = await getTimeFrames();
       setTimeFrames(timeFrames);
     };
-    fetchTimeFrames(); */
+    fetchTimeFrames();
   }, []);
 
-  /* useEffect(() => {
+  useEffect(() => {
     setAutoPairTf(calculateTf(timeFrames, autoPairTfToFilter, "autoPairTf"));
     setAutoShortTf(calculateTf(timeFrames, autoShortTfToFilter, "autoShortTf"));
     setAutoLongTf(calculateTf(timeFrames, autoLongTfToFilter, "autoLongTf"));
     setAutoSellTf(calculateTf(timeFrames, autoSellTfToFilter, "autoSellTf"));
-  }, [timeFrames]); */
+  }, [timeFrames]);
 
   /* const autoPairTfToFilter = [0, 30, 60, 240, 1440];
   const autoPairTf = timeFrames
@@ -168,7 +147,7 @@ const Editform = () => {
 
   return (
     <>
-      {states.length === 0 ? (
+      {states.length === 0 || autoPairTf.length === 0 || autoShortTf.length === 0 || autoLongTf.length === 0 || autoSellTf.length === 0 ? (
         <Loading />
       ) : (
         <TabbedForm toolbar={<PrymaryEditToolbar />}>
@@ -386,20 +365,12 @@ const Editform = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                {/* <ReferenceInput source="auto_pair_tf" reference="timeframes">
+                <ReferenceInput source="auto_pair_tf" reference="timeframes">
                   <SelectInput
                     fullWidth
                     label="The RSI timeframe for choosing a pair"
                     source="auto_pair_tf"
                     choices={autoPairTf}
-                    defaultValue={record.auto_pair_tf}
-                  />
-                </ReferenceInput> */}
-                <ReferenceInput reference="timeframes" source="minutes">
-                  <SelectInput
-                    fullWidth
-                    label="The RSI timeframe for choosing a pair"
-                    optionText="minutes"
                     defaultValue={record.auto_pair_tf}
                   />
                 </ReferenceInput>
@@ -487,14 +458,14 @@ const Editform = () => {
                 <h2>Short RSI input</h2>
               </Grid>
               <Grid item xs={12} md={6}>
-                {/* <ReferenceInput source="auto_short_tf" reference="timeframes">
+                <ReferenceInput source="auto_short_tf" reference="timeframes">
                   <SelectInput
                     fullWidth
                     label="RSI timeframe for entry (short)"
                     source="auto_short_tf"
                     choices={autoShortTf}
                   />
-                </ReferenceInput> */}
+                </ReferenceInput>
               </Grid>
               <Grid item xs={12} md={6}>
                 <NumberInput
@@ -529,14 +500,14 @@ const Editform = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                {/* <ReferenceInput source="auto_long_tf" reference="timeframes">
+                <ReferenceInput source="auto_long_tf" reference="timeframes">
                   <SelectInput
                     fullWidth
                     label="RSI timeframe for entry (long)"
                     source="auto_long_tf"
                     choices={autoLongTf}
                   />
-                </ReferenceInput> */}
+                </ReferenceInput>
               </Grid>
               <Grid item xs={12} md={6}>
                 <NumberInput
@@ -565,7 +536,7 @@ const Editform = () => {
                 <h2>RSI for sale</h2>
               </Grid>
               <Grid item xs={12} md={6}>
-                {/* <ReferenceInput source="auto_sell_tf" reference="timeframes">
+                <ReferenceInput source="auto_sell_tf" reference="timeframes">
                   <SelectInput
                     fullWidth
                     label="The RSI timeframe for sale"
@@ -573,7 +544,7 @@ const Editform = () => {
                     choices={autoSellTf}
                     defaultValue={record.auto_sell_tf}
                   />
-                </ReferenceInput> */}
+                </ReferenceInput>
               </Grid>
               <Grid item xs={12} md={6}>
                 <SelectInput
