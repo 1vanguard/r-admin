@@ -12,34 +12,17 @@ import {
   NumberInput,
   AutocompleteInput,
   BooleanInput,
-  useGetList,
 } from "react-admin";
-import { useWatch } from 'react-hook-form';
 
 import { getStates } from "../../helpers/stateUtils";
-import { getTimeFrames } from "../../helpers/timeframesUtils";
+import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
-
-import { timeFrame } from "../../types";
-
 import Grid from "@mui/material/Grid";
 
-
-
-
-/* const CityInput = (props) => {
-  const country = useWatch({ name: "timeframes" });
-  return (
-    <SelectInput
-      choices={country ? toChoices(cities[country]) : []}
-      {...props}
-    />
-  );
-}; */
-
-
-
-
+const autoPairTfToFilter = [0, 30, 60, 240, 1440];
+const autoShortTfToFilter = [5, 15, 30, 60, 240];
+const autoLongTfToFilter = [30, 60, 240];
+const autoSellTfToFilter = [0, 5, 15, 30, 60, 240, 1440];
 
 const Editform = () => {
   const record = useRecordContext();
@@ -47,33 +30,7 @@ const Editform = () => {
   if (!record) {
     return <Loading />;
   }
-
-  const { data, isLoading } = useGetList("timeframes");
-
-  const calculateTf = (timeFrames, filter, label) => {
-    return timeFrames
-      .filter((timeFrame) => filter.includes(timeFrame.minutes))
-      .map((timeFrame) => {
-        const name =
-          timeFrame.minutes < 60
-            ? `${timeFrame.minutes} min.`
-            : `${timeFrame.minutes / 60} h.`;
-        return { ...timeFrame, name: name, label: label };
-      });
-  };
-
-  const autoPairTfToFilter = [0, 30, 60, 240, 1440];
-  const autoShortTfToFilter = [5, 15, 30, 60, 240];
-  const autoLongTfToFilter = [30, 60, 240];
-  const autoSellTfToFilter = [0, 5, 15, 30, 60, 240, 1440];
-
   const [states, setStates] = useState([]);
-  /* const [timeFrames, setTimeFrames] = useState([]);
-
-  const [autoPairTf, setAutoPairTf] = useState([]);
-  const [autoShortTf, setAutoShortTf] = useState([]);
-  const [autoLongTf, setAutoLongTf] = useState([]);
-  const [autoSellTf, setAutoSellTf] = useState([]); */
 
   useEffect(() => {
     const fetchStates = async () => {
@@ -81,64 +38,9 @@ const Editform = () => {
       setStates(states);
     };
     fetchStates();
-
-    /* const fetchTimeFrames = async () => {
-      const timeFrames = await getTimeFrames();
-      setTimeFrames(timeFrames);
-    };
-    fetchTimeFrames(); */
   }, []);
 
-  /* useEffect(() => {
-    setAutoPairTf(calculateTf(timeFrames, autoPairTfToFilter, "autoPairTf"));
-    setAutoShortTf(calculateTf(timeFrames, autoShortTfToFilter, "autoShortTf"));
-    setAutoLongTf(calculateTf(timeFrames, autoLongTfToFilter, "autoLongTf"));
-    setAutoSellTf(calculateTf(timeFrames, autoSellTfToFilter, "autoSellTf"));
-  }, [timeFrames]); */
 
-  /* const autoPairTfToFilter = [0, 30, 60, 240, 1440];
-  const autoPairTf = timeFrames
-    .filter((timeFrame) => autoPairTfToFilter.includes(timeFrame.minutes))
-    .map((timeFrame) => {
-      const name =
-        timeFrame.minutes < 60
-          ? `${timeFrame.minutes} min.`
-          : `${timeFrame.minutes / 60} h.`;
-      return { ...timeFrame, name: name };
-    });
-
-  const autoShortTfToFilter = [5, 15, 30, 60, 240];
-  const autoShortTf = timeFrames
-    .filter((timeFrame) => autoShortTfToFilter.includes(timeFrame.minutes))
-    .map((timeFrame) => {
-      const name =
-        timeFrame.minutes < 60
-          ? `${timeFrame.minutes} min.`
-          : `${timeFrame.minutes / 60} h.`;
-      return { ...timeFrame, name: name };
-    });
-
-  const autoLongTfToFilter = [30, 60, 240];
-  const autoLongTf = timeFrames
-    .filter((timeFrame) => autoLongTfToFilter.includes(timeFrame.minutes))
-    .map((timeFrame) => {
-      const name =
-        timeFrame.minutes < 60
-          ? `${timeFrame.minutes} min.`
-          : `${timeFrame.minutes / 60} h.`;
-      return { ...timeFrame, name: name };
-    });
-
-  const autoSellTfToFilter = [0, 5, 15, 30, 60, 240, 1440];
-  const autoSellTf = timeFrames
-    .filter((timeFrame) => autoSellTfToFilter.includes(timeFrame.minutes))
-    .map((timeFrame) => {
-      const name =
-        timeFrame.minutes < 60
-          ? `${timeFrame.minutes} min.`
-          : `${timeFrame.minutes / 60} h.`;
-      return { ...timeFrame, name: name };
-    }); */
 
   const autoRsiPeriodOptionsToFilter = [6, 8, 10, 14];
   const autoRsiPeriodOptions = [
@@ -386,23 +288,11 @@ const Editform = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                {/* <ReferenceInput source="auto_pair_tf" reference="timeframes">
-                  <SelectInput
-                    fullWidth
-                    label="The RSI timeframe for choosing a pair"
-                    source="auto_pair_tf"
-                    choices={autoPairTf}
-                    defaultValue={record.auto_pair_tf}
-                  />
-                </ReferenceInput> */}
-                <ReferenceInput reference="timeframes" source="minutes">
-                  <SelectInput
-                    fullWidth
-                    label="The RSI timeframe for choosing a pair"
-                    optionText="minutes"
-                    defaultValue={record.auto_pair_tf}
-                  />
-                </ReferenceInput>
+                <TimeFramesSelectInput
+                  name="auto_pair_tf"
+                  label="The RSI timeframe for choosing a pair"
+                  frameChoices={autoPairTfToFilter}
+                />
               </Grid>
               <Grid item xs={12} md={6}>
                 <NumberInput
@@ -487,14 +377,11 @@ const Editform = () => {
                 <h2>Short RSI input</h2>
               </Grid>
               <Grid item xs={12} md={6}>
-                {/* <ReferenceInput source="auto_short_tf" reference="timeframes">
-                  <SelectInput
-                    fullWidth
-                    label="RSI timeframe for entry (short)"
-                    source="auto_short_tf"
-                    choices={autoShortTf}
-                  />
-                </ReferenceInput> */}
+                <TimeFramesSelectInput
+                  name="auto_short_tf"
+                  label="RSI timeframe for entry (short)"
+                  frameChoices={autoShortTfToFilter}
+                />
               </Grid>
               <Grid item xs={12} md={6}>
                 <NumberInput
@@ -529,14 +416,11 @@ const Editform = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                {/* <ReferenceInput source="auto_long_tf" reference="timeframes">
-                  <SelectInput
-                    fullWidth
-                    label="RSI timeframe for entry (long)"
-                    source="auto_long_tf"
-                    choices={autoLongTf}
-                  />
-                </ReferenceInput> */}
+                <TimeFramesSelectInput
+                  name="auto_long_tf"
+                  label="RSI timeframe for entry (long)"
+                  frameChoices={autoLongTfToFilter}
+                />
               </Grid>
               <Grid item xs={12} md={6}>
                 <NumberInput
@@ -565,15 +449,11 @@ const Editform = () => {
                 <h2>RSI for sale</h2>
               </Grid>
               <Grid item xs={12} md={6}>
-                {/* <ReferenceInput source="auto_sell_tf" reference="timeframes">
-                  <SelectInput
-                    fullWidth
-                    label="The RSI timeframe for sale"
-                    source="auto_sell_tf"
-                    choices={autoSellTf}
-                    defaultValue={record.auto_sell_tf}
-                  />
-                </ReferenceInput> */}
+                <TimeFramesSelectInput
+                  name="auto_sell_tf"
+                  label="The RSI timeframe for sale"
+                  frameChoices={autoSellTfToFilter}
+                />
               </Grid>
               <Grid item xs={12} md={6}>
                 <SelectInput
