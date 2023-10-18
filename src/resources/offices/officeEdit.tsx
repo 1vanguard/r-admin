@@ -1,5 +1,3 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
 import {
   Loading,
   Edit,
@@ -7,9 +5,10 @@ import {
   TextInput,
   SelectInput,
   required,
+  useGetList,
   useRecordContext,
+  usePermissions,
 } from "react-admin";
-import { getStates } from "../../helpers/stateUtils";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 
 const Editform = () => {
@@ -19,55 +18,63 @@ const Editform = () => {
     return <Loading />;
   }
 
-  const [states, setStates] = useState([]);
+  const {
+    data: states,
+    isLoading: isLoadingStates,
+    error,
+  } = useGetList("states");
 
-  useEffect(() => {
-    const fetchStates = async () => {
-      const states = await getStates();
-      setStates(states);
-    };
-
-    fetchStates();
-  }, []);
+  if (isLoadingStates) {
+    return <Loading />;
+  }
+  if (error) {
+    return <p>ERROR</p>;
+  }
 
   return (
-    <>
-      {states.length > 0 ? (
-        <SimpleForm toolbar={<PrymaryEditToolbar/>}>
-          <TextInput disabled label="Id" source="id" />
-          <TextInput
-            source="title"
-            defaultValue={record.title}
-            validate={required()}
-          />
-          <TextInput
-            source="address"
-            defaultValue={record.address}
-            validate={required()}
-          />
-          <TextInput
-            source="phone"
-            defaultValue={record.phone}
-            validate={required()}
-          />
-          <SelectInput
-            source="state"
-            choices={states}
-            validate={required()}
-            defaultValue={record.state}
-          />
-        </SimpleForm>
-      ) : (
-        <Loading />
-      )}
-    </>
+    <SimpleForm toolbar={<PrymaryEditToolbar />}>
+      <TextInput disabled label="Id" source="id" />
+      <TextInput
+        source="title"
+        defaultValue={record.title}
+        validate={required()}
+      />
+      <TextInput
+        source="address"
+        defaultValue={record.address}
+        validate={required()}
+      />
+      <TextInput
+        source="phone"
+        defaultValue={record.phone}
+        validate={required()}
+      />
+      <SelectInput
+        source="state"
+        choices={states}
+        validate={required()}
+        defaultValue={record.state}
+      />
+    </SimpleForm>
   );
 };
 
 export const OfficeEdit = () => {
-  return (
-    <Edit>
-      <Editform />
-    </Edit>
-  );
+  const { isLoading, permissions } = usePermissions();
+
+  if (isLoading) {
+    return <Loading />;
+  } else {
+    const role = permissions.role;
+
+    if (role === 1) {
+      return (
+        <Edit>
+          <Editform />
+        </Edit>
+      );
+    } else {
+      return <div>Not enough permissions</div>;
+    }
+  }
 };

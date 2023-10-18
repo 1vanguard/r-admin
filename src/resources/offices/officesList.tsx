@@ -1,6 +1,5 @@
-import * as React from "react";
-import { useMediaQuery, Theme } from "@mui/material";
 import {
+  Loading,
   List,
   SimpleList,
   Datagrid,
@@ -9,19 +8,18 @@ import {
   ReferenceField,
   usePermissions,
 } from "react-admin";
-
-// import MyUrlField from "./MyUrlField";
+import { useMediaQuery, Theme } from "@mui/material";
 
 export const OfficesList = () => {
   const { isLoading, permissions } = usePermissions();
   const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
 
   if (isLoading) {
-    return <div>Checking permissions...</div>;
+    return <Loading />;
   } else {
     const role = permissions.role;
-    console.log(role);
-
+    // console.log(role);
+1
     if (role === 1) {
       return (
         <List>

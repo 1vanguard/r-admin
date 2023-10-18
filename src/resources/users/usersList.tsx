@@ -1,4 +1,4 @@
-import { useMediaQuery, Theme } from "@mui/material";
+
 import {
   List,
   SimpleList,
@@ -10,6 +10,7 @@ import {
   DateField,
   EditButton,
 } from "react-admin";
+import { useMediaQuery, Theme } from "@mui/material";
 
 export const UsersList = () => {
   const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));

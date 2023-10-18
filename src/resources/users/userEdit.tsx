@@ -1,5 +1,3 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
 import {
   Loading,
   Edit,
@@ -9,6 +7,8 @@ import {
   SelectInput,
   required,
   useRecordContext,
+  useGetList,
+  usePermissions,
 } from "react-admin";
 import { getStates } from "../../helpers/stateUtils";
 import { getRoles } from "../../helpers/roleUtils";
@@ -21,64 +21,60 @@ const Editform = () => {
     return <Loading />;
   }
 
-  const [states, setStates] = useState([]);
-  const [roles, setRoles] = useState([]);
+  const {
+    data: states,
+    isLoading: isLoadingStates,
+    error: errorStates,
+  } = useGetList("states");
 
-  useEffect(() => {
-    const fetchStates = async () => {
-      const states = await getStates();
-      setStates(states);
-    };
+  const {
+    data: roles,
+    isLoading: isLoadingRoles,
+    error: errorRoles,
+  } = useGetList("roles");
 
-    fetchStates();
-
-    const fetchRoles = async () => {
-      const roles = await getRoles();
-      setRoles(roles);
-    };
-
-    fetchRoles();
-  }, []);
+  if (isLoadingStates || isLoadingRoles) {
+    return <Loading />;
+  }
+  if (errorStates || errorRoles) {
+    return <p>ERROR</p>;
+  }
 
   return (
-    <>
-      {states.length > 0 && roles.length > 0 ? (
-        <SimpleForm toolbar={<PrymaryEditToolbar/>}>
-          <TextInput disabled label="Id" source="id" />
-          <TextInput
-            disabled
-            source="username"
-            defaultValue={record.username}
-          />
-          <TextInput source="firstName" defaultValue={record.firstName} />
-          <TextInput source="lastName" defaultValue={record.lastName} />
-          <TextInput
-            source="email"
-            type="email"
-            validate={required()}
-            defaultValue={record.email}
-          />
-          <TextInput source="telegram" defaultValue={record.telegram} />
-          <ReferenceInput label="Role" source="role" reference="roles">
-            <SelectInput
-              source="role"
-              choices={roles}
-              validate={required()}
-              defaultValue={"2"}
-            />
-          </ReferenceInput>
-          <ReferenceInput label="Office" source="officeId" reference="offices">
-            <SelectInput
-              optionText="title"
-              optionValue="id"
-              validate={required()}
-            />
-          </ReferenceInput>
-        </SimpleForm>
-      ) : (
-        <Loading />
-      )}
-    </>
+    <SimpleForm toolbar={<PrymaryEditToolbar />}>
+      <TextInput disabled label="Id" source="id" />
+      <TextInput disabled source="username" defaultValue={record.username} />
+      <TextInput source="firstName" defaultValue={record.firstName} />
+      <TextInput source="lastName" defaultValue={record.lastName} />
+      <TextInput
+        source="email"
+        type="email"
+        validate={required()}
+        defaultValue={record.email}
+      />
+      <TextInput source="telegram" defaultValue={record.telegram} />
+      <ReferenceInput label="Role" source="role" reference="roles">
+        <SelectInput
+          source="role"
+          choices={roles}
+          validate={required()}
+          defaultValue={"2"}
+        />
+      </ReferenceInput>
+      <ReferenceInput label="Office" source="officeId" reference="offices">
+        <SelectInput
+          optionText="title"
+          optionValue="id"
+          validate={required()}
+        />
+      </ReferenceInput>
+      <SelectInput
+        source="state"
+        choices={states}
+        validate={required()}
+        defaultValue={record.state}
+      />
+    </SimpleForm>
   );
 };
 

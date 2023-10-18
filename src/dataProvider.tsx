@@ -41,6 +41,7 @@ export default {
     const { token } = await authProvider.getIdentity(),
       headers = new Headers();
     headers.set("authorization", token);
+
     return await httpClient(`${apiUrl}/${resource}/${params.id}`, {
       headers,
     }).then(({ json }) => {
