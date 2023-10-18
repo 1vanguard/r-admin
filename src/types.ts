@@ -10,3 +10,8 @@ export interface timeFrame {
   id: number;
   minutes: number;
 }
+
+export interface period {
+  id: number;
+  value: number;
+}

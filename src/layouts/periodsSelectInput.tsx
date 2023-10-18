@@ -1,26 +1,19 @@
 import * as React from "react";
 import { Loading, SelectInput, useGetList } from "react-admin";
 import { useWatch } from "react-hook-form";
-// import { timeFrame } from "../types";
+// import { period } from "../../types";
 
-const calculateChoices = (timeFrames, filter) => {
-  return timeFrames
-    .filter((timeFrame) => filter.includes(timeFrame.minutes))
-    .map((timeFrame) => {
-      const name =
-        timeFrame.minutes < 60
-          ? `${timeFrame.minutes} min.`
-          : `${timeFrame.minutes / 60} h.`;
-      return { ...timeFrame, name: name };
-    });
+const calculateChoices = (periods, filter) => {
+  return periods
+    .filter((period) => filter.includes(period.value))
 };
 
-export const TimeFramesSelectInput = (props) => {
+export const PeriodsSelectInput = (props) => {
   const {
       data: choices,
       isLoading: isLoadingChoices,
       error,
-    } = useGetList("timeframes"),
+    } = useGetList("periods"),
     currentValue = useWatch({ name: props.name });
 
   if (isLoadingChoices) {
@@ -30,7 +23,7 @@ export const TimeFramesSelectInput = (props) => {
     return <p>ERROR</p>;
   }
 
-  const timeFrameChoices = calculateChoices(choices, props.frameChoices);
+  const periodChoices = calculateChoices(choices, props.periodChoices);
 
   return (
     <SelectInput
@@ -39,7 +32,7 @@ export const TimeFramesSelectInput = (props) => {
       source={props.name}
       optionText="name"
       emptyText="Do not use"
-      choices={timeFrameChoices}
+      choices={periodChoices}
       isLoading={isLoadingChoices}
       disabled={isLoadingChoices}
     />

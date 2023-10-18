@@ -16,13 +16,23 @@ import {
 
 import { getStates } from "../../helpers/stateUtils";
 import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
+import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 import Grid from "@mui/material/Grid";
 
-const autoPairTfToFilter = [0, 30, 60, 240, 1440];
-const autoShortTfToFilter = [5, 15, 30, 60, 240];
-const autoLongTfToFilter = [30, 60, 240];
-const autoSellTfToFilter = [0, 5, 15, 30, 60, 240, 1440];
+const autoPairTfToFilter = [0, 30, 60, 240, 1440],
+  autoShortTfToFilter = [5, 15, 30, 60, 240],
+  autoLongTfToFilter = [30, 60, 240],
+  autoSellTfToFilter = [0, 5, 15, 30, 60, 240, 1440];
+
+const autoRsiPeriodOptionsToFilter = [6, 8, 10, 14],
+  autoRsiPeriod1hOptionsToFilter = [6, 8, 12, 14],
+  autoSellPeriodOptionsToFilter = [6, 8, 10, 12, 14];
+
+const autoSortOptions = [
+  { id: 1, name: "Value" },
+  { id: 2, name: "Volatility" },
+];
 
 const Editform = () => {
   const record = useRecordContext();
@@ -39,34 +49,6 @@ const Editform = () => {
     };
     fetchStates();
   }, []);
-
-
-
-  const autoRsiPeriodOptionsToFilter = [6, 8, 10, 14];
-  const autoRsiPeriodOptions = [
-      { id: 6, name: "6" },
-      { id: 8, name: "8" },
-      { id: 10, name: "10" },
-      { id: 14, name: "14" },
-    ],
-    autoRsiPeriod1hOptions = [
-      { id: 6, name: "6" },
-      { id: 8, name: "8" },
-      { id: 12, name: "12" },
-      { id: 14, name: "14" },
-    ],
-    autoSellPeriodOptions = [
-      { id: 6, name: "6" },
-      { id: 8, name: "8" },
-      { id: 10, name: "10" },
-      { id: 12, name: "12" },
-      { id: 14, name: "14" },
-    ];
-
-  const autoSortOptions = [
-    { id: 1, name: "Value" },
-    { id: 2, name: "Volatility" },
-  ];
 
   return (
     <>
@@ -289,6 +271,7 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TimeFramesSelectInput
+                  fullWidth
                   name="auto_pair_tf"
                   label="The RSI timeframe for choosing a pair"
                   frameChoices={autoPairTfToFilter}
@@ -378,6 +361,7 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TimeFramesSelectInput
+                  fullWidth
                   name="auto_short_tf"
                   label="RSI timeframe for entry (short)"
                   frameChoices={autoShortTfToFilter}
@@ -398,12 +382,11 @@ const Editform = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <SelectInput
+                <PeriodsSelectInput
                   fullWidth
+                  name="auto_rsi_period"
                   label="The RSI period for entry"
-                  source="auto_rsi_period"
-                  choices={autoRsiPeriodOptions}
-                  defaultValue={record.auto_rsi_period}
+                  periodChoices={autoRsiPeriodOptionsToFilter}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -417,6 +400,7 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TimeFramesSelectInput
+                  fullWidth
                   name="auto_long_tf"
                   label="RSI timeframe for entry (long)"
                   frameChoices={autoLongTfToFilter}
@@ -437,12 +421,11 @@ const Editform = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <SelectInput
+                <PeriodsSelectInput
                   fullWidth
+                  name="auto_rsi_period_1h"
                   label="The RSI period for entry"
-                  source="auto_rsi_period_1h"
-                  choices={autoRsiPeriod1hOptions}
-                  defaultValue={record.auto_rsi_period_1h}
+                  periodChoices={autoRsiPeriod1hOptionsToFilter}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -450,18 +433,18 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TimeFramesSelectInput
+                  fullWidth
                   name="auto_sell_tf"
                   label="The RSI timeframe for sale"
                   frameChoices={autoSellTfToFilter}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <SelectInput
+                <PeriodsSelectInput
                   fullWidth
+                  name="auto_sell_period"
                   label="RSI period for Sale"
-                  source="auto_sell_period"
-                  choices={autoSellPeriodOptions}
-                  defaultValue={record.auto_sell_period}
+                  periodChoices={autoSellPeriodOptionsToFilter}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
