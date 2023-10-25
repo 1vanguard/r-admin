@@ -8,6 +8,7 @@ import {
   useGetList,
   usePermissions,
 } from "react-admin";
+import Grid from "@mui/material/Grid";
 
 const CreateForm = () => {
   const {
@@ -25,16 +26,29 @@ const CreateForm = () => {
 
   return (
     <SimpleForm>
-      <TextInput source="title" validate={required()} />
-      <TextInput source="address" validate={required()} />
-      <TextInput source="phone" validate={required()} />
-      <TextInput source="url" />
-      <SelectInput
-        source="state"
-        choices={states}
-        validate={required()}
-        defaultValue={1}
-      />
+      <Grid container spacing={2} maxWidth={700}>
+        <Grid item xs={12}>
+          <TextInput fullWidth source="title" validate={required()} />
+        </Grid>
+        <Grid item xs={12}>
+          <TextInput fullWidth source="address" validate={required()} />
+        </Grid>
+        <Grid item xs={12}>
+          <TextInput fullWidth source="phone" validate={required()} />
+        </Grid>
+        <Grid item xs={12}>
+          <TextInput fullWidth source="url" />
+        </Grid>
+        <Grid item xs={12}>
+          <SelectInput
+            fullWidth
+            source="state"
+            choices={states}
+            validate={required()}
+            defaultValue={1}
+          />
+        </Grid>
+      </Grid>
     </SimpleForm>
   );
 };

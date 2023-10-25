@@ -9,6 +9,7 @@ import {
   useGetList,
   usePermissions,
 } from "react-admin";
+import Grid from "@mui/material/Grid";
 
 const CreateForm = () => {
   const {
@@ -32,31 +33,64 @@ const CreateForm = () => {
 
   return (
     <SimpleForm>
-      <TextInput source="username" validate={required()} />
-      <TextInput source="password" type="password" validate={required()} />
-      <TextInput source="firstName" validate={required()} />
-      <TextInput source="lastName" validate={required()} />
-      <TextInput source="email" type="email" validate={required()} />
-      <TextInput source="telegram" validate={required()} />
-      <ReferenceInput label="Office" source="officeId" reference="offices">
-        <SelectInput
-          optionText="title"
-          optionValue="id"
-          validate={required()}
-        />
-      </ReferenceInput>
-      <SelectInput
-        source="role"
-        choices={roles}
-        validate={required()}
-        defaultValue={2}
-      />
-      <SelectInput
-        source="state"
-        choices={states}
-        validate={required()}
-        defaultValue={1}
-      />
+      <Grid container spacing={2} maxWidth={700}>
+        <Grid item xs={12} sm={6}>
+          <TextInput fullWidth source="username" validate={required()} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextInput
+            fullWidth
+            source="password"
+            type="password"
+            validate={required()}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextInput fullWidth source="firstName" validate={required()} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextInput fullWidth source="lastName" validate={required()} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextInput
+            fullWidth
+            source="email"
+            type="email"
+            validate={required()}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextInput fullWidth source="telegram" validate={required()} />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <ReferenceInput label="Office" source="officeId" reference="offices">
+            <SelectInput
+              fullWidth
+              optionText="title"
+              optionValue="id"
+              validate={required()}
+            />
+          </ReferenceInput>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <SelectInput
+            fullWidth
+            source="role"
+            choices={roles}
+            validate={required()}
+            defaultValue={2}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <SelectInput
+            fullWidth
+            source="state"
+            choices={states}
+            validate={required()}
+            defaultValue={1}
+          />
+        </Grid>
+      </Grid>
     </SimpleForm>
   );
 };

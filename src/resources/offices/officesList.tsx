@@ -11,15 +11,15 @@ import {
 import { useMediaQuery, Theme } from "@mui/material";
 
 export const OfficesList = () => {
-  const { isLoading, permissions } = usePermissions();
+  const { isLoading: isLoadingPermissions, permissions } = usePermissions();
   const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
 
-  if (isLoading) {
+  if (isLoadingPermissions) {
     return <Loading />;
   } else {
     const role = permissions.role;
     // console.log(role);
-1
+
     if (role === 1) {
       return (
         <List>

@@ -7,6 +7,7 @@ import {
   FunctionField,
   ReferenceField,
   usePermissions,
+  EditButton,
 } from "react-admin";
 import { useMediaQuery, Theme } from "@mui/material";
 
@@ -37,6 +38,7 @@ export const ExchangesList = () => {
                 <FunctionField render={(record) => record.name} />
               </ReferenceField>
               <TextField source="currencies" />
+              {/* <EditButton /> */}
             </Datagrid>
           )}
         </List>

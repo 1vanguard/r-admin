@@ -1,11 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Route } from "react-router-dom";
-import {
-  Admin,
-  CustomRoutes,
-  Resource
-} from "react-admin";
+import { Admin, CustomRoutes, Resource } from "react-admin";
 
 // Providers
 import { authProvider } from "./authProvider";
@@ -26,6 +22,7 @@ import { OfficesList } from "./resources/offices/officesList";
 import { OfficeCreate } from "./resources/offices/officeCreate";
 import { OfficeEdit } from "./resources/offices/officeEdit";
 import { ExchangesList } from "./resources/exchanges/exchangesList";
+import { ExchangeEdit } from "./resources/exchanges/exchangeEdit";
 import { BotsList } from "./resources/bots/botsList";
 import { BotEdit } from "./resources/bots/botEdit";
 
@@ -38,7 +35,7 @@ export const App = () => {
       loginPage={CabLogin}
       dashboard={Dashboard}
     >
-      {permissions => (
+      {(permissions) => (
         <>
           {permissions.role === 1 ? (
             <Resource
@@ -58,7 +55,11 @@ export const App = () => {
             />
           ) : null}
           {permissions.role === 1 ? (
-            <Resource name="exchanges" list={ExchangesList} />
+            <Resource
+              name="exchanges"
+              list={ExchangesList}
+              edit={ExchangeEdit}
+            />
           ) : null}
         </>
       )}

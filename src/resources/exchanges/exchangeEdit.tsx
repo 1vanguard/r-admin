@@ -50,24 +50,8 @@ const Editform = () => {
         <Grid item xs={12}>
           <TextInput
             fullWidth
-            source="address"
-            defaultValue={record.address}
-            validate={required()}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextInput
-            fullWidth
-            source="phone"
-            defaultValue={record.phone}
-            validate={required()}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextInput
-            fullWidth
-            source="url"
-            defaultValue={record.url}
+            source="Currencies"
+            defaultValue={record.currencies}
             validate={required()}
           />
         </Grid>
@@ -85,7 +69,7 @@ const Editform = () => {
   );
 };
 
-export const OfficeEdit = () => {
+export const ExchangeEdit = () => {
   const { isLoading, permissions } = usePermissions();
 
   if (isLoading) {

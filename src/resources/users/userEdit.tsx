@@ -10,16 +10,11 @@ import {
   useGetList,
   usePermissions,
 } from "react-admin";
-import { getStates } from "../../helpers/stateUtils";
-import { getRoles } from "../../helpers/roleUtils";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
+import Grid from "@mui/material/Grid";
 
 const Editform = () => {
   const record = useRecordContext();
-
-  if (!record) {
-    return <Loading />;
-  }
 
   const {
     data: states,
@@ -33,7 +28,7 @@ const Editform = () => {
     error: errorRoles,
   } = useGetList("roles");
 
-  if (isLoadingStates || isLoadingRoles) {
+  if (!record || isLoadingStates || isLoadingRoles) {
     return <Loading />;
   }
   if (errorStates || errorRoles) {
@@ -42,38 +37,85 @@ const Editform = () => {
 
   return (
     <SimpleForm toolbar={<PrymaryEditToolbar />}>
-      <TextInput disabled label="Id" source="id" />
-      <TextInput disabled source="username" defaultValue={record.username} />
-      <TextInput source="firstName" defaultValue={record.firstName} />
-      <TextInput source="lastName" defaultValue={record.lastName} />
-      <TextInput
-        source="email"
-        type="email"
-        validate={required()}
-        defaultValue={record.email}
-      />
-      <TextInput source="telegram" defaultValue={record.telegram} />
-      <ReferenceInput label="Role" source="role" reference="roles">
-        <SelectInput
-          source="role"
-          choices={roles}
-          validate={required()}
-          defaultValue={"2"}
-        />
-      </ReferenceInput>
-      <ReferenceInput label="Office" source="officeId" reference="offices">
-        <SelectInput
-          optionText="title"
-          optionValue="id"
-          validate={required()}
-        />
-      </ReferenceInput>
-      <SelectInput
-        source="state"
-        choices={states}
-        validate={required()}
-        defaultValue={record.state}
-      />
+      <Grid container spacing={2} maxWidth={700}>
+        <Grid item xs="auto">
+          <TextInput
+            disabled
+            label="Id"
+            source="id"
+            style={{ maxWidth: "7em" }}
+          />
+        </Grid>
+        <Grid item xs sm>
+          <TextInput
+            fullWidth
+            disabled
+            source="username"
+            defaultValue={record.username}
+          />
+        </Grid>
+        <Grid item xs={12} style={{ padding: "0" }}></Grid>
+        <Grid item xs={12} sm={6}>
+          <TextInput
+            fullWidth
+            source="firstName"
+            defaultValue={record.firstName}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextInput
+            fullWidth
+            source="lastName"
+            defaultValue={record.lastName}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextInput
+            fullWidth
+            source="email"
+            type="email"
+            validate={required()}
+            defaultValue={record.email}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextInput
+            fullWidth
+            source="telegram"
+            defaultValue={record.telegram}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <ReferenceInput label="Office" source="officeId" reference="offices">
+            <SelectInput
+              fullWidth
+              optionText="title"
+              optionValue="id"
+              validate={required()}
+            />
+          </ReferenceInput>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <SelectInput
+            fullWidth
+            source="state"
+            choices={states}
+            validate={required()}
+            defaultValue={record.state}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <ReferenceInput label="Role" source="role" reference="roles">
+            <SelectInput
+              fullWidth
+              source="role"
+              choices={roles}
+              validate={required()}
+              defaultValue={"2"}
+            />
+          </ReferenceInput>
+        </Grid>
+      </Grid>
     </SimpleForm>
   );
 };

@@ -36,20 +36,17 @@ const autoSortOptions = [
 const Editform = () => {
   const record = useRecordContext();
 
-  if (!record) {
-    return <Loading />;
-  }
   const {
     data: states,
     isLoading: isLoadingStates,
     error,
   } = useGetList("states");
 
-  if (isLoadingStates) {
+  if (!record || isLoadingStates) {
     return <Loading />;
   }
   if (error) {
-    return <p>ERROR</p>;
+    return <div>ERROR</div>;
   }
 
   return (
