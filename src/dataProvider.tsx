@@ -139,6 +139,9 @@ export default {
     if (resource === "offices" && params.meta.creator_role === 1) {
       endPoint = "create-office";
     }
+    if (resource === "exchanges" && params.meta.creator_role === 1) {
+      endPoint = "create-exchange";
+    }
 
     const { json } = await httpClient(`${apiUrl}/${endPoint}`, {
       method: "POST",

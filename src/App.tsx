@@ -22,6 +22,7 @@ import { OfficesList } from "./resources/offices/officesList";
 import { OfficeCreate } from "./resources/offices/officeCreate";
 import { OfficeEdit } from "./resources/offices/officeEdit";
 import { ExchangesList } from "./resources/exchanges/exchangesList";
+import { ExchangeCreate } from "./resources/exchanges/exchangeCreate";
 import { ExchangeEdit } from "./resources/exchanges/exchangeEdit";
 import { BotsList } from "./resources/bots/botsList";
 import { BotEdit } from "./resources/bots/botEdit";
@@ -58,6 +59,7 @@ export const App = () => {
             <Resource
               name="exchanges"
               list={ExchangesList}
+              create={ExchangeCreate}
               edit={ExchangeEdit}
             />
           ) : null}

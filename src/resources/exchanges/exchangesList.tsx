@@ -38,7 +38,7 @@ export const ExchangesList = () => {
                 <FunctionField render={(record) => record.name} />
               </ReferenceField>
               <TextField source="currencies" />
-              {/* <EditButton /> */}
+              <EditButton />
             </Datagrid>
           )}
         </List>

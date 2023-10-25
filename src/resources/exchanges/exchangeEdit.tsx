@@ -50,7 +50,7 @@ const Editform = () => {
         <Grid item xs={12}>
           <TextInput
             fullWidth
-            source="Currencies"
+            source="currencies"
             defaultValue={record.currencies}
             validate={required()}
           />
