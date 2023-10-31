@@ -108,7 +108,7 @@ export const UserCreate = () => {
         redirect="list"
       >
         <>
-          {role === 1 ? (
+          {role === 1 || role === 2 ? (
             <CreateForm />
           ) : (
             <div>Only admins can create users</div>

@@ -38,7 +38,7 @@ export const App = () => {
     >
       {(permissions) => (
         <>
-          {permissions.role === 1 ? (
+          {permissions.role === 1 || permissions.role === 2 ? (
             <Resource
               name="users"
               list={UsersList}

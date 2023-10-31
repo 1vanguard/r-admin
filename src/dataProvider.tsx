@@ -1,15 +1,16 @@
 import { fetchUtils } from "react-admin";
 import { authProvider } from "./authProvider";
 import { stringify } from "query-string";
+import { json } from "stream/consumers";
 
 const apiUrl = import.meta.env.VITE_JSON_SERVER_URL;
 const httpClient = fetchUtils.fetchJson;
 
 export default {
-  getResources: () => {
+  /* getResources: () => {
     // Здесь вы должны реализовать логику получения списка ресурсов вашего приложения
     return Promise.resolve([{ name: "users" }, { name: "offices" }]);
-  },
+  }, */
   getList: async (resource, params) => {
     console.log("Работает dataProvider getList");
     const { page, perPage } = params.pagination,
@@ -21,15 +22,23 @@ export default {
       },
       { token } = await authProvider.getIdentity(),
       url = `${apiUrl}/${resource}?${stringify(query)}`,
-      headers = new Headers();
-    headers.set("authorization", token);
-    
+      reqHeaders = new Headers();
+    reqHeaders.set("authorization", token);
+
+    console.log(resource);
+    console.log(params);
+    console.log("query: " + stringify(query));
+    console.log("order: " + order);
     console.log("page: " + page);
     console.log("perPage: " + perPage);
 
-    const response = await httpClient(url, { headers }),
-      resHeaders = response.headers,
-      resData = response.json;
+    const response = await httpClient(url, { headers: reqHeaders });
+
+    console.log(response);
+
+    const resHeaders = response.headers
+    // const resData = response.json
+    const resData = JSON.parse(response.body)
     return {
       data: resData,
       total: parseInt(resHeaders.get("content-range").split("/").pop(), 10),
@@ -41,6 +50,8 @@ export default {
     const { token } = await authProvider.getIdentity(),
       headers = new Headers();
     headers.set("authorization", token);
+
+    console.log(resource);
 
     return await httpClient(`${apiUrl}/${resource}/${params.id}`, {
       headers,
@@ -60,6 +71,10 @@ export default {
       headers = new Headers();
 
     headers.set("authorization", token);
+
+    console.log(resource);
+    console.log(params);
+
     return await httpClient(url, { headers }).then(({ json }) => {
       console.log(json);
       return { data: json };

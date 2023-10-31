@@ -57,7 +57,7 @@ export const BotsList = () => {
               >
                 <FunctionField render={(record) => record.title} />
               </ReferenceField>
-              <TextField source="office_id" />
+              {/* <TextField source="office_id" /> */}
               <ReferenceField
                 label="Client"
                 source="client_id"

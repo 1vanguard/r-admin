@@ -79,7 +79,7 @@ export const authProvider: AuthProvider = {
       const token = JSON.parse(localStorage.getItem("token") as string),
         uid = JSON.parse(localStorage.getItem("uid") as string),
         username = JSON.parse(localStorage.getItem("username") as string)
-      return Promise.resolve({ id: uid, username, token /*, permissions, role */ });
+      return Promise.resolve({ id: uid, username, token });
     } catch (error) {
       return Promise.reject({ message: "Failed to retrieve identity", error });
     }
