@@ -15,3 +15,8 @@ export interface period {
   id: number;
   value: number;
 }
+
+export interface usersFilter {
+  officeId?: number;
+  role?: number;
+}

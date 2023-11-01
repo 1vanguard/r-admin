@@ -2,15 +2,12 @@ import { fetchUtils } from "react-admin";
 import { authProvider } from "./authProvider";
 import { stringify } from "query-string";
 import { json } from "stream/consumers";
+import { error } from "console";
 
 const apiUrl = import.meta.env.VITE_JSON_SERVER_URL;
 const httpClient = fetchUtils.fetchJson;
 
 export default {
-  /* getResources: () => {
-    // Здесь вы должны реализовать логику получения списка ресурсов вашего приложения
-    return Promise.resolve([{ name: "users" }, { name: "offices" }]);
-  }, */
   getList: async (resource, params) => {
     console.log("Работает dataProvider getList");
     const { page, perPage } = params.pagination,
@@ -37,8 +34,10 @@ export default {
     console.log(response);
 
     const resHeaders = response.headers
-    // const resData = response.json
+    // const resData = await response.json()
     const resData = JSON.parse(response.body)
+
+    console.log(resData);
     return {
       data: resData,
       total: parseInt(resHeaders.get("content-range").split("/").pop(), 10),

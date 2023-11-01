@@ -12,40 +12,38 @@ import {
   usePermissions,
   useGetIdentity,
   useGetOne,
+  useStore
 } from "react-admin";
+import { usersFilter } from "../../types";
 import { useMediaQuery, Theme } from "@mui/material";
 
 export const UsersList = () => {
-  const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+  const userId = localStorage.getItem("uid");
+  // const [ userId ] = useStore('currentUid');
+  console.log(userId);
+  //const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
   const { permissions, isLoading: isLoadingPermissions } = usePermissions();
   const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
-  const {data: user, isLoading: isLoadingUser, error: errorUser} = useGetOne("users", { id: identity?.id });
+  const {data: user, isLoading: isLoadingUser, error: errorUser} = useGetOne("users", { id: userId });
 
   console.log(isLoadingPermissions);
-  console.log(isLoadingIdentity);
-  console.log(identity);
+  //console.log(isLoadingIdentity);
+  console.log(isLoadingUser);
 
-  if (isLoadingIdentity || isLoadingPermissions) { return <Loading />; }
+  if (/* isLoadingIdentity ||  */isLoadingPermissions || isLoadingUser) { return <Loading />; }
 
+  const role = permissions.role,
+    userOfficeId = user?.officeId,
+    usersFilter: usersFilter = {}
 
-  console.log(isLoadingPermissions);
-  console.log(isLoadingIdentity);
-
-    console.log(identity.id);
-
-    /* if (isLoadingUser) {
-      return <Loading />;
-    } else {
-      //console.log(user);
-      if (role === 2) {
-      }
-    } */
-  const role = permissions.role;
-
+  if (role === 2) {
+    usersFilter.officeId = userOfficeId
+    usersFilter.role = 3
+  }
 
   if (role === 1 || role === 2) {
     return (
-      <List>
+      <List filter={usersFilter}>
         {isSmall ? (
           <SimpleList
             primaryText={(record) => record.username}
