@@ -40,7 +40,7 @@ export default {
     console.log(resData);
     return {
       data: resData,
-      total: parseInt(resHeaders.get("content-range").split("/").pop(), 10),
+      total: parseInt(resHeaders.get("content-range").split("/").pop(), perPage),
     };
   },
 
@@ -146,7 +146,7 @@ export default {
 
     if (resource === "users") {
       endPoint = "register";
-      if (params.meta.creator_role === 1) {
+      if (params.meta.creator_role === 1 || params.meta.creator_role === 2) {
         endPoint = "create-user";
       }
     }

@@ -8,28 +8,26 @@ import {
   required,
   useGetList,
   usePermissions,
+  useGetOne,
+  useNotify,
+  useRedirect,
 } from "react-admin";
 import Grid from "@mui/material/Grid";
 
 const CreateForm = () => {
-  const {
-    data: states,
-    isLoading: isLoadingStates,
-    error: errorStates,
-  } = useGetList("states");
+  const userId = localStorage.getItem("uid"),
+    {
+      data: user,
+      isLoading: isLoadingUser,
+      error: errorUser,
+    } = useGetOne("users", { id: userId }),
+    { permissions, isLoading: isLoadingPermissions } = usePermissions()
 
-  const {
-    data: roles,
-    isLoading: isLoadingRoles,
-    error: errorRoles,
-  } = useGetList("roles");
-
-  if (isLoadingStates || isLoadingRoles) {
+  if (isLoadingPermissions)
     return <Loading />;
-  }
-  if (errorStates || errorRoles) {
-    return <p>ERROR</p>;
-  }
+
+  const role = permissions.role,
+    userOfficeId = user?.officeId;
 
   return (
     <SimpleForm>
@@ -63,32 +61,47 @@ const CreateForm = () => {
           <TextInput fullWidth source="telegram" validate={required()} />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <ReferenceInput label="Office" source="officeId" reference="offices">
+          <ReferenceInput
+            label="Office"
+            source="officeId"
+            reference="offices"
+            {...(role === 2 && { filter: { id: userOfficeId } })}
+          >
             <SelectInput
               fullWidth
               optionText="title"
               optionValue="id"
               validate={required()}
+              {...(role === 2 && { defaultValue: userOfficeId })}
             />
           </ReferenceInput>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <SelectInput
-            fullWidth
+          <ReferenceInput
+            label="Role"
             source="role"
-            choices={roles}
-            validate={required()}
-            defaultValue={2}
-          />
+            reference="roles"
+            {...(role === 2 && { filter: { id: 3 } })}
+          >
+            <SelectInput
+              fullWidth
+              optionText="name"
+              source="role"
+              validate={required()}
+              {...(role === 2 && { defaultValue: 3 })}
+            />
+          </ReferenceInput>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <SelectInput
-            fullWidth
-            source="state"
-            choices={states}
-            validate={required()}
-            defaultValue={1}
-          />
+          <ReferenceInput label="State" source="state" reference="states">
+            <SelectInput
+              fullWidth
+              optionText="name"
+              source="state"
+              validate={required()}
+              defaultValue={1}
+            />
+          </ReferenceInput>
         </Grid>
       </Grid>
     </SimpleForm>
@@ -96,25 +109,43 @@ const CreateForm = () => {
 };
 
 export const UserCreate = () => {
-  const { isLoading, permissions } = usePermissions(),
+  const { permissions, isLoading: isLoadingPermissions } = usePermissions(),
+    {
+      data: exchanges,
+      isLoading: isLoadingExchanges,
+      error: errorExchanges,
+    } = useGetList("exchanges"),
+    {
+      data: offices,
+      isLoading: isLoadingOffices,
+      error: errorOffices,
+    } = useGetList("offices"),
+    notify = useNotify(),
+    redirect = useRedirect(),
     role = permissions.role;
 
-  if (isLoading) {
+  if (isLoadingPermissions || isLoadingExchanges || isLoadingOffices)
     return <Loading />;
-  } else {
-    return (
-      <Create
-        mutationOptions={{ meta: { creator_role: role } }}
-        redirect="list"
-      >
-        <>
-          {role === 1 || role === 2 ? (
-            <CreateForm />
-          ) : (
-            <div>Only admins can create users</div>
-          )}
-        </>
-      </Create>
-    );
+  if (errorExchanges || errorOffices) return <p>ERROR</p>;
+
+  if (offices.length === 0) {
+    notify(`Offices are not created. Please, create offices first`);
+    redirect("offices");
   }
+  if (exchanges.length === 0) {
+    notify(`Exchanges are not created. Please, create exchanges first`);
+    redirect("exchanges");
+  }
+
+  return (
+    <Create mutationOptions={{ meta: { creator_role: role } }} redirect="list">
+      <>
+        {role === 1 || role === 2 ? (
+          <CreateForm />
+        ) : (
+          <div>Only admins and managers can create users</div>
+        )}
+      </>
+    </Create>
+  );
 };

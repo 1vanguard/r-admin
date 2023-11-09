@@ -1,4 +1,4 @@
-import { AuthProvider, useStore } from "react-admin";
+import { AuthProvider } from "react-admin";
 
 const apiUrl = import.meta.env.VITE_JSON_SERVER_URL;
 

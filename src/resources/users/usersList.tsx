@@ -10,40 +10,36 @@ import {
   DateField,
   EditButton,
   usePermissions,
-  useGetIdentity,
   useGetOne,
-  useStore
 } from "react-admin";
 import { usersFilter } from "../../types";
 import { useMediaQuery, Theme } from "@mui/material";
 
 export const UsersList = () => {
-  const userId = localStorage.getItem("uid");
-  // const [ userId ] = useStore('currentUid');
-  console.log(userId);
-  //const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
-  const { permissions, isLoading: isLoadingPermissions } = usePermissions();
-  const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
-  const {data: user, isLoading: isLoadingUser, error: errorUser} = useGetOne("users", { id: userId });
+  const userId = localStorage.getItem("uid"),
+    {
+      data: user,
+      isLoading: isLoadingUser,
+      error: errorUser,
+    } = useGetOne("users", { id: userId }),
+    { permissions, isLoading: isLoadingPermissions } = usePermissions(),
+    isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
 
-  console.log(isLoadingPermissions);
-  //console.log(isLoadingIdentity);
-  console.log(isLoadingUser);
-
-  if (/* isLoadingIdentity ||  */isLoadingPermissions || isLoadingUser) { return <Loading />; }
+  if (isLoadingPermissions || isLoadingUser) return <Loading />;
+  if (errorUser) return <p>ERROR</p>;
 
   const role = permissions.role,
     userOfficeId = user?.officeId,
-    usersFilter: usersFilter = {}
+    usersFilter: usersFilter = {};
 
   if (role === 2) {
-    usersFilter.officeId = userOfficeId
-    usersFilter.role = 3
+    usersFilter.officeId = userOfficeId;
+    usersFilter.role = 3;
   }
 
   if (role === 1 || role === 2) {
     return (
-      <List filter={usersFilter}>
+      <List filter={usersFilter} sort={{field: 'id', order: 'DESC'}}>
         {isSmall ? (
           <SimpleList
             primaryText={(record) => record.username}
