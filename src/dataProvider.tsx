@@ -14,7 +14,8 @@ export default {
       { field, order } = params.sort,
       query = {
         sort: JSON.stringify([field, order]),
-        range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
+        // range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
+        range: JSON.stringify([(page - 1) * perPage, perPage]),
         filter: JSON.stringify(params.filter),
       },
       { token } = await authProvider.getIdentity(),
@@ -40,7 +41,7 @@ export default {
     console.log(resData);
     return {
       data: resData,
-      total: parseInt(resHeaders.get("content-range").split("/").pop(), perPage),
+      total: parseInt(resHeaders.get("content-range").split("/").pop(), 10),
     };
   },
 
