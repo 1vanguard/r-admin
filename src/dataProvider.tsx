@@ -56,7 +56,7 @@ export default {
     return await httpClient(`${apiUrl}/${resource}/${params.id}`, {
       headers,
     }).then(({ json }) => {
-      console.log(json);
+      console.log('json  dataProvider getOne', json);
       return{ data: json }
     });
   },
@@ -156,6 +156,9 @@ export default {
     }
     if (resource === "exchanges" && params.meta.creator_role === 1) {
       endPoint = "create-exchange";
+    }
+    if (resource === "bots" && (params.meta.creator_role === 1 || params.meta.creator_role === 2)) {
+      endPoint = "create-bot";
     }
 
     const { json } = await httpClient(`${apiUrl}/${endPoint}`, {
