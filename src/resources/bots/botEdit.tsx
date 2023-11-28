@@ -14,9 +14,9 @@ import {
   useGetList,
 } from "react-admin";
 
-//import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
-//import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
-//import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
+import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
+import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
+import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 import Grid from "@mui/material/Grid";
 
 const autoPairTfToFilter = [0, 30, 60, 240, 1440],
@@ -34,7 +34,7 @@ const autoSortOptions = [
 ];
 
 const Editform = () => {
-  /* const record = useRecordContext();
+  const record = useRecordContext();
 
   const {
     data: states,
@@ -47,15 +47,13 @@ const Editform = () => {
   }
   if (error) {
     return <div>ERROR</div>;
-  } */
+  }
 
-    /* <TabbedForm toolbar={<PrymaryEditToolbar />} id="editBotForm"> */
   return (
-    <TabbedForm id="editBotForm">
+    <TabbedForm toolbar={<PrymaryEditToolbar />} id="editBotForm"  syncWithLocation={false}>
       <TabbedForm.Tab label="General">
         <Grid container spacing={2}>
-          Gggg
-          {/* <Grid item xs={12} sm={4} md={2} lg={1}>
+          <Grid item xs={12} sm={4} md={2} lg={1}>
             <TextInput
               fullWidth
               disabled
@@ -144,15 +142,12 @@ const Editform = () => {
           </Grid>
           <Grid item xs={12} md={6}>
             <BooleanInput label="Enable autotrading" source="auto_on" />
-          </Grid> */}
+          </Grid>
         </Grid>
       </TabbedForm.Tab>
       <TabbedForm.Tab label="Auto">
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            sss
-          </Grid>
-          {/* <Grid item xs={12} md={6}>
             <NumberInput
               fullWidth
               label="Pairs quantity"
@@ -344,15 +339,12 @@ const Editform = () => {
               source="pd_pause"
               validate={required()}
             />
-          </Grid> */}
+          </Grid>
         </Grid>
       </TabbedForm.Tab>
       <TabbedForm.Tab label="RSI">
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            rrrrrrrrrrrr
-          </Grid>
-          {/* <Grid item xs={12}>
             <BooleanInput label="Sell by RSI" source="rsi_sell" />
           </Grid>
           <Grid item xs={12}>
@@ -487,8 +479,11 @@ const Editform = () => {
               label="Percentage price drop for blocking for a month"
               source="long_dump"
             />
-          </Grid> */}
+          </Grid>
         </Grid>
+      </TabbedForm.Tab>
+      <TabbedForm.Tab label="Pairs">
+        
       </TabbedForm.Tab>
     </TabbedForm>
   );

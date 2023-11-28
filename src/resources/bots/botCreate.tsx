@@ -73,21 +73,20 @@ const CreateForm = () => {
 };
 
 export const BotCreate = () => {
-  const { isLoading, permissions } = usePermissions(),
+  const { permissions, isLoading: isLoadingPermissions } = usePermissions(),
     role = permissions.role;
 
-  if (isLoading) {
-    return <Loading />;
-  } else {
-    return (
-      <Create
-        mutationOptions={{ meta: { creator_role: role } }}
-        redirect="list"
-      >
-        <>
-          {role === 1 ? <CreateForm /> : <div>Only admins can create bots</div>}
-        </>
-      </Create>
-    );
-  }
+    if (isLoadingPermissions) return <Loading />;
+
+  return (
+    <Create mutationOptions={{ meta: { creator_role: role } }} redirect="list">
+      <>
+        {role === 1 || role === 2 ? (
+          <CreateForm />
+        ) : (
+          <div>Only admins and managers can create bots</div>
+        )}
+      </>
+    </Create>
+  );
 };
