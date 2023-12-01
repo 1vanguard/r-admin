@@ -12,12 +12,18 @@ import {
   AutocompleteInput,
   BooleanInput,
   useGetList,
+  List,
+  Datagrid,
+  TextField,
+  ReferenceField,
+  EditButton,
+  FunctionField,
 } from "react-admin";
 
-import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
-import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
-import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 import Grid from "@mui/material/Grid";
+import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
+import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
+import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
 
 const autoPairTfToFilter = [0, 30, 60, 240, 1440],
   autoShortTfToFilter = [5, 15, 30, 60, 240],
@@ -29,9 +35,18 @@ const autoRsiPeriodOptionsToFilter = [6, 8, 10, 14],
   autoSellPeriodOptionsToFilter = [6, 8, 10, 12, 14];
 
 const autoSortOptions = [
-  { id: 1, name: "Value" },
-  { id: 2, name: "Volatility" },
-];
+    { id: 1, name: "Value" },
+    { id: 2, name: "Volatility" },
+  ],
+  baseMin = 0,
+  colorImportant01 = "rgb(0 0 0 / 5%)",
+  colorImportantBorder02 = "#2196f3",
+  exchangeFilterToQuery = (searchText: any) => ({
+    title_like: `${searchText}`,
+  }),
+  usernameFilterToQuery = (searchText: any) => ({
+    username_like: `${searchText}`,
+  });
 
 const Editform = () => {
   const record = useRecordContext();
@@ -50,7 +65,11 @@ const Editform = () => {
   }
 
   return (
-    <TabbedForm toolbar={<PrymaryEditToolbar />} id="editBotForm"  syncWithLocation={false}>
+    <TabbedForm
+      toolbar={<PrymaryEditToolbar />}
+      id="editBotForm"
+      syncWithLocation={false}
+    >
       <TabbedForm.Tab label="General">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4} md={2} lg={1}>
@@ -85,6 +104,7 @@ const Editform = () => {
                 fullWidth
                 optionText="username"
                 validate={required()}
+                filterToQuery={usernameFilterToQuery}
               />
             </ReferenceInput>
           </Grid>
@@ -98,6 +118,7 @@ const Editform = () => {
                 fullWidth
                 optionText="title"
                 validate={required()}
+                filterToQuery={exchangeFilterToQuery}
               />
             </ReferenceInput>
           </Grid>
@@ -130,8 +151,8 @@ const Editform = () => {
               fullWidth
               label="Trading limit"
               source="botlimit"
-              min={0}
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -153,6 +174,7 @@ const Editform = () => {
               label="Pairs quantity"
               source="auto_pair_count"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -161,6 +183,7 @@ const Editform = () => {
               label="Limit for a pair"
               source="auto_limit_pair"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -169,6 +192,7 @@ const Editform = () => {
               label="Number of orders in a pair"
               source="auto_order_count"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -177,6 +201,7 @@ const Editform = () => {
               label="Indent in %"
               source="auto_offset"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -185,6 +210,7 @@ const Editform = () => {
               label="Initial order amount"
               source="auto_start_sum"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -193,6 +219,7 @@ const Editform = () => {
               label="Order step, in %"
               source="auto_step"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -201,6 +228,7 @@ const Editform = () => {
               label="Martingale, in %"
               source="auto_martin"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -209,6 +237,7 @@ const Editform = () => {
               label="Profit, in %"
               source="auto_profit"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -217,6 +246,7 @@ const Editform = () => {
               label="Slippage, in %"
               source="auto_squiz"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -225,6 +255,7 @@ const Editform = () => {
               label="Min. daily trading volume"
               source="auto_min_vol"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -233,6 +264,7 @@ const Editform = () => {
               label="Max. daily trading volume"
               source="auto_max_vol"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -250,6 +282,7 @@ const Editform = () => {
               label="Timeout in seconds for entering the pair"
               source="timeout"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -258,6 +291,7 @@ const Editform = () => {
               label="Timeout until the next purchase (in seconds)"
               source="next_buy_timeout"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -274,6 +308,7 @@ const Editform = () => {
               label="Min. RSI to enter the pair"
               source="auto_rsi_min_big"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -282,6 +317,7 @@ const Editform = () => {
               label="Max. RSI to enter the pair"
               source="auto_rsi_max_big"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12}>
@@ -298,6 +334,7 @@ const Editform = () => {
               label="Max growth per day, %"
               source="auto_pd_up"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -306,6 +343,7 @@ const Editform = () => {
               label="Max drop per day, %"
               source="auto_pd_down"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -314,6 +352,7 @@ const Editform = () => {
               label="Pause for a pair, hours"
               source="auto_pd_pause"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -322,6 +361,7 @@ const Editform = () => {
               label="Max BTC growth per hour, %"
               source="pd_up"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -330,6 +370,7 @@ const Editform = () => {
               label="Max BTC drop per hour, %"
               source="pd_down"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -338,46 +379,60 @@ const Editform = () => {
               label="Pause for the bot, hours"
               source="pd_pause"
               validate={required()}
+              min={baseMin}
             />
           </Grid>
         </Grid>
       </TabbedForm.Tab>
       <TabbedForm.Tab label="RSI">
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ maxWidth: 700 }}>
           <Grid item xs={12}>
             <BooleanInput label="Sell by RSI" source="rsi_sell" />
           </Grid>
           <Grid item xs={12}>
             <h2>Short RSI input</h2>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <TimeFramesSelectInput
-              fullWidth
-              name="auto_short_tf"
-              label="RSI timeframe for entry (short)"
-              frameChoices={autoShortTfToFilter}
-            />
+          <Grid item xs={12} md={8}>
+            <Grid
+              container
+              sx={{
+                backgroundColor: colorImportant01,
+                borderStyle: "solid",
+                borderWidth: "1px",
+                borderColor: colorImportantBorder02,
+                p: 2,
+              }}
+            >
+              <Grid item xs={12} md={6}>
+                <TimeFramesSelectInput
+                  fullWidth
+                  name="auto_short_tf"
+                  label="RSI timeframe for entry"
+                  frameChoices={autoShortTfToFilter}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <PeriodsSelectInput
+                  fullWidth
+                  name="auto_rsi_period"
+                  label="The RSI period for entry"
+                  periodChoices={autoRsiPeriodOptionsToFilter}
+                />
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <NumberInput
-              fullWidth
-              label="Min. RSI for entry"
-              source="auto_rsi_min"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <NumberInput
               fullWidth
               label="Max. RSI for entry"
               source="auto_rsi_max"
+              min={baseMin}
             />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <PeriodsSelectInput
+            <NumberInput
               fullWidth
-              name="auto_rsi_period"
-              label="The RSI period for entry"
-              periodChoices={autoRsiPeriodOptionsToFilter}
+              label="Min. RSI for entry"
+              source="auto_rsi_min"
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12}>
@@ -389,67 +444,93 @@ const Editform = () => {
               source="auto_use_ltf"
             />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <TimeFramesSelectInput
-              fullWidth
-              name="auto_long_tf"
-              label="RSI timeframe for entry (long)"
-              frameChoices={autoLongTfToFilter}
-            />
+          <Grid item xs={12} md={8}>
+            <Grid
+              container
+              sx={{
+                backgroundColor: colorImportant01,
+                borderStyle: "solid",
+                borderWidth: "1px",
+                borderColor: colorImportantBorder02,
+                p: 2,
+              }}
+            >
+              <Grid item xs={12} md={6}>
+                <TimeFramesSelectInput
+                  fullWidth
+                  name="auto_long_tf"
+                  label="RSI timeframe for entry"
+                  frameChoices={autoLongTfToFilter}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <PeriodsSelectInput
+                  fullWidth
+                  name="auto_rsi_period_1h"
+                  label="The RSI period for entry"
+                  periodChoices={autoRsiPeriod1hOptionsToFilter}
+                />
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <NumberInput
-              fullWidth
-              label="Min. RSI for entry"
-              source="auto_rsi_min_1h"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <NumberInput
               fullWidth
               label="Max. RSI for entry"
               source="auto_rsi_max_1h"
+              min={baseMin}
             />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <PeriodsSelectInput
+            <NumberInput
               fullWidth
-              name="auto_rsi_period_1h"
-              label="The RSI period for entry"
-              periodChoices={autoRsiPeriod1hOptionsToFilter}
+              label="Min. RSI for entry"
+              source="auto_rsi_min_1h"
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12}>
             <h2>RSI for sale</h2>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <TimeFramesSelectInput
-              fullWidth
-              name="auto_sell_tf"
-              label="The RSI timeframe for sale"
-              frameChoices={autoSellTfToFilter}
-            />
+          <Grid item xs={12} md={8}>
+            <Grid
+              container
+              sx={{
+                backgroundColor: colorImportant01,
+                borderStyle: "solid",
+                borderWidth: "1px",
+                borderColor: colorImportantBorder02,
+                p: 2,
+              }}
+            >
+              <Grid item xs={12} md={6}>
+                <TimeFramesSelectInput
+                  fullWidth
+                  name="auto_sell_tf"
+                  label="The RSI timeframe for sale"
+                  frameChoices={autoSellTfToFilter}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <PeriodsSelectInput
+                  fullWidth
+                  name="auto_sell_period"
+                  label="RSI period for Sale"
+                  periodChoices={autoSellPeriodOptionsToFilter}
+                />
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <PeriodsSelectInput
-              fullWidth
-              name="auto_sell_period"
-              label="RSI period for Sale"
-              periodChoices={autoSellPeriodOptionsToFilter}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <NumberInput
-              fullWidth
-              label="Min. RSI for sale"
-              source="auto_rsi_min_sell"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <NumberInput
               fullWidth
               label="Max. RSI for sale"
               source="auto_rsi_max_sell"
+              min={baseMin}
+            />
+            <NumberInput
+              fullWidth
+              label="Min. RSI for sale"
+              source="auto_rsi_min_sell"
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -457,6 +538,7 @@ const Editform = () => {
               fullWidth
               label="Difference from the previous RSI value for purchase, %"
               source="auto_rsi_diff"
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -464,6 +546,7 @@ const Editform = () => {
               fullWidth
               label="Difference from the previous RSI value for sale, %"
               source="rsi_sell_diff"
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -471,6 +554,7 @@ const Editform = () => {
               fullWidth
               label="Percentage price increase for blocking for a month"
               source="long_pump"
+              min={baseMin}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -478,12 +562,31 @@ const Editform = () => {
               fullWidth
               label="Percentage price drop for blocking for a month"
               source="long_dump"
+              min={baseMin}
             />
           </Grid>
         </Grid>
       </TabbedForm.Tab>
       <TabbedForm.Tab label="Pairs">
-        
+        <List
+          resource="pairs"
+          filter={{ bot_id: record.id }}
+          sx={{ width: "100%" }}
+        >
+          <Datagrid>
+            <TextField source="id" />
+            <TextField source="symbol" />
+            <ReferenceField label="State" source="state" reference="states">
+              <FunctionField render={(record) => record.name} />
+            </ReferenceField>
+            <TextField source="pair_limit" />
+            <TextField source="step" />
+            <TextField source="start_offset" />
+            <TextField source="profit" />
+            <TextField source="squiz" />
+            <EditButton />
+          </Datagrid>
+        </List>
       </TabbedForm.Tab>
     </TabbedForm>
   );

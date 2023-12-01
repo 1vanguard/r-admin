@@ -27,6 +27,9 @@ import { ExchangeEdit } from "./resources/exchanges/exchangeEdit";
 import { BotsList } from "./resources/bots/botsList";
 import { BotEdit } from "./resources/bots/botEdit";
 import { BotCreate } from "./resources/bots/botCreate";
+import { PairsList } from "./resources/pairs/pairsList";
+import { PairEdit } from "./resources/pairs/pairEdit";
+import { PairCreate } from "./resources/pairs/pairCreate";
 
 export const App = () => {
   return (
@@ -67,6 +70,7 @@ export const App = () => {
         </>
       )}
       <Resource name="bots" list={BotsList} edit={BotEdit} create={BotCreate} />
+      <Resource name="pairs" list={PairsList} edit={PairEdit} create={PairCreate} />
       <CustomRoutes noLayout>
         <Route path="/registration" element={<CabRegistration />} />
       </CustomRoutes>

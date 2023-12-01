@@ -6,13 +6,19 @@ import {
   DateField,
   FunctionField,
   TextField,
+  TextInput,
   ReferenceField,
   EditButton,
   usePermissions,
 } from "react-admin";
+
 import { useMediaQuery, Theme } from "@mui/material";
 
-export const BotsList = () => {
+const pairsFilters = [
+    <TextInput label="Search" source="q" alwaysOn />
+]
+
+export const PairsList = () => {
   const { isLoading, permissions } = usePermissions();
   const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
 
@@ -33,47 +39,18 @@ export const BotsList = () => {
           ) : (
             <Datagrid>
               <TextField source="id" />
-              <TextField source="title" />
+              <TextField source="symbol" />
               <ReferenceField label="State" source="state" reference="states">
                 <FunctionField render={(record) => record.name} />
               </ReferenceField>
-              <DateField
-                source="pause_until"
-                showTime
-                options={{
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                }}
-              />
-              <ReferenceField
-                label="Exchange"
-                source="exchange_id"
-                reference="exchanges"
-              >
+              <ReferenceField label="Bot" source="bot_id" reference="bots">
                 <FunctionField render={(record) => record.title} />
               </ReferenceField>
-              {/* <TextField source="office_id" /> */}
-              <ReferenceField
-                label="Client"
-                source="client_id"
-                reference="users"
-              />
-              <DateField
-                source="created"
-                showTime
-                options={{
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                }}
-              />
+              <TextField source="pair_limit" />
+              <TextField source="step" />
+              <TextField source="start_offset" />
+              <TextField source="profit" />
+              <TextField source="squiz" />
               <EditButton />
             </Datagrid>
           )}

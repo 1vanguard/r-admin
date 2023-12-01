@@ -12,13 +12,6 @@ import {
 } from "react-admin";
 import Grid from "@mui/material/Grid";
 
-const exchangeFilterToQuery = (searchText: any) => ({
-    title_like: `${searchText}`,
-  }),
-  usernameFilterToQuery = (searchText: any) => ({
-    username_like: `${searchText}`,
-  });
-
 const CreateForm = () => {
   const {
     data: states,
@@ -40,12 +33,11 @@ const CreateForm = () => {
           <TextInput fullWidth source="title" validate={required()} />
         </Grid>
         <Grid item xs={12} md={4}>
-          <ReferenceInput label="Client" source="client_id" reference="users">
+          <ReferenceInput label="Bot" source="bot_id" reference="bots">
             <AutocompleteInput
               fullWidth
               optionText="username"
               validate={required()}
-              filterToQuery={usernameFilterToQuery}
             />
           </ReferenceInput>
         </Grid>
@@ -55,18 +47,12 @@ const CreateForm = () => {
             source="exchange"
             reference="exchange"
           >
-            {/* <SelectInput
+            <SelectInput
               fullWidth
               optionText="title"
               source="exchange"
               validate={required()}
               defaultValue={1}
-            /> */}
-            <AutocompleteInput
-              fullWidth
-              optionText="title"
-              validate={required()}
-              filterToQuery={exchangeFilterToQuery}
             />
           </ReferenceInput>
         </Grid>
@@ -86,7 +72,7 @@ const CreateForm = () => {
   );
 };
 
-export const BotCreate = () => {
+export const PairCreate = () => {
   const { permissions, isLoading: isLoadingPermissions } = usePermissions(),
     role = permissions.role;
 
@@ -98,7 +84,7 @@ export const BotCreate = () => {
         {role === 1 || role === 2 ? (
           <CreateForm />
         ) : (
-          <div>Only admins and managers can create bots</div>
+          <div>Only admins and managers can create pairs</div>
         )}
       </>
     </Create>

@@ -11,8 +11,13 @@ import {
   useGetOne,
   useNotify,
   useRedirect,
+  AutocompleteInput,
 } from "react-admin";
 import Grid from "@mui/material/Grid";
+
+const officeFilterToQuery = (searchText: any) => ({
+  title_like: `${searchText}`,
+});
 
 const CreateForm = () => {
   const userId = localStorage.getItem("uid"),
@@ -21,10 +26,12 @@ const CreateForm = () => {
       isLoading: isLoadingUser,
       error: errorUser,
     } = useGetOne("users", { id: userId }),
-    { permissions, isLoading: isLoadingPermissions } = usePermissions()
+    { permissions, isLoading: isLoadingPermissions } = usePermissions();
 
-  if (isLoadingPermissions)
-    return <Loading />;
+  if (isLoadingPermissions || isLoadingUser) return <Loading />;
+  if (errorUser) {
+    return <p>ERROR</p>;
+  }
 
   const role = permissions.role,
     userOfficeId = user?.officeId;
@@ -32,17 +39,19 @@ const CreateForm = () => {
   return (
     <SimpleForm>
       <Grid container spacing={2} maxWidth={700}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={role === 1 ? 6 : 12}>
           <TextInput fullWidth source="username" validate={required()} />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextInput
-            fullWidth
-            source="password"
-            type="password"
-            validate={required()}
-          />
-        </Grid>
+        {role === 1 && (
+          <Grid item xs={12} sm={6}>
+            <TextInput
+              fullWidth
+              source="password"
+              type="password"
+              validate={required()}
+            />
+          </Grid>
+        )}
         <Grid item xs={12} sm={6}>
           <TextInput fullWidth source="firstName" validate={required()} />
         </Grid>
@@ -67,13 +76,25 @@ const CreateForm = () => {
             reference="offices"
             {...(role === 2 && { filter: { id: userOfficeId } })}
           >
-            <SelectInput
-              fullWidth
-              optionText="title"
-              optionValue="id"
-              validate={required()}
-              {...(role === 2 && { defaultValue: userOfficeId })}
-            />
+            <>
+              {role === 1 && (
+                <AutocompleteInput
+                  fullWidth
+                  optionText="title"
+                  validate={required()}
+                  filterToQuery={officeFilterToQuery}
+                />
+              )}
+              {role === 2 && (
+                <SelectInput
+                  fullWidth
+                  optionText="title"
+                  optionValue="id"
+                  validate={required()}
+                  {...(role === 2 && { defaultValue: userOfficeId })}
+                />
+              )}
+            </>
           </ReferenceInput>
         </Grid>
         <Grid item xs={12} sm={4}>
