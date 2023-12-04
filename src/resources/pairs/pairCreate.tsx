@@ -9,20 +9,33 @@ import {
   required,
   useGetList,
   usePermissions,
+  NumberInput,
 } from "react-admin";
 import Grid from "@mui/material/Grid";
 
+const botFilterToQuery = (searchText: any) => ({
+  title_like: `${searchText}`,
+});
+
 const CreateForm = () => {
+  const baseMin = 0;
+
   const {
     data: states,
     isLoading: isLoadingStates,
-    error,
+    error: errorStates,
   } = useGetList("states");
 
-  if (isLoadingStates) {
+  const {
+    data: strategies,
+    isLoading: isLoadingStrategies,
+    error: errorStrategies,
+  } = useGetList("strategies");
+
+  if (isLoadingStates || isLoadingStrategies) {
     return <Loading />;
   }
-  if (error) {
+  if (errorStates || errorStrategies) {
     return <p>ERROR</p>;
   }
 
@@ -30,31 +43,85 @@ const CreateForm = () => {
     <SimpleForm>
       <Grid container spacing={2} maxWidth={700}>
         <Grid item xs={12}>
-          <TextInput fullWidth source="title" validate={required()} />
+          <TextInput fullWidth source="symbol" validate={required()} />
         </Grid>
         <Grid item xs={12} md={4}>
           <ReferenceInput label="Bot" source="bot_id" reference="bots">
             <AutocompleteInput
               fullWidth
-              optionText="username"
+              optionText="title"
               validate={required()}
+              filterToQuery={botFilterToQuery}
             />
           </ReferenceInput>
         </Grid>
-        <Grid item xs={12} md={4}>
+        {/* <Grid item xs={12} md={4}>
           <ReferenceInput
             label="Exchange"
             source="exchange"
             reference="exchange"
           >
-            <SelectInput
+            <AutocompleteInput
               fullWidth
               optionText="title"
-              source="exchange"
               validate={required()}
-              defaultValue={1}
+              filterToQuery={exchangeFilterToQuery}
             />
           </ReferenceInput>
+        </Grid> */}
+        <Grid item xs={12} sm={4}>
+          <SelectInput
+            fullWidth
+            source="strategy"
+            choices={strategies}
+            validate={required()}
+            defaultValue={1}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <NumberInput
+            fullWidth
+            label="Start Orders"
+            source="start_orders"
+            validate={required()}
+            min={baseMin}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <NumberInput
+            fullWidth
+            label="Pair limit"
+            source="pair_limit"
+            validate={required()}
+            min={baseMin}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <NumberInput
+            fullWidth
+            label="Step"
+            source="step"
+            validate={required()}
+            min={baseMin}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <NumberInput
+            fullWidth
+            label="Profit in %"
+            source="profit"
+            validate={required()}
+            min={baseMin}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <NumberInput
+            fullWidth
+            label="Trailing stop"
+            source="stop_offset"
+            validate={required()}
+            min={baseMin}
+          />
         </Grid>
         <Grid item xs={12} md={4}>
           <ReferenceInput label="State" source="state" reference="states">

@@ -55,13 +55,6 @@ const CreateForm = () => {
             source="exchange"
             reference="exchange"
           >
-            {/* <SelectInput
-              fullWidth
-              optionText="title"
-              source="exchange"
-              validate={required()}
-              defaultValue={1}
-            /> */}
             <AutocompleteInput
               fullWidth
               optionText="title"

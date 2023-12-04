@@ -23,8 +23,10 @@ const botFilterToQuery = (searchText: any) => ({
     title_like: `${searchText}`,
   }),
   entryShortRsiTfToFilter = [5, 15, 30, 60, 240],
-  entryLongRsiTfToFilter = [30, 60, 240],
+  entryLongRsiTfToFilter = [5, 30, 60, 240],
   autoPairRsiTfToFilter = [30, 60, 240, 1440],
+  rsiPeriodOptionsToFilter = [6, 8, 10, 12, 14],
+  rsiPeriodLongOptionsToFilter = [6, 8, 10, 12, 14],
   aiutoSellRsiTfToFilter = [5, 15, 30, 60, 240, 1440],
   autoRsiSellPeriodOptionsToFilter = [6, 8, 10, 12, 14],
   baseMin = 0;
@@ -70,6 +72,14 @@ const Editform = () => {
             />
           </Grid>
           <Grid item xs={12} sm={4}>
+            <TextInput
+              fullWidth
+              label="Symbol"
+              source="symbol"
+              validate={required()}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
             <ReferenceInput label="Bot" source="bot_id" reference="bots">
               <AutocompleteInput
                 fullWidth
@@ -93,7 +103,6 @@ const Editform = () => {
               fullWidth
               label="Base Currency"
               source="base_cur"
-              validate={required()}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -101,7 +110,6 @@ const Editform = () => {
               fullWidth
               label="Alternative Currency"
               source="alt_cur"
-              validate={required()}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -109,7 +117,6 @@ const Editform = () => {
               fullWidth
               label="Interval, ms"
               source="interval"
-              validate={required()}
               min={baseMin}
             />
           </Grid>
@@ -139,7 +146,6 @@ const Editform = () => {
               fullWidth
               label="Start offset"
               source="start_offset"
-              validate={required()}
               min={baseMin}
             />
           </Grid>
@@ -157,7 +163,6 @@ const Editform = () => {
               fullWidth
               label="Martingale"
               source="martin"
-              validate={required()}
               min={baseMin}
             />
           </Grid>
@@ -166,7 +171,6 @@ const Editform = () => {
               fullWidth
               label="Additional Martingale"
               source="add_martin"
-              validate={required()}
               min={baseMin}
             />
           </Grid>
@@ -184,7 +188,6 @@ const Editform = () => {
               fullWidth
               label="Additional Step"
               source="add_step"
-              validate={required()}
               min={baseMin}
             />
           </Grid>
@@ -202,7 +205,6 @@ const Editform = () => {
               fullWidth
               label="Squiz"
               source="squiz"
-              validate={required()}
               min={baseMin}
             />
           </Grid>
@@ -220,7 +222,6 @@ const Editform = () => {
               fullWidth
               label="Percentage of market growth"
               source="growth"
-              validate={required()}
               min={baseMin}
             />
           </Grid>
@@ -229,7 +230,6 @@ const Editform = () => {
               fullWidth
               label="Timeout (sec)"
               source="start_timeout"
-              validate={required()}
               min={baseMin}
             />
           </Grid>
@@ -238,7 +238,6 @@ const Editform = () => {
               fullWidth
               label="Timeout after purchase (sec)"
               source="next_buy_timeout"
-              validate={required()}
               min={baseMin}
             />
           </Grid>
@@ -247,11 +246,11 @@ const Editform = () => {
       <TabbedForm.Tab label="Indicators">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
-            <NumberInput
+            <PeriodsSelectInput
               fullWidth
+              name="rsi_period"
               label="RSI period"
-              source="rsi_period"
-              min={baseMin}
+              periodChoices={rsiPeriodOptionsToFilter}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -285,11 +284,11 @@ const Editform = () => {
             />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <NumberInput
+            <PeriodsSelectInput
               fullWidth
+              name="rsi_period_1h"
               label="RSI period (long)"
-              source="rsi_period_1h"
-              min={baseMin}
+              periodChoices={rsiPeriodLongOptionsToFilter}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -436,9 +435,9 @@ const Editform = () => {
           </Grid>
         </Grid>
       </TabbedForm.Tab>
-      <TabbedForm.Tab label="3">
+      {/* <TabbedForm.Tab label="3">
         <Grid container spacing={2}></Grid>
-      </TabbedForm.Tab>
+      </TabbedForm.Tab> */}
     </TabbedForm>
   );
 };
