@@ -33,9 +33,9 @@ export const OfficesList = () => {
             <Datagrid>
               <TextField source="id" />
               <TextField source="title" />
-              <TextField source="address" />
+              {/* <TextField source="address" />
               <TextField source="phone" />
-              <TextField source="url" />
+              <TextField source="url" /> */}
               <ReferenceField source="state" reference="states">
                 <TextField source="name" />
               </ReferenceField>

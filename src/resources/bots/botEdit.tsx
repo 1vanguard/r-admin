@@ -68,7 +68,6 @@ const Editform = () => {
     <TabbedForm
       toolbar={<PrymaryEditToolbar />}
       id="editBotForm"
-      syncWithLocation={false}
     >
       <TabbedForm.Tab label="General">
         <Grid container spacing={2}>
