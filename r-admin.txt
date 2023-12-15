@@ -1,0 +1,14 @@
+chief
+l0ngLiv343v3r
+
+https://adminalgo.ae/phpmyadmin/
+
+DB
+Host: 185.195.69.110
+DB name: citonex_cabinet
+User name: citonex_sql
+2b1WWzPVWD7FaeCk
+
+secretKey: 'your_secret_key'
+
+This one should be deleted!
