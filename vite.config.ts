@@ -9,6 +9,11 @@ export default defineConfig({
     },
     server: {
         host: true,
+        port: 5174,
+        https: {
+            key: '/home/citonex/conf/web/dev.adminalgo.ae/ssl/dev.adminalgo.ae.key',
+            cert: '/home/citonex/conf/web/dev.adminalgo.ae/ssl/dev.adminalgo.ae.pem',
+        }
     },
     base: './',
 });
