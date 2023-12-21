@@ -79,10 +79,10 @@ const Editform = () => {
         <Grid container spacing={2} maxWidth={700}>
           <Grid item xs="auto">
             <TextInput
-              disabled
               label="Id"
               source="id"
               style={{ maxWidth: "7em" }}
+              InputProps={{ disabled: true }}
             />
           </Grid>
           <Grid item xs sm>
@@ -91,7 +91,7 @@ const Editform = () => {
                 <Grid item xs={12} sm={6}>
                   <TextInput
                     fullWidth
-                    disabled
+                    InputProps={{ disabled: true }}
                     source="username"
                     defaultValue={record.username}
                     validate={required()}

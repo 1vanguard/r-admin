@@ -42,7 +42,7 @@ const Editform = () => {
         <Grid container spacing={2} maxWidth={700}>
           <Grid item xs="auto">
             <TextInput
-              disabled
+              InputProps={{ disabled: true }}
               label="Id"
               source="id"
               style={{ maxWidth: "7em" }}

@@ -74,7 +74,7 @@ const Editform = () => {
           <Grid item xs={12} sm={4} md={2} lg={1}>
             <TextInput
               fullWidth
-              disabled
+              InputProps={{ disabled: true }}
               label="Id"
               source="id"
               validate={required()}
