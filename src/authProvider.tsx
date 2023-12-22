@@ -40,6 +40,7 @@ export const authProvider: AuthProvider = {
     }
     if (status && (status.toString().startsWith("4") || status.toString().startsWith("5"))) {
       localStorage.removeItem("token");
+      console.log(error);
       return Promise.reject({ message: errorText });
     }
     return Promise.resolve();
