@@ -9,8 +9,10 @@ import {
   ReferenceField,
   EditButton,
   usePermissions,
+  useRecordContext,
 } from "react-admin";
 import { useMediaQuery, Theme } from "@mui/material";
+import { BotPanel } from "./botPanel";
 
 export const BotsList = () => {
   const { isLoading, permissions } = usePermissions();
@@ -31,7 +33,7 @@ export const BotsList = () => {
               tertiaryText={(record) => record.currencies}
             />
           ) : (
-            <Datagrid>
+            <Datagrid expand={BotPanel}>
               <TextField source="id" />
               <TextField source="title" />
               <ReferenceField label="State" source="state" reference="states">
