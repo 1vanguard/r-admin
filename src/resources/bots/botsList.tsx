@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import {
   List,
   SimpleList,
@@ -11,12 +11,41 @@ import {
   usePermissions,
   useRecordContext,
 } from "react-admin";
-import { useMediaQuery, Theme } from "@mui/material";
+import { LogEntry } from "../../types";
+import processWebSocketMessage from "../../helpers/webSocketDataProcessor";
 import { BotPanel } from "./botPanel";
+import { useMediaQuery, Theme } from "@mui/material";
+import { useWebSocket } from "../../webSocketProvider";
 
 export const BotsList = () => {
+  const { sockets } = useWebSocket();
+  const [botsLogs, setBotsLogs] = useState<LogEntry>([]);
   const { isLoading, permissions } = usePermissions();
   const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    // Прослушивание сообщений от веб-сокета
+    if (sockets.length > 0 && sockets[0]) {
+      sockets[0].onmessage = (event) => {
+        // Обработка полученного сообщения
+        const rawData = processWebSocketMessage(event.data);
+        if (rawData && rawData.mode === "log") {
+          const newProcessedData: LogEntry = {
+            bot_id: Number(rawData.bot_id),
+            color: rawData.color,
+            date: rawData.date,
+            message: rawData.message,
+            mode: rawData.mode,
+            pair_id: Number(rawData.pair_id),
+            site: rawData.site,
+          };
+          // console.log("newProcessedData", newProcessedData);
+          setBotsLogs((prevLogs) => [...prevLogs, newProcessedData]);
+        }
+        // console.log(botsLogs);
+      };
+    }
+  }, [sockets]);
 
   if (isLoading) {
     return <div>Checking permissions...</div>;
@@ -33,7 +62,7 @@ export const BotsList = () => {
               tertiaryText={(record) => record.currencies}
             />
           ) : (
-            <Datagrid expand={BotPanel}>
+              <Datagrid expand={<BotPanel logs={botsLogs} />}>
               <TextField source="id" />
               <TextField source="title" />
               <ReferenceField label="State" source="state" reference="states">
