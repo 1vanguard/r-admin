@@ -5,12 +5,12 @@ const processWebSocketMessage = (rawMessage: string) => {
     mode = data.mode
   let processedData = null
 
-    if (mode === "log") {
-      processedData = data
+    //console.log(data);
 
+    if (mode === "log" || mode === "idx") {
+      processedData = data
     }
-      // console.log(data);
-    if (mode === "log") {
+    if (mode === "log" || mode === "idx") {
       return processedData;
     }
 };

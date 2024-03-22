@@ -7,18 +7,18 @@ const LogMaster = (props) => {
 
   useEffect(() => {
     if (props.itemLog) {
-      setCurrentItems(props.itemLog);
+      setCurrentItems(props.itemLog.slice(-100));
     }
   }, [props.itemLog]);
 
   return (
     <Box sx={{ maxHeight: '500px', overflowY: 'auto' }}>
-      {currentItems.map((item, index) => (
+      {currentItems.slice().reverse().map((item, index) => (
       <Grid key={index} container spacing={2}>
         <Grid item xs="auto">
-            {new Date(item.date).toLocaleString()}
+            {new Date(item.date).toLocaleTimeString()}
         </Grid>
-        <Grid item xs="auto">
+        <Grid item xs>
             {JSON.stringify(item.message, null, 2)}
         </Grid>
       </Grid>

@@ -35,3 +35,15 @@ export interface LogEntry {
   pair_id: number;
   site: string;
 }
+
+export interface BotIdx {
+  bot_id: number;
+  color: string;
+  date: string;
+  id: string;
+  indicator: string;
+  mode: string;
+  pair_id: number;
+  site: string;
+  value: number; // Проверить на знаки после запятой
+}

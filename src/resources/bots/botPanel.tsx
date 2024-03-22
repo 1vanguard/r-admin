@@ -29,7 +29,6 @@ export const BotPanel = (props: any) => {
 
   return (
     <div>
-      Bot panel content
       <Grid container spacing={2}>
         <Grid item xs={6}>
             <LogMaster itemLog={botLog}/>
