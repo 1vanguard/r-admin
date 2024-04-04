@@ -123,7 +123,7 @@ export const BotsList = () => {
               />
               <FunctionField
                 source="id"
-                label="Test fie"
+                label="Test field"
                 render={record => {
                     // Логика вывода поля на основе данных записи
                     if (record.published) {
