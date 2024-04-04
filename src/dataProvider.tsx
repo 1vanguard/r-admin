@@ -146,7 +146,9 @@ export default {
     console.log(params);
 
     if (resource === "users") {
-      endPoint = "register";
+      if (params.meta.creator_role === undefined) {
+        endPoint = "register";
+      }
       if (params.meta.creator_role === 1 || params.meta.creator_role === 2) {
         endPoint = "create-user";
       }

@@ -10,6 +10,8 @@ import {
   useTranslate,
 } from "react-admin";
 import { authProvider } from "../../authProvider";
+import Box from "@mui/material/Grid";
+import Grid from "@mui/material/Grid";
 
 const RegistrationPage = (props) => {
   const redirect = useRedirect();
@@ -28,22 +30,42 @@ const RegistrationPage = (props) => {
   const notify = useNotify(),
     translate = useTranslate();
   const onSuccess = (data) => {
-    notify('registration.registrationSuccess');
+    notify("registration.registrationSuccess");
     redirect(`/login`);
   };
 
   return (
-    <Create
-      disableAuthentication
-      resource="users"
-      mutationOptions={{ onSuccess }}
+    <Box
+      sx={{
+        alignItems: "center",
+        backgroundColor: "black",
+        backgroundImage: "url(/assets/images/backgrounds/01.jpg)",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        minHeight: "100vh",
+        padding: 4,
+      }}
     >
-      <SimpleForm>
-        <TextInput source="username" label="Username" fullWidth />
-        <TextInput source="email" type="email" label="E-mail" fullWidth />
-        <PasswordInput source="password" fullWidth />
-      </SimpleForm>
-    </Create>
+      <Grid container spacing={2} maxWidth={300}>
+        <Grid item xs={12}>
+          <Create
+            disableAuthentication
+            resource="users"
+            mutationOptions={{ onSuccess, meta: { creator_role: undefined } }}
+          >
+            <SimpleForm>
+              <h1 style={{ margin: 0, textAlign: "center", width: "100%" }}>
+                Registration
+              </h1>
+              <TextInput source="username" label="Username" fullWidth />
+              <TextInput source="email" type="email" label="E-mail" fullWidth />
+              <PasswordInput source="password" fullWidth />
+            </SimpleForm>
+          </Create>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
