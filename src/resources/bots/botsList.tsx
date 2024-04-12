@@ -13,9 +13,12 @@ import {
 } from "react-admin";
 import { BotIdx, LogEntry } from "../../types";
 import processWebSocketMessage from "../../helpers/webSocketDataProcessor";
+import { useWebSocket } from "../../webSocketProvider";
 import { BotPanel } from "./botPanel";
 import { useMediaQuery, Theme } from "@mui/material";
-import { useWebSocket } from "../../webSocketProvider";
+import CircleIcon from '@mui/icons-material/Circle';
+import KeyIcon from '@mui/icons-material/Key';
+import KeyOffIcon from '@mui/icons-material/KeyOff';
 
 export const BotsList = () => {
   const { sockets } = useWebSocket();
@@ -80,7 +83,41 @@ export const BotsList = () => {
           ) : (
             <Datagrid expand={<BotPanel logs={botsLogs} />}>
               <TextField source="id" />
-              <TextField source="title" />
+              <FunctionField
+                source="title"
+                label="Title"
+                render={record => {
+                  let stateColor,
+                    botApiState = <KeyIcon style={{color: 'green', marginRight: '5px'}} sx={{fontSize: '1.1em'}} />
+                  switch(record.state) {
+                    case -1:
+                      stateColor = 'violet';
+                      break;
+                    case 0:
+                      stateColor = 'red';
+                      break;
+                    case 1:
+                      stateColor = 'green';
+                      break;
+                    case 2:
+                      stateColor = 'yellow';
+                      break;
+                    default:
+                      stateColor = 'black';
+                  }
+
+                  if (record.api_ready === 0) {
+                    botApiState = <KeyOffIcon style={{color: 'red', marginRight: '5px'}} sx={{fontSize: '1.1em'}} />
+                  }
+                  return (
+                    <span style={{display: 'inline-flex', alignItems: 'center'}}>
+                      <CircleIcon style={{color: stateColor, marginRight: '5px'}} sx={{fontSize: '0.9em'}}/>
+                      {botApiState}
+                      <span>{record.title}</span>
+                    </span>
+                  )
+                }}
+                />
               <ReferenceField label="State" source="state" reference="states">
                 <FunctionField render={(record) => record.name} />
               </ReferenceField>
