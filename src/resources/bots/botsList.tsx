@@ -7,18 +7,21 @@ import {
   FunctionField,
   TextField,
   ReferenceField,
+  ReferenceManyField,
   EditButton,
   usePermissions,
   useRecordContext,
+  WithListContext,
 } from "react-admin";
-import { BotIdx, LogEntry } from "../../types";
+import { BotIdx, BotPair, LogEntry } from "../../types";
 import processWebSocketMessage from "../../helpers/webSocketDataProcessor";
 import { useWebSocket } from "../../webSocketProvider";
 import { BotPanel } from "./botPanel";
 import { useMediaQuery, Theme } from "@mui/material";
-import CircleIcon from '@mui/icons-material/Circle';
-import KeyIcon from '@mui/icons-material/Key';
-import KeyOffIcon from '@mui/icons-material/KeyOff';
+import CircleIcon from "@mui/icons-material/Circle";
+import KeyIcon from "@mui/icons-material/Key";
+import KeyOffIcon from "@mui/icons-material/KeyOff";
+import BotPairsCounter from "../../helpers/botPairsCounter";
 
 export const BotsList = () => {
   const { sockets } = useWebSocket();
@@ -42,7 +45,7 @@ export const BotsList = () => {
             mode: rawData.mode,
             pair_id: Number(rawData.pair_id),
             site: rawData.site,
-          }
+          };
           // console.log("newProcessedData", newProcessedData);
           setBotsLogs((prevLogs) => [...prevLogs, newProcessedData]);
         }
@@ -58,7 +61,7 @@ export const BotsList = () => {
             pair_id: Number(rawData.pair_id),
             site: rawData.site,
             value: Number(rawData.value),
-          }
+          };
           setBotsIdxs((prevLogs) => [...prevLogs, newProcessedData]);
         }
         // console.log(botsLogs);
@@ -86,38 +89,53 @@ export const BotsList = () => {
               <FunctionField
                 source="title"
                 label="Title"
-                render={record => {
+                render={(record) => {
                   let stateColor,
-                    botApiState = <KeyIcon style={{color: 'green', marginRight: '5px'}} sx={{fontSize: '1.1em'}} />
-                  switch(record.state) {
+                    botApiState = (
+                      <KeyIcon
+                        style={{ color: "green", marginRight: "5px" }}
+                        sx={{ fontSize: "1.1em" }}
+                      />
+                    );
+                  switch (record.state) {
                     case -1:
-                      stateColor = 'violet';
+                      stateColor = "violet";
                       break;
                     case 0:
-                      stateColor = 'red';
+                      stateColor = "red";
                       break;
                     case 1:
-                      stateColor = 'green';
+                      stateColor = "green";
                       break;
                     case 2:
-                      stateColor = 'yellow';
+                      stateColor = "yellow";
                       break;
                     default:
-                      stateColor = 'black';
+                      stateColor = "black";
                   }
 
                   if (record.api_ready === 0) {
-                    botApiState = <KeyOffIcon style={{color: 'red', marginRight: '5px'}} sx={{fontSize: '1.1em'}} />
+                    botApiState = (
+                      <KeyOffIcon
+                        style={{ color: "red", marginRight: "5px" }}
+                        sx={{ fontSize: "1.1em" }}
+                      />
+                    );
                   }
                   return (
-                    <span style={{display: 'inline-flex', alignItems: 'center'}}>
-                      <CircleIcon style={{color: stateColor, marginRight: '5px'}} sx={{fontSize: '0.9em'}}/>
+                    <span
+                      style={{ display: "inline-flex", alignItems: "center" }}
+                    >
+                      <CircleIcon
+                        style={{ color: stateColor, marginRight: "5px" }}
+                        sx={{ fontSize: "0.9em" }}
+                      />
                       {botApiState}
                       <span>{record.title}</span>
                     </span>
-                  )
+                  );
                 }}
-                />
+              />
               <ReferenceField label="State" source="state" reference="states">
                 <FunctionField render={(record) => record.name} />
               </ReferenceField>
@@ -158,18 +176,34 @@ export const BotsList = () => {
                   second: "2-digit",
                 }}
               />
+              <ReferenceManyField
+                reference="pairs"
+                target="bot_id"
+                label="Pairs count"
+              >
+                <WithListContext
+                  render={({ isLoading, data }) => (
+                    !isLoading && (
+                      <BotPairsCounter pairs={data} />
+                    )
+                  )}
+                />
+              </ReferenceManyField>
+              <TextField label="Order" source="auto_start_sum" />
+              <TextField label="Profit %" source="auto_profit" />
+              <TextField label="Limit" source="botlimit" />
               <FunctionField
                 source="id"
                 label="Test field"
-                render={record => {
-                    // Логика вывода поля на основе данных записи
-                    if (record.published) {
-                        return <span>Published</span>;
-                    } else {
-                        return <span>Not published</span>;
-                    }
+                render={(record) => {
+                  // Логика вывода поля на основе данных записи
+                  if (record.published) {
+                    return <span>Published</span>;
+                  } else {
+                    return <span>Not published</span>;
+                  }
                 }}
-                />
+              />
               <EditButton />
             </Datagrid>
           )}

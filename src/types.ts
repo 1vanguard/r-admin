@@ -47,3 +47,10 @@ export interface BotIdx {
   site: string;
   value: number; // Проверить на знаки после запятой
 }
+
+export type BotPair = {
+  id: number;
+  state: string;
+  symbol: string;
+  bot_id: number;
+}

@@ -162,6 +162,9 @@ export default {
     if (resource === "bots" && (params.meta.creator_role === 1 || params.meta.creator_role === 2)) {
       endPoint = "create-bot";
     }
+    /* if (resource === "botgrid" && (params.meta.creator_role === 1 || params.meta.creator_role === 2)) {
+      endPoint = "botgrid";
+    } */
     if (resource === "pairs" && (params.meta.creator_role === 1 || params.meta.creator_role === 2)) {
       endPoint = "create-pair";
     }
