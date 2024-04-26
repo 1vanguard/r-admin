@@ -1,0 +1,21 @@
+.btn_iconOnly .MuiButton-icon {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.btns_state_control {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.btns_state_control button:first-child {
+    margin-left: 0;
+}
+
+.btns_state_control button {
+    margin-left: 0.3em;
+    min-width: 0;
+}

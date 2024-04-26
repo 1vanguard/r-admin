@@ -36,6 +36,26 @@ export interface LogEntry {
   site: string;
 }
 
+export type Bot = {
+  id: number;
+  state: number;
+  title: string;
+  exchange_id: number;
+  user_id: number;
+}
+
+export type BotGrid = {
+  id: number;
+  symbol: string;
+  bot_id: number;
+  pair_id: number;
+  qty_usd: number;
+  order_done: number;
+  sell_done: number;
+  in_trades: number;
+  profit: number;
+}
+
 export interface BotIdx {
   bot_id: number;
   color: string;

@@ -87,7 +87,8 @@ export default {
       { field, order } = params.sort,
       query = {
         sort: JSON.stringify([field, order]),
-        range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
+        // range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
+        range: JSON.stringify([(page - 1) * perPage, perPage]),
         filter: JSON.stringify({
           ...params.filter,
           [params.target]: params.id,
@@ -98,6 +99,9 @@ export default {
       headers = new Headers();
 
     headers.set("authorization", token);
+    
+    console.log(resource);
+    console.log(params);
 
     return httpClient(url, { headers }).then(({ headers, json }) => ({
       data: json,

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
 import { Route } from "react-router-dom";
 import { Admin, CustomRoutes, Resource } from "react-admin";
 
@@ -8,6 +7,9 @@ import { authProvider } from "./authProvider";
 import dataProvider from "./dataProvider";
 import { i18nProvider } from "./i18nProvider";
 // import { Permissions } from "./types";
+
+// Styles
+import "./styles/app.css";
 
 // Pages
 import CabLogin from "./resources/cabinet/CabLoginPage";
