@@ -1,4 +1,10 @@
-.btn_iconOnly .MuiButton-icon {
+.botPanel .content {
+    max-height: 50vh;
+    overflow: auto;
+}
+
+.btn_iconOnly .MuiButton-icon,
+.btn_iconOnly .MuiButton-startIcon {
     margin-right: 0;
     margin-left: 0;
 }

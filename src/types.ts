@@ -15,7 +15,6 @@ export interface timeFrame {
   minutes: number;
 }
 
-
 export interface period {
   id: number;
   value: number;
@@ -26,7 +25,17 @@ export interface usersFilter {
   role?: number;
 }
 
+export type Logs = {
+  [baseEntityId: number]: LogEntry[];
+};
+
+export interface LogContextType {
+  logs: Logs;
+  addLog?(baseEntityId: number, data: LogEntry): void;
+}
+
 export interface LogEntry {
+  id: string;
   bot_id: number;
   color: string;
   date: string;
@@ -70,7 +79,9 @@ export interface BotIdx {
 
 export type BotPair = {
   id: number;
-  state: string;
+  state: number;
   symbol: string;
   bot_id: number;
-}
+} & {
+  [key: string]: any;
+};
