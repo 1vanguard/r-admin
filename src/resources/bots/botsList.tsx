@@ -12,6 +12,7 @@ import {
   WithListContext,
   useListController,
   Loading,
+  useRecordContext,
 } from "react-admin";
 // import { Bot, BotIdx } from "../../types";
 import { BotPanel } from "./botPanel";
@@ -152,11 +153,12 @@ export const BotsList = () => {
               target="bot_id"
               label="Pairs count"
             >
-              <WithListContext
-                render={({ isLoading, data }) =>
-                  !isLoading && <BotPairsCounter pairs={data} />
-                }
-              />
+                <WithListContext
+                  render={({ isLoading, data }) => {
+                    const record = useRecordContext();
+                    return !isLoading && <BotPairsCounter bot={record} pairs={data} />;
+                  }}
+                />
             </ReferenceManyField>
             <TextField label="Order" source="auto_start_sum" />
             <TextField label="Profit %" source="auto_profit" />

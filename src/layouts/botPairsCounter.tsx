@@ -1,7 +1,12 @@
 import * as React from "react";
 
-const BotPairsCounter = (props) => {
-  const allPairsCount = props.pairs.length;
+interface BotPairsCounterProps {
+  bot: any;
+  pairs: any[];
+}
+
+const BotPairsCounter: React.FC<BotPairsCounterProps> = (props) => {
+  const botAutoPairCount = props.bot.auto_pair_count
   const pairsWithState1Count = props.pairs.filter(
     (pair) => pair.state === 1
   ).length;
@@ -17,25 +22,25 @@ const BotPairsCounter = (props) => {
     textAlign: "center",
     width: "30%",
   };
-  const allPairsCountStyles = {
+  const botAutoPairCountStyles = {
     textAlign: "right",
     width: "35%",
   };
   const acvtivePairsStyles = {
     color:
-      allPairsCount > 0
-        ? pairsWithState1Count > allPairsCount
+      botAutoPairCount > 0
+        ? pairsWithState1Count > botAutoPairCount
           ? "red"
           : "green"
         : "black",
-    fontWeight: allPairsCount > 0 ? "bold" : "normal",
+    fontWeight: botAutoPairCount > 0 ? "bold" : "normal",
     textAlign: "left",
     width: "35%",
   };
 
   return (
     <span style={counterStyles}>
-      <span style={allPairsCountStyles}>{allPairsCount}</span>
+      <span style={botAutoPairCountStyles}>{botAutoPairCount}</span>
       <span style={counterDividerStyles}>/</span>
       <span style={acvtivePairsStyles}>{pairsWithState1Count}</span>
     </span>

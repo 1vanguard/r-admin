@@ -63,14 +63,11 @@ const Editform = () => {
   if (error) {
     return <div>ERROR</div>;
   }
-
+  console.log("botEdit record", record);
   return (
-    <TabbedForm
-      toolbar={<PrymaryEditToolbar />}
-      id="editBotForm"
-    >
+    <TabbedForm toolbar={<PrymaryEditToolbar />} id="editBotForm">
       <TabbedForm.Tab label="General">
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
           <Grid item xs={12} sm={4} md={2} lg={1}>
             <TextInput
               fullWidth
@@ -122,20 +119,28 @@ const Editform = () => {
             </ReferenceInput>
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextInput
-              fullWidth
-              label="API Key"
-              source="apikey"
-              validate={required()}
-            />
+            {record.api_ready === 1 ? (
+              <div>API is ready</div>
+            ) : (
+              <TextInput
+                fullWidth
+                label="API Key"
+                source="apikey"
+                validate={required()}
+              />
+            )}
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextInput
-              fullWidth
-              label="API Secret"
-              source="apisecret"
-              validate={required()}
-            />
+            {record.api_ready === 1 ? (
+              <div>API is ready</div>
+            ) : (
+              <TextInput
+                fullWidth
+                label="API Secret"
+                source="apisecret"
+                validate={required()}
+              />
+            )}
           </Grid>
           <Grid item xs={12} md={6}>
             <TextInput
