@@ -51,7 +51,7 @@ const botsFilter = [
   </ReferenceInput>,
 ];
 
-const BotsPagination = () => <Pagination perPage={5} />;
+const BotsPagination = () => <Pagination rowsPerPageOptions={[10, 25, 50, 100, 500]} />;
 
 export const BotsList = () => {
   const { isLoading: isLoadingPermissions, permissions } = usePermissions();
@@ -69,8 +69,7 @@ export const BotsList = () => {
       resource="bots"
       filters={botsFilter}
       filterDefaultValues={{ state: 1 }}
-      perPage={1000000}
-      //pagination={false}
+      perPage={50}
       pagination={<BotsPagination />}
       sx={{ marginBottom: 3 }}
     >
