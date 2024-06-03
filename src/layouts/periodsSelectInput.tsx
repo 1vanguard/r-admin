@@ -27,14 +27,16 @@ export const PeriodsSelectInput = (props) => {
 
   return (
     <SelectInput
-      fullWidth={props.fullWidth ? true : false}
-      label={props.label}
-      source={props.name}
-      optionText="name"
-      emptyText="Do not use"
       choices={periodChoices}
-      isLoading={isLoadingChoices}
       disabled={isLoadingChoices}
+      emptyText="Do not use"
+      fullWidth={props.fullWidth ? true : false}
+      isLoading={isLoadingChoices}
+      label={props.label}
+      margin="none"
+      optionText="name"
+      variant="standard"
+      source={props.name}
     />
   );
 };

@@ -1,3 +1,7 @@
+table caption.captionTop {
+    caption-side: top;
+}
+
 .botPanel .content {
     max-height: 50vh;
     overflow: auto;
@@ -25,3 +29,25 @@
     margin-left: 0.3em;
     min-width: 0;
 }
+
+.pairPanel .content {
+    height: 100%;
+    min-height: 300px;
+    max-height: 40vh;
+    overflow: auto;
+}
+
+/* .pairOrders {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.pairOrders .tableWrap {
+    max-height: 49%;
+    overflow: auto;
+}
+
+.pairOrders .tableWrap + .tableWrap {
+    margin-top: 2%;
+} */

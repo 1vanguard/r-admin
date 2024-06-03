@@ -25,13 +25,25 @@ export interface usersFilter {
   role?: number;
 }
 
+export type Idxs = {
+  [baseEntityId: number]: IdxEntry[];
+};
+
 export type Logs = {
   [baseEntityId: number]: LogEntry[];
 };
 
-export interface LogContextType {
-  logs: Logs;
-  addLog?(baseEntityId: number, data: LogEntry): void;
+
+export interface IdxEntry {
+  bot_id: number;
+  color: string;
+  date: string;
+  id: string;
+  indicator: string;
+  mode: string;
+  pair_id: number;
+  site: string;
+  value: number; // Проверить на знаки после запятой
 }
 
 export interface LogEntry {
@@ -51,7 +63,9 @@ export type Bot = {
   title: string;
   exchange_id: number;
   user_id: number;
-}
+} & {
+  [key: string]: any;
+};
 
 export type BotGrid = {
   id: number;
@@ -63,6 +77,42 @@ export type BotGrid = {
   sell_done: number;
   in_trades: number;
   profit: number;
+}
+
+export type Exchange = {
+  id: number;
+  state: number;
+  title: string;
+} & {
+  [key: string]: any;
+};
+
+export type PairGrid = {
+  id: number;
+  symbol: string;
+  bot_id: number;
+  pair_id: number;
+  /* qty_usd: number;
+  order_done: number;
+  sell_done: number; */
+  in_orders: number;
+  purchases: number;
+  sales: number;
+}
+
+export type PairOrder = {
+  id: number;
+  order_done: number;
+  order_id: number;
+  pair_id: number;
+  price: number;
+  profit: number;
+  qty: number;
+  sell_done: number;
+  sell_price: number;
+  sell_qty: number;
+  sellOrder: string;
+  startOrder: string;
 }
 
 export interface BotIdx {
@@ -85,3 +135,17 @@ export type BotPair = {
 } & {
   [key: string]: any;
 };
+
+export interface WebSocketDataContextType {
+  logs?: Logs;
+  idxs?: Idxs;
+  addLog?(baseEntityId: number, data: LogEntry): void;
+  addIdx?(baseEntityId: number, data: IdxEntry): void;
+}
+
+export interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  parentId?: number;
+  tabValue: number;
+}

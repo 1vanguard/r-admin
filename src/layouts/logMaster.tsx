@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { useLogContext } from "../helpers/LogContext";
+import { useWebSocketDataContext } from "../helpers/WebSocketDataContext";
 
 interface LogMasterProps {
   entityType: string;
@@ -9,18 +9,26 @@ interface LogMasterProps {
 }
 
 const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {
-  const { logs } = useLogContext();
+  const { logs } = useWebSocketDataContext();
 
   let targetEntityLogsArray: any[] = [];
+
+  if (!logs) {
+    return "No data accepted";
+  }
+
   const baseLogs = Object.entries(logs);
 
-  if (entityType === "bot") {
-    targetEntityLogsArray = baseLogs.flatMap(([key, value]) => {
-      return value.filter((entry) => {
+  targetEntityLogsArray = baseLogs.flatMap(([key, value]) => {
+    return value.filter((entry) => {
+      if (entityType === "bot") {
         return entry.bot_id === entityId;
-      });
+      }
+      if (entityType === "pair") {
+        return entry.pair_id === entityId;
+      }
     });
-  }
+  });
 
   targetEntityLogsArray.sort((a, b) => {
     const dateA = a.date.split(/\D/).map(Number);
@@ -47,7 +55,7 @@ const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {
               hour: "numeric",
               minute: "numeric",
               second: "numeric",
-              fractionalSecondDigits: 3,
+              // fractionalSecondDigits: 3,
             })}
           </Grid>
           <Grid item xs>
@@ -60,31 +68,3 @@ const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {
 };
 
 export default LogMaster;
-/* useEffect(() => {
-  // Прослушивание сообщений от веб-сокета
-  if (sockets.length > 0 && sockets[0]) {
-    sockets[0].onmessage = (event) => {
-      // Обработка полученного сообщения
-      const rawData = processWebSocketMessage(event.data);
-      // console.log(botId + ' - ' + parseInt(rawData.bot_id));
-
-      // mode === "idx" - НУЖЕН ДЛЯ ОБНОВЛЕНИЯ ИНДИКАТОРОВ ПАР
-      if (rawData && rawData.mode === "idx") {
-        // console.log(rawData);
-        const newProcessedData: BotIdx = {
-          bot_id: Number(rawData.bot_id),
-          color: rawData.color,
-          date: rawData.date,
-          id: rawData.id,
-          indicator: rawData.indicator,
-          mode: rawData.mode,
-          pair_id: Number(rawData.pair_id),
-          site: rawData.site,
-          value: Number(rawData.value),
-        };
-        setBotsIdxs((prevLogs) => [...prevLogs, newProcessedData]);
-      }
-      // console.log(botLog);
-    };
-  }
-}, [sockets, botId, botLog]); */

@@ -32,6 +32,7 @@ import { BotCreate } from "./resources/bots/botCreate";
 import { PairsList } from "./resources/pairs/pairsList";
 import { PairEdit } from "./resources/pairs/pairEdit";
 import { PairCreate } from "./resources/pairs/pairCreate";
+import PairsListByBot from "./resources/pairs/pairsListByBot";
 
 export const App = () => {
   return (
@@ -71,11 +72,13 @@ export const App = () => {
           ) : null}
         </>
       )}
-      <Resource name="bots" list={BotsList} edit={BotEdit} create={BotCreate} />
+      <Resource name="bots" list={BotsList} edit={BotEdit} create={BotCreate} >
+        <Route path=":id/pairs" element={<PairsListByBot />} />
+      </Resource>
       <Resource name="pairs" list={PairsList} edit={PairEdit} create={PairCreate} />
-      <CustomRoutes noLayout>
+      {/* <CustomRoutes noLayout>
         <Route path="/registration" element={<CabRegistration />} />
-      </CustomRoutes>
+      </CustomRoutes> */}
     </Admin>
   );
 };

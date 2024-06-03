@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Loading, SelectInput, useGetList } from "react-admin";
+import { useEffect, useState } from "react";
+import { Loading, SelectInput, required, useGetList } from "react-admin";
 import { useWatch } from "react-hook-form";
 // import { timeFrame } from "../types";
 
@@ -15,13 +16,25 @@ const calculateChoices = (timeFrames, filter) => {
     });
 };
 
-export const TimeFramesSelectInput = (props) => {
+interface TimeFramesSelectInputProps {
+  frameChoices: number[];
+  fullWidth?: boolean;
+  label: string;
+  recordValue?: number;
+  required?: boolean;
+  sourceName: string;
+}
+
+export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (props) => {
+  
+  const [selectedValue, setSelectedValue] = useState(null);
+
   const {
       data: choices,
       isLoading: isLoadingChoices,
       error,
     } = useGetList("timeframes"),
-    currentValue = useWatch({ name: props.name });
+    currentValue = useWatch({ name: props.sourceName });
 
   if (isLoadingChoices) {
     return <Loading />;
@@ -30,18 +43,38 @@ export const TimeFramesSelectInput = (props) => {
     return <p>ERROR</p>;
   }
 
-  const timeFrameChoices = calculateChoices(choices, props.frameChoices);
+  const frameChoices = props.frameChoices;
+  const timeFrameChoices = calculateChoices(choices, frameChoices);
+  const minChoiceObj = timeFrameChoices.reduce((min, current) => current.id < min.id ? current : min, timeFrameChoices[0]);
+  const minChoiceId = minChoiceObj.id;
+
+  /* useEffect(() => {
+    if (props.recordValue === null || props.recordValue === undefined) {
+
+      setSelectedValue(minChoiceId);
+    } 
+  }, [props.recordValue]);
+
+  const handleSelectChange = (value: number) => {
+    setSelectedValue(value);
+  }; */
 
   return (
     <SelectInput
-      fullWidth={props.fullWidth ? true : false}
-      label={props.label}
-      source={props.name}
-      optionText="name"
-      emptyText="Do not use"
       choices={timeFrameChoices}
-      isLoading={isLoadingChoices}
+      // defaultValue={minChoiceId}
       disabled={isLoadingChoices}
+      emptyText="Do not use"
+      fullWidth={props.fullWidth ? true : false}
+      isLoading={isLoadingChoices}
+      label={props.label}
+      margin="none"
+      emptyValue={minChoiceId}
+      optionText="name"
+      source={props.sourceName}
+      variant="standard"
+      validate={required()}
+      // {...(props.required ? { validate: required() } : {})}
     />
   );
 };

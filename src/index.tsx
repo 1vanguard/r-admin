@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { App } from "./App";
 import { WebSocketProvider } from "./webSocketProvider";
-import LogProvider from "./helpers/LogContext";
+import WebSocketDataProvider from "./helpers/WebSocketDataContext";
 const webSocketUrl1 = import.meta.env.VITE_JSON_WEB_SOCKET_URL_1;
 const webSocketProtocol1 = import.meta.env.VITE_JSON_WEB_SOCKET_PROTOCOL_1;
 
@@ -12,9 +12,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       urls={[webSocketUrl1]}
       protocols={[webSocketProtocol1]}
     >
-      <LogProvider webSocketLogs={true}>
+      <WebSocketDataProvider webSocket={true}>
         <App />
-      </LogProvider>
+      </WebSocketDataProvider>
     </WebSocketProvider>
   </React.StrictMode>
 );

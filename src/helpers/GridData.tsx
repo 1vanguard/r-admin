@@ -1,10 +1,13 @@
 import { Loading, useGetOne } from "react-admin";
-import { BotGrid, BotPair } from "../types";
+import { BotGrid, PairGrid } from "../types";
 
 interface GridDataProps {
   type: string;
   id: number;
   parameter: string;
+  additionalFilters?: {
+    [key: string]: any;
+  };
 }
 
 const GridData: React.FC<GridDataProps> = ({ type, id, parameter }) => {
@@ -12,7 +15,7 @@ const GridData: React.FC<GridDataProps> = ({ type, id, parameter }) => {
     data: GridDataLoaded,
     isLoading,
     error,
-  } = useGetOne<BotGrid>(`botgrid-by-${type}`, {
+  } = useGetOne<BotGrid | PairGrid>(`botgrid-by-${type}`, {
     id: id,
   });
   if (isLoading) {
@@ -21,20 +24,43 @@ const GridData: React.FC<GridDataProps> = ({ type, id, parameter }) => {
   if (error) {
     return <p>ERROR</p>;
   }
+  // console.log("GridDataLoaded: ", GridDataLoaded);
   let displayData: any = "";
-  // console.log(GridDataLoaded);
+  if (type === "bot") {
+    const botGridData = GridDataLoaded as BotGrid;
+    const in_tradesData = botGridData?.in_trades,
+      inTrades = in_tradesData ? Math.round(in_tradesData) : "-",
+      profitData = botGridData?.profit,
+      profit = profitData ? Math.round(profitData) : "-";
 
-  const in_tradesData = GridDataLoaded?.in_trades,
-    inTrades = in_tradesData ? Math.round(in_tradesData) : "-",
-    profitData = GridDataLoaded?.profit,
-    profit = profitData ? Math.round(profitData) : "-";
+    if (parameter === "in_trades") {
+      displayData = inTrades;
+    }
+    if (parameter === "profit") {
+      displayData = profit;
+    }
+  }
 
-  if (parameter === "in_trades") {
-    displayData = inTrades;
+  if (type === "pair") {
+    const pairGridData = GridDataLoaded as PairGrid;
+    const in_ordersData = pairGridData?.in_orders,
+      inOrders = in_ordersData ? Math.round(in_ordersData) : "-",
+      purchasesData = pairGridData?.purchases,
+      purchases = purchasesData ? Math.round(purchasesData) : "-",
+      salesData = pairGridData?.sales,
+      sales = salesData ? Math.round(salesData) : "-";
+
+    if (parameter === "in_orders") {
+      displayData = inOrders;
+    }
+    if (parameter === "purchases") {
+      displayData = purchases;
+    }
+    if (parameter === "sales") {
+      displayData = sales;
+    }
   }
-  if (parameter === "profit") {
-    displayData = profit;
-  }
+
   return <span>{displayData}</span>;
 };
 

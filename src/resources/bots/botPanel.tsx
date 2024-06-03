@@ -27,6 +27,7 @@ export const BotPanel = (props: any) => {
   } = useGetManyReference<BotPair>("pairs", {
     target: "bot_id",
     id: botId,
+    pagination: { page: 1, perPage: 1000000 },
   });
 
   if (botPairsLoading) {

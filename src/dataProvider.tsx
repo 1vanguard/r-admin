@@ -23,16 +23,16 @@ export default {
       reqHeaders = new Headers();
     reqHeaders.set("authorization", token);
 
-    console.log(resource);
+    /* console.log(resource);
     console.log(params);
     console.log("query: " + stringify(query));
     console.log("order: " + order);
     console.log("page: " + page);
-    console.log("perPage: " + perPage);
+    console.log("perPage: " + perPage); */
 
     const response = await httpClient(url, { headers: reqHeaders });
 
-    console.log(response);
+    // console.log(response);
 
     const resHeaders = response.headers
     // const resData = await response.json()

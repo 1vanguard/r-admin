@@ -6,7 +6,7 @@ interface BotPairsCounterProps {
 }
 
 const BotPairsCounter: React.FC<BotPairsCounterProps> = (props) => {
-  const botAutoPairCount = props.bot.auto_pair_count
+  const botAutoPairCount = props.bot.auto_pair_count;
   const pairsWithState1Count = props.pairs.filter(
     (pair) => pair.state === 1
   ).length;
