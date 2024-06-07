@@ -51,7 +51,7 @@ import Switch from "@mui/material/Switch";
 import Collapse from "@mui/material/Collapse";
 import { BotPair } from "../../types"; */
 
-const autoPairTfToFilter = [/* 0, */ 30, 60, 240, 1440],
+const autoPairTfToFilter = [0, 5, 15, 30, 60, 240, 1440, 10080, 43200],
   autoShortTfToFilter = [5, 15, 30, 60, 240],
   autoLongTfToFilter = [30, 60, 240],
   autoSellTfToFilter = [0, 5, 15, 30, 60, 240, 1440];
@@ -59,6 +59,9 @@ const autoPairTfToFilter = [/* 0, */ 30, 60, 240, 1440],
 const autoRsiPeriodOptionsToFilter = [6, 8, 10, 14],
   autoRsiPeriod1hOptionsToFilter = [6, 8, 12, 14],
   autoSellPeriodOptionsToFilter = [6, 8, 10, 12, 14];
+
+const timeframeToFilter = [1, 5, 15, 30, 60, 240, 1440, 10080, 43200];
+const periodToFilter = [6, 8, 10, 12, 14];
 
 const autoSortOptions = [
     { id: 1, name: "Value" },
@@ -134,7 +137,7 @@ const Editform = () => {
   }; */
 
   return (
-    <div>
+    <div className="editBot">
       <Table size="small">
         <TableHead sx={{ bgcolor: color01 }}>
           <TableRow>
@@ -209,38 +212,38 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} sm={8} md={10} lg={11}>
                 <TextInput
-                  fullWidth
-                  source="title"
                   defaultValue={record.title}
+                  fullWidth
                   margin="none"
-                  variant="standard"
+                  source="title"
                   validate={required()}
+                  variant="standard"
                 />
               </Grid>
               <Grid item xs={12} md={4}>
                 <SelectInput
-                  fullWidth
-                  source="state"
                   choices={states}
+                  defaultValue={record.state}
+                  fullWidth
                   margin="none"
+                  source="state"
                   validate={required()}
                   variant="standard"
-                  defaultValue={record.state}
                 />
               </Grid>
               <Grid item xs={12} md={4}>
                 <ReferenceInput
                   label="Client"
-                  source="user_id"
                   reference="users"
+                  source="user_id"
                 >
                   <AutocompleteInput
+                    filterToQuery={usernameFilterToQuery}
                     fullWidth
-                    optionText="username"
                     margin="none"
+                    optionText="username"
                     validate={required()}
                     variant="standard"
-                    filterToQuery={usernameFilterToQuery}
                   />
                 </ReferenceInput>
               </Grid>
@@ -280,6 +283,24 @@ const Editform = () => {
                   validate={required()}
                   variant="standard"
                 />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TimeFramesSelectInput
+                  frameChoices={timeframeToFilter}
+                  fullWidth
+                  label="Timeframe"
+                  sourceName="timeframe"
+                  required={true}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                  <PeriodsSelectInput
+                    periodChoices={periodToFilter}
+                    fullWidth
+                    label="Period"
+                    sourceName="period"
+                    required={true}
+                  />
               </Grid>
               <Grid item xs={12} md={6}>
                 <BooleanInput
@@ -496,9 +517,8 @@ const Editform = () => {
                   frameChoices={autoPairTfToFilter}
                   fullWidth
                   label="The RSI timeframe for choosing a pair"
-                  recordValue={record.auto_pair_tf_id}
                   required={true}
-                  sourceName="auto_pair_tf_id"
+                  sourceName="auto_pair_tf"
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4} xl={3}>
@@ -627,17 +647,17 @@ const Editform = () => {
                 >
                   <Grid item xs={12} md={6}>
                     <TimeFramesSelectInput
-                      fullWidth
-                      sourceName="auto_short_tf"
-                      label="RSI timeframe for entry"
                       frameChoices={autoShortTfToFilter}
+                      fullWidth
+                      label="RSI timeframe for entry"
+                      sourceName="auto_short_tf"
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
                       fullWidth
-                      name="auto_rsi_period"
                       label="The RSI period for entry"
+                      sourceName="auto_rsi_period"
                       periodChoices={autoRsiPeriodOptionsToFilter}
                     />
                   </Grid>
@@ -693,16 +713,16 @@ const Editform = () => {
                   >
                     <Grid item xs={12} md={6}>
                       <TimeFramesSelectInput
-                        fullWidth
-                        sourceName="auto_long_tf"
-                        label="RSI timeframe for entry"
                         frameChoices={autoLongTfToFilter}
+                        fullWidth
+                        label="RSI timeframe for entry"
+                        sourceName="auto_long_tf"
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <PeriodsSelectInput
                         fullWidth
-                        name="auto_rsi_period_1h"
+                        sourceName="auto_rsi_period_1h"
                         label="The RSI period for entry"
                         periodChoices={autoRsiPeriod1hOptionsToFilter}
                       />
@@ -760,18 +780,18 @@ const Editform = () => {
                 >
                   <Grid item xs={12} md={6}>
                     <TimeFramesSelectInput
-                      fullWidth
-                      sourceName="auto_sell_tf"
-                      label="The RSI timeframe for sale"
                       frameChoices={autoSellTfToFilter}
+                      fullWidth
+                      label="The RSI timeframe for sale"
+                      sourceName="auto_sell_tf"
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
                       fullWidth
-                      name="auto_sell_period"
                       label="RSI period for Sale"
                       periodChoices={autoSellPeriodOptionsToFilter}
+                      sourceName="auto_sell_period"
                     />
                   </Grid>
                 </Grid>
@@ -843,306 +863,6 @@ const Editform = () => {
           </Container>
         </TabbedForm.Tab>
         <TabbedForm.Tab label="Pairs" path={`/bots/${botId}/pairs`}></TabbedForm.Tab>
-        {/* <TabbedForm.Tab label="Pairs">
-          <Container maxWidth="xl" sx={{ ml: 0 }}>
-            <h2>Bot pairs</h2>
-            <ReferenceManyField
-              label="Pairs"
-              reference="pairs"
-              target="bot_id"
-              filter={{ bot_id: record.id, state: [1, 2] }}
-              perPage={1000000}
-            >
-                <Datagrid
-                  expand={<PairPanel />}
-                  bulkActionButtons={false}
-                  sx={{
-                    "& .RaDatagrid-row": {
-                      backgroundColor: "rgb(46 125 50 / 5%)",
-                    },
-                    marginBottom: 3,
-                  }}
-                >
-                  <TextField source="id" />
-                  <FunctionField
-                    source="state"
-                    label="State"
-                    sortable={true}
-                    sortBy="state"
-                    render={(record) => {
-                      let stateColor;
-
-                      switch (record.state) {
-                        case -1:
-                          stateColor = "disabled";
-                          break;
-                        case 0:
-                          stateColor = "error";
-                          break;
-                        case 1:
-                          stateColor = "success";
-                          break;
-                        case 2:
-                          stateColor = "warning";
-                          break;
-                        default:
-                          stateColor = "disabled";
-                      }
-
-                      return (
-                        <div style={{ textAlign: "center" }}>
-                          <CircleIcon
-                            color={stateColor}
-                            sx={{ fontSize: "0.9em" }}
-                          />
-                        </div>
-                      );
-                    }}
-                  />
-                  <FunctionField
-                    source="symbol"
-                    label="Pair"
-                    sortable={true}
-                    sortBy="symbol"
-                    render={(record) => {
-                      let pairPauseUntil;
-
-                      if (record.pause_until) {
-                        pairPauseUntil = (
-                          <span style={{ fontSize: "0.8em" }}>
-                            <span
-                              style={{ fontWeight: "700", marginRight: "5px" }}
-                            >
-                              Pause until:
-                            </span>
-                            {new Date(record.pause_until).toLocaleString()}
-                          </span>
-                        );
-                      }
-
-                      return (
-                        <div>
-                          <span
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <span style={{ marginRight: "0.7em" }}>
-                              {record.symbol}
-                            </span>
-                            <span
-                              style={{
-                                display: "flex",
-                                marginLeft: "auto",
-                              }}
-                            >
-                              <BtnsStateControl />
-                              <EditButton
-                                label=""
-                                color="inherit"
-                                variant="contained"
-                                className="btn_iconOnly"
-                                style={{
-                                  marginLeft: "0.3em",
-                                  minWidth: "0",
-                                }}
-                                icon={
-                                  <SettingsIcon style={{ fontSize: "1em" }} />
-                                }
-                              />
-                            </span>
-                          </span>
-                          {pairPauseUntil}
-                        </div>
-                      );
-                    }}
-                  />
-                  <FunctionField
-                    // source="id"
-                    label="RSI_S"
-                    render={(record) => {
-                      return (
-                        <IdxMaster
-                          idxName="RSI_S"
-                          pairId={record.id}
-                        ></IdxMaster>
-                      );
-                    }}
-                  />
-                  <FunctionField
-                    label="RSI_L"
-                    render={(record) => {
-                      return (
-                        <IdxMaster
-                          idxName="RSI_L"
-                          pairId={record.id}
-                        ></IdxMaster>
-                      );
-                    }}
-                  />
-                  <FunctionField
-                    label="RSI_SELL"
-                    render={(record) => {
-                      return (
-                        <IdxMaster
-                          idxName="RSI_SELL"
-                          pairId={record.id}
-                        ></IdxMaster>
-                      );
-                    }}
-                  />
-                  <FunctionField
-                    label="Price"
-                    style={{ textAlign: "center" }}
-                    render={(record) => {
-                      return (
-                        <IdxMaster
-                          idxName="Price"
-                          pairId={record.id}
-                        ></IdxMaster>
-                      );
-                    }}
-                  />
-                  <FunctionField
-                    label="In orders (USDT)"
-                    render={(record) => {
-                      return (
-                        <GridData
-                          type="pair"
-                          id={record.id}
-                          parameter="in_orders"
-                        />
-                      );
-                    }}
-                  />
-                  <FunctionField
-                    label="Purchases"
-                    render={(record) => {
-                      return (
-                        <GridData
-                          type="pair"
-                          id={record.id}
-                          parameter="purchases"
-                        />
-                      );
-                    }}
-                  />
-                  <FunctionField
-                    label="Sales"
-                    render={(record) => {
-                      return (
-                        <GridData
-                          type="pair"
-                          id={record.id}
-                          parameter="sales"
-                        />
-                      );
-                    }}
-                  />
-                </Datagrid>
-            </ReferenceManyField>
-            <ReferenceManyField
-              label="Pairs"
-              reference="pairs"
-              target="bot_id"
-              filter={{ state: 0 }}
-            >
-              <WithListContext
-                render={({ data }) => {
-                  if (data && data.length > 0) {
-                    return (
-                      <div>
-                        <FormControlLabel
-                          control={
-                            <Switch checked={checked} onChange={handleChange} />
-                          }
-                          label="Show inactive bot's pairs"
-                        />
-                        <Collapse in={checked}>
-                          {
-                            <Datagrid
-                              bulkActionButtons={false}
-                              sx={{
-                                "& .RaDatagrid-table": {
-                                  width: "auto",
-                                },
-                              }}
-                            >
-                              <TextField source="id" />
-                              <FunctionField
-                                source="state"
-                                label="State"
-                                sortable={true}
-                                sortBy="state"
-                                render={() => {
-                                  return (
-                                    <div style={{ textAlign: "center" }}>
-                                      <CircleIcon
-                                        color={"error"}
-                                        sx={{ fontSize: "0.9em" }}
-                                      />
-                                    </div>
-                                  );
-                                }}
-                              />
-                              <FunctionField
-                                source="symbol"
-                                label="Pair"
-                                sortable={true}
-                                sortBy="symbol"
-                                render={(record: BotPair) => {
-                                  return (
-                                    <div>
-                                      <span
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        <span style={{ marginRight: "0.7em" }}>
-                                          {record.symbol}
-                                        </span>
-                                        <span
-                                          style={{
-                                            display: "flex",
-                                            marginLeft: "auto",
-                                          }}
-                                        >
-                                          <BtnsStateControl />
-                                          <EditButton
-                                            label=""
-                                            color="inherit"
-                                            variant="contained"
-                                            className="btn_iconOnly"
-                                            style={{
-                                              marginLeft: "0.3em",
-                                              minWidth: "0",
-                                            }}
-                                            icon={
-                                              <SettingsIcon
-                                                style={{ fontSize: "1em" }}
-                                              />
-                                            }
-                                          />
-                                        </span>
-                                      </span>
-                                    </div>
-                                  );
-                                }}
-                              />
-                            </Datagrid>
-                          }
-                        </Collapse>
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
-              />
-            </ReferenceManyField>
-          </Container>
-        </TabbedForm.Tab> */}
       </TabbedForm>
     </div>
   );

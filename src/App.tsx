@@ -43,39 +43,46 @@ export const App = () => {
       loginPage={CabLogin}
       dashboard={Dashboard}
     >
-      {(permissions) => (
-        <>
-          {permissions.role === 1 || permissions.role === 2 ? (
-            <Resource
-              name="users"
-              list={UsersList}
-              create={UserCreate}
-              edit={UserEdit}
-              recordRepresentation="username"
-            />
-          ) : null}
-          {permissions.role === 1 ? (
-            <Resource
-              name="offices"
-              list={OfficesList}
-              create={OfficeCreate}
-              edit={OfficeEdit}
-            />
-          ) : null}
-          {permissions.role === 1 ? (
-            <Resource
-              name="exchanges"
-              list={ExchangesList}
-              create={ExchangeCreate}
-              edit={ExchangeEdit}
-            />
-          ) : null}
-        </>
-      )}
-      <Resource name="bots" list={BotsList} edit={BotEdit} create={BotCreate} >
+      {(permissions: any) => {
+        return (
+          <>
+            {permissions.role === 1 || permissions.role === 2 ? (
+              <Resource
+                name="users"
+                list={UsersList}
+                create={UserCreate}
+                edit={UserEdit}
+                recordRepresentation="username"
+              />
+            ) : null}
+            {permissions.role === 1 ? (
+              <Resource
+                name="offices"
+                list={OfficesList}
+                create={OfficeCreate}
+                edit={OfficeEdit}
+              />
+            ) : null}
+            {permissions.role === 1 ? (
+              <Resource
+                name="exchanges"
+                list={ExchangesList}
+                create={ExchangeCreate}
+                edit={ExchangeEdit}
+              />
+            ) : null}
+          </>
+        );
+      }}
+      <Resource name="bots" list={BotsList} edit={BotEdit} create={BotCreate}>
         <Route path=":id/pairs" element={<PairsListByBot />} />
       </Resource>
-      <Resource name="pairs" list={PairsList} edit={PairEdit} create={PairCreate} />
+      <Resource
+        name="pairs"
+        list={PairsList}
+        edit={PairEdit}
+        create={PairCreate}
+      />
       {/* <CustomRoutes noLayout>
         <Route path="/registration" element={<CabRegistration />} />
       </CustomRoutes> */}

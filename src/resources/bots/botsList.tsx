@@ -4,6 +4,7 @@ import {
   EditButton,
   FunctionField,
   List,
+  Loading,
   Pagination,
   ReferenceField,
   ReferenceInput,
@@ -32,32 +33,45 @@ const botsFilter = [
   <TextInput label="Title" source="title_like" alwaysOn />,
   <TextInput label="Id" source="id_like" alwaysOn />,
   <ReferenceInput
-    label="State"
-    source="state"
-    reference="states"
     allowEmpty
     alwaysOn
+    label="State"
+    reference="states"
+    source="state"
+    sort={{ field: "name", order: "ASC" }}
   >
     <SelectInput optionText="name" source="name" />
   </ReferenceInput>,
   <ReferenceInput
-    label="Exchange"
-    source="exchange_id"
-    reference="exchange"
     allowEmpty
     alwaysOn
+    filter={{ state: 1 }}
+    label="Exchange"
+    reference="exchange"
+    source="exchange_id"
+    sort={{ field: "title", order: "ASC" }}
   >
     <SelectInput optionText="title" source="exchange_id" />
   </ReferenceInput>,
 ];
 
-const BotsPagination = () => <Pagination rowsPerPageOptions={[10, 25, 50, 100, 500]} />;
+const BotsPagination = () => (
+  <Pagination rowsPerPageOptions={[10, 25, 50, 100, 500]} />
+);
 
 export const BotsList = () => {
-  const { isLoading: isLoadingPermissions, permissions } = usePermissions();
+  const {
+    error: errorPermissions,
+    isLoading: isLoadingPermissions,
+    permissions,
+  } = usePermissions();
 
   if (isLoadingPermissions) {
-    return <div>Permissions is loading...</div>;
+    return <Loading />;
+  }
+
+  if (errorPermissions) {
+    return <div>Error loading permissions</div>;
   }
 
   if (permissions.role !== 1 && permissions.role !== 2) {
@@ -66,7 +80,6 @@ export const BotsList = () => {
 
   return (
     <List
-      resource="bots"
       filters={botsFilter}
       filterDefaultValues={{ state: 1 }}
       perPage={50}

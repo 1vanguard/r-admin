@@ -1,18 +1,34 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { Loading, SelectInput, required, useGetList } from "react-admin";
-import { useWatch } from "react-hook-form";
-// import { timeFrame } from "../types";
+import { Loading, required, SelectInput, useGetList } from "react-admin";
 
 const calculateChoices = (timeFrames, filter) => {
   return timeFrames
-    .filter((timeFrame) => filter.includes(timeFrame.minutes))
+    .filter((timeFrame) => filter.includes(timeFrame.minutes)) // Filter time frames based on values in the filter array
     .map((timeFrame) => {
-      const name =
-        timeFrame.minutes < 60
-          ? `${timeFrame.minutes} min.`
-          : `${timeFrame.minutes / 60} h.`;
-      return { ...timeFrame, name: name };
+      let name = "";
+
+      if (timeFrame.minutes < 60) {
+        // If the duration is less than 60 minutes, format the name as "{minutes} min."
+        name = `${timeFrame.minutes} min.`;
+      } else if (timeFrame.minutes >= 60 && timeFrame.minutes < 1440) {
+        // If the duration is between 60 and 1440 minutes (one day), format the name as "{hours} hour{s}"
+        const hours = Math.floor(timeFrame.minutes / 60);
+        name = `${hours} hour${hours > 1 ? "s" : ""}`;
+      } else if (timeFrame.minutes < 10080) {
+        // If the duration is between 1440 and 10080 minutes (one week), format the name as "{days} day{s}"
+        const days = Math.floor(timeFrame.minutes / 1440);
+        name = `${days} day${days > 1 ? "s" : ""}`;
+      } else if (timeFrame.minutes < 43200) {
+        // If the duration is between 10080 and 43200 minutes (one month), format the name as "{weeks} week{s}"
+        const weeks = Math.floor(timeFrame.minutes / 10080);
+        name = `${weeks} week${weeks > 1 ? "s" : ""}`;
+      } else {
+        // If the duration is more than 43200 minutes (more than one month), format the name as "{months} month{s}"
+        const months = Math.floor(timeFrame.minutes / 43200);
+        name = `${months} month${months > 1 ? "s" : ""}`;
+      }
+
+      return { ...timeFrame, name: name }; // Return the time frame with the added name property
     });
 };
 
@@ -20,21 +36,19 @@ interface TimeFramesSelectInputProps {
   frameChoices: number[];
   fullWidth?: boolean;
   label: string;
-  recordValue?: number;
+  // recordValue?: number;
   required?: boolean;
   sourceName: string;
 }
 
-export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (props) => {
-  
-  const [selectedValue, setSelectedValue] = useState(null);
-
+export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (
+  props
+) => {
   const {
-      data: choices,
-      isLoading: isLoadingChoices,
-      error,
-    } = useGetList("timeframes"),
-    currentValue = useWatch({ name: props.sourceName });
+    data: choices,
+    isLoading: isLoadingChoices,
+    error,
+  } = useGetList("timeframes");
 
   if (isLoadingChoices) {
     return <Loading />;
@@ -45,36 +59,27 @@ export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (prop
 
   const frameChoices = props.frameChoices;
   const timeFrameChoices = calculateChoices(choices, frameChoices);
-  const minChoiceObj = timeFrameChoices.reduce((min, current) => current.id < min.id ? current : min, timeFrameChoices[0]);
-  const minChoiceId = minChoiceObj.id;
-
-  /* useEffect(() => {
-    if (props.recordValue === null || props.recordValue === undefined) {
-
-      setSelectedValue(minChoiceId);
-    } 
-  }, [props.recordValue]);
-
-  const handleSelectChange = (value: number) => {
-    setSelectedValue(value);
-  }; */
+  /* const minChoiceObj = timeFrameChoices.reduce(
+    (min, current) => (current.id < min.id ? current : min),
+    timeFrameChoices[0]
+  );
+  const minChoiceId = minChoiceObj.id; */
 
   return (
     <SelectInput
       choices={timeFrameChoices}
-      // defaultValue={minChoiceId}
       disabled={isLoadingChoices}
       emptyText="Do not use"
+      // emptyValue={minChoiceId}
       fullWidth={props.fullWidth ? true : false}
       isLoading={isLoadingChoices}
       label={props.label}
       margin="none"
-      emptyValue={minChoiceId}
       optionText="name"
+      optionValue="minutes"
       source={props.sourceName}
       variant="standard"
-      validate={required()}
-      // {...(props.required ? { validate: required() } : {})}
+      {...(props.required ? { validate: required() } : {})}
     />
   );
 };

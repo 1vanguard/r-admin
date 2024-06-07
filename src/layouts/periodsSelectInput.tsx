@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Loading, SelectInput, useGetList } from "react-admin";
-import { useWatch } from "react-hook-form";
+import { Loading, required, SelectInput, useGetList } from "react-admin";
 // import { period } from "../../types";
 
 const calculateChoices = (periods, filter) => {
@@ -8,13 +7,20 @@ const calculateChoices = (periods, filter) => {
     .filter((period) => filter.includes(period.value))
 };
 
-export const PeriodsSelectInput = (props) => {
+interface PeriodsSelectInputProps {
+  fullWidth?: boolean;
+  label: string;
+  periodChoices?: number[];
+  required?: boolean;
+  sourceName: string;
+}
+
+export const PeriodsSelectInput: React.FC<PeriodsSelectInputProps> = (props) => {
   const {
       data: choices,
       isLoading: isLoadingChoices,
       error,
-    } = useGetList("periods"),
-    currentValue = useWatch({ name: props.name });
+    } = useGetList("periods")
 
   if (isLoadingChoices) {
     return <Loading />;
@@ -35,8 +41,10 @@ export const PeriodsSelectInput = (props) => {
       label={props.label}
       margin="none"
       optionText="name"
+      optionValue="value"
+      source={props.sourceName}
       variant="standard"
-      source={props.name}
+      {...(props.required ? { validate: required() } : {})}
     />
   );
 };

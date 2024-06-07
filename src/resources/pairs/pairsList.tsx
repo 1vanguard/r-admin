@@ -1,24 +1,33 @@
 import * as React from "react";
+import { useWatch } from "react-hook-form";
 import {
-  List,
-  SimpleList,
+  AutocompleteInput,
+  AutocompleteInputProps,
   Datagrid,
   DateField,
+  EditButton,
   FunctionField,
+  List,
+  Loading,
+  Pagination,
+  ReferenceField,
+  ReferenceInput,
+  SearchInput,
+  SelectInput,
   TextField,
   TextInput,
-  ReferenceField,
-  EditButton,
-  usePermissions,
-  SearchInput,
-  ReferenceInput,
-  SelectInput,
-  AutocompleteInput,
   useListContext,
-  AutocompleteInputProps,
+  usePermissions,
 } from "react-admin";
-import { useWatch } from "react-hook-form";
-import { useMediaQuery, Theme } from "@mui/material";
+import { Bot, BotPair, Exchange } from "../../types";
+import BtnsStateControl from "../../layouts/btnsStateControl";
+import GridData from "../../helpers/GridData";
+import IdxMaster from "../../layouts/idxMaster";
+
+import CircleIcon from "@mui/icons-material/Circle";
+import SettingsIcon from "@mui/icons-material/Settings";
+
+//import { useMediaQuery, Theme } from "@mui/material";
 
 const botFilterToQuery = (searchText: any) => ({
     title_like: `${searchText}`,
@@ -40,190 +49,214 @@ const botFilter = () => {
   );
 };
 
-/* const ExchangeFilter = () => {
-  const { displayedFilters, filterValues, setFilters, hideFilter } =
-    useListContext();
-  console.log("filterValues", filterValues);
-  const handleChange: AutocompleteInputProps["onChange"] = (value, record) => {
-    console.log("value", value, "record", record);
-    setFilters(
-      {
-        bot_id: 48,
-      },
-      ["bot_id"]
-    );
-    console.log("filterValues", filterValues);
-    console.log("filterValues.bot_id", filterValues.bot_id);
-
-    hideFilter("symbol_like");
-  };
-  //console.log("displayedFilters", displayedFilters);
-  return (
-    <ReferenceInput source="exchange_id" reference="exchange">
-      <AutocompleteInput
-        optionText="title"
-        filterToQuery={exchangeFilterToQuery}
-        onChange={handleChange}
-      />
-    </ReferenceInput>
-  );
-}; */
-
-const ExchangeHandleChange = (value: any, record: any) => {
-  console.log("value", value, "record", record);
-
-  const { filterValues, setFilters } = useListContext();
-  console.log("filterValues", filterValues);
-  /* setFilters(
-    {
-      bot_id: 48,
-    },
-    ["bot_id"]
-  );
-  
-  console.log("filterValues", filterValues); */
-};
-{/* <ReferenceInput source="exchange_id" reference="exchange" allowEmpty alwaysOn>
-    <AutocompleteInput
-      optionText="title"
-      filterToQuery={exchangeFilterToQuery}
-      onChange={ExchangeHandleChange}
-    />
-  </ReferenceInput>, */}
 const pairsFilters = [
   <TextInput label="Symbol" source="symbol_like" alwaysOn />,
-
-  <ReferenceInput source="bot_id" reference="bots" allowEmpty alwaysOn>
+  <TextInput label="Id" source="id_like" alwaysOn />,
+  <ReferenceInput
+    allowEmpty
+    alwaysOn
+    label="State"
+    reference="states"
+    source="state"
+    sort={{ field: "name", order: "ASC" }}
+  >
+    <SelectInput optionText="name" source="state" />
+  </ReferenceInput>,
+  <ReferenceInput
+    source="bot_id"
+    filter={{ state: 1 }}
+    reference="bots"
+    allowEmpty
+    alwaysOn
+  >
     <AutocompleteInput optionText="title" filterToQuery={botFilterToQuery} />
   </ReferenceInput>,
   <ReferenceInput
-    label="State"
-    source="state"
-    reference="states"
     allowEmpty
     alwaysOn
+    filter={{ state: 1 }}
+    label="Exchange"
+    reference="exchange"
+    source="exchange_id"
+    sort={{ field: "title", order: "ASC" }}
   >
-    <SelectInput optionText="name" source="state" />
+    <SelectInput optionText="title" source="exchange_id" />
   </ReferenceInput>,
 ];
 
-/* const botFilterToQuery = (searchText: any, _, params: any) => {
-  const query = {
-    title_like: `${searchText}`,
-  };
-
-  if (params.exchange_id_like) {
-    query.exchange_id_like = params.exchange_id_like;
-  }
-
-  return query;
-};
-
-const exchangeFilterToQuery = (searchText: any, _, params: any) => {
-  const query = {
-    title_like: `${searchText}`,
-  };
-
-  if (params.bot_id_like) {
-    query.bot_id_like = params.bot_id_like;
-  }
-
-  return query;
-};
-
-const BotFilter = () => {
-  const exchangeId = useWatch({
-    name: "exchange_id_like",
-  });
-
-  return (
-    <ReferenceInput source="bot_id" reference="bots" allowEmpty>
-      <AutocompleteInput
-        optionText="title"
-        filterToQuery={botFilterToQuery}
-        onChange={(event, newValue) => {
-          // Обновить значение exchange_id_like при изменении значения фильтра bot_id
-          setFilterValue("exchange_id_like", newValue?.id);
-        }}
-      />
-    </ReferenceInput>
-  );
-};
-
-const ExchangeFilter = () => {
-  const botId = useWatch({
-    name: "bot_id_like",
-  });
-
-  return (
-    <ReferenceInput source="exchange_id" reference="exchange" allowEmpty>
-      <AutocompleteInput
-        optionText="title"
-        filterToQuery={exchangeFilterToQuery}
-        onChange={(event, newValue) => {
-          // Обновить значение bot_id_like при изменении значения фильтра exchange_id
-          setFilterValue("bot_id_like", newValue?.id);
-        }}
-      />
-    </ReferenceInput>
-  );
-};
-
-const pairsFilters = [
-  <TextInput label="Symbol" source="symbol_like" alwaysOn />,
-  <ExchangeFilter />,
-  <BotFilter />,
-  <ReferenceInput
-    label="State"
-    source="state"
-    reference="states"
-    allowEmpty
-    alwaysOn
-  >
-    <SelectInput optionText="name" source="state" />
-  </ReferenceInput>,
-]; */
+const PairsPagination = () => (
+  <Pagination rowsPerPageOptions={[10, 25, 50, 100, 500]} />
+);
 
 export const PairsList = () => {
-  const { isLoading, permissions } = usePermissions();
-  const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
+  const {
+    error: errorPermissions,
+    isLoading: isLoadingPermissions,
+    permissions,
+  } = usePermissions();
 
-  if (isLoading) {
-    return <div>Checking permissions...</div>;
-  } else {
-    const role = permissions.role;
-
-    if (role === 1 || role === 2) {
-      return (
-        <List perPage={10} filters={pairsFilters}>
-          {isSmall ? (
-            <SimpleList
-              primaryText={(record) => record.title}
-              secondaryText={(record) => record.state}
-              tertiaryText={(record) => record.currencies}
-            />
-          ) : (
-            <Datagrid>
-              <TextField source="id" />
-              <TextField source="symbol" />
-              <ReferenceField label="State" source="state" reference="states">
-                <FunctionField render={(record) => record.name} />
-              </ReferenceField>
-              <ReferenceField label="Bot" source="bot_id" reference="bots">
-                <FunctionField render={(record) => record.title} />
-              </ReferenceField>
-              <TextField source="pair_limit" />
-              <TextField source="step" />
-              <TextField source="start_offset" />
-              <TextField source="profit" />
-              <TextField source="squiz" />
-              <EditButton />
-            </Datagrid>
-          )}
-        </List>
-      );
-    } else {
-      return <div>Not enough permissions</div>;
-    }
+  if (isLoadingPermissions) {
+    return <Loading />;
   }
+
+  if (errorPermissions) {
+    return <div>Error loading permissions</div>;
+  }
+
+  if (permissions.role !== 1 && permissions.role !== 2) {
+    return <div>Not enough permissions</div>;
+  }
+
+  return (
+    <List
+      perPage={50}
+      filters={pairsFilters}
+      filterDefaultValues={{ state: 1 }}
+      pagination={<PairsPagination />}
+    >
+      <Datagrid bulkActionButtons={false}>
+        <TextField source="id" />
+        <FunctionField
+          source="state"
+          label="State"
+          sortable={true}
+          sortBy="state"
+          render={(record: BotPair) => {
+            let stateColor;
+
+            switch (record.state) {
+              case -1:
+                stateColor = "disabled";
+                break;
+              case 0:
+                stateColor = "error";
+                break;
+              case 1:
+                stateColor = "success";
+                break;
+              case 2:
+                stateColor = "warning";
+                break;
+              default:
+                stateColor = "disabled";
+            }
+
+            return (
+              <div style={{ textAlign: "center" }}>
+                <CircleIcon color={stateColor} sx={{ fontSize: "0.9em" }} />
+              </div>
+            );
+          }}
+        />
+        <FunctionField
+          source="symbol"
+          label="Pair"
+          sortable={true}
+          sortBy="symbol"
+          render={(record: BotPair) => {
+            let pairPauseUntil;
+
+            if (record.pause_until) {
+              pairPauseUntil = (
+                <span style={{ fontSize: "0.8em" }}>
+                  <span style={{ fontWeight: "700", marginRight: "5px" }}>
+                    Pause until:
+                  </span>
+                  {new Date(record.pause_until).toLocaleString()}
+                </span>
+              );
+            }
+
+            return (
+              <div>
+                <span
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <span style={{ marginRight: "0.7em" }}>{record.symbol}</span>
+                  <span
+                    style={{
+                      display: "flex",
+                      marginLeft: "auto",
+                    }}
+                  >
+                    <BtnsStateControl />
+                    <EditButton
+                      label=""
+                      color="inherit"
+                      variant="contained"
+                      className="btn_iconOnly"
+                      style={{
+                        marginLeft: "0.3em",
+                        minWidth: "0",
+                      }}
+                      icon={<SettingsIcon style={{ fontSize: "1em" }} />}
+                    />
+                  </span>
+                </span>
+                {pairPauseUntil}
+              </div>
+            );
+          }}
+        />
+        <ReferenceField label="Bot" source="bot_id" reference="bots">
+          <FunctionField render={(record: Bot) => record.title} />
+        </ReferenceField>
+        {/* <ReferenceField label="Exchange" source="exchange_id" reference="exchanges">
+          <FunctionField render={(record: Exchange) => record.title} />
+        </ReferenceField> */}
+        <FunctionField
+          label="RSI_S"
+          render={(record: BotPair) => {
+            return <IdxMaster idxName="RSI_S" pairId={record.id}></IdxMaster>;
+          }}
+        />
+        <FunctionField
+          label="RSI_L"
+          render={(record: BotPair) => {
+            return <IdxMaster idxName="RSI_L" pairId={record.id}></IdxMaster>;
+          }}
+        />
+        <FunctionField
+          label="RSI_SELL"
+          render={(record: BotPair) => {
+            return (
+              <IdxMaster idxName="RSI_SELL" pairId={record.id}></IdxMaster>
+            );
+          }}
+        />
+        <FunctionField
+          label="Price"
+          style={{ textAlign: "center" }}
+          render={(record: BotPair) => {
+            return <IdxMaster idxName="Price" pairId={record.id}></IdxMaster>;
+          }}
+        />
+        <FunctionField
+          label="In orders (USDT)"
+          render={(record: BotPair) => {
+            return (
+              <GridData type="pair" id={record.id} parameter="in_orders" />
+            );
+          }}
+        />
+        <FunctionField
+          label="Purchases"
+          render={(record: BotPair) => {
+            return (
+              <GridData type="pair" id={record.id} parameter="purchases" />
+            );
+          }}
+        />
+        <FunctionField
+          label="Sales"
+          render={(record: BotPair) => {
+            return <GridData type="pair" id={record.id} parameter="sales" />;
+          }}
+        />
+      </Datagrid>
+    </List>
+  );
 };

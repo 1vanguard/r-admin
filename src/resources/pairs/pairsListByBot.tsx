@@ -11,17 +11,20 @@ import {
   WithListContext,
   useGetOne,
 } from "react-admin";
-import { BotPair } from "../../types";
+import { Bot, BotPair } from "../../types";
 import GridData from "../../helpers/GridData";
-import { PairPanel } from "./pairPanel";
 import IdxMaster from "../../layouts/idxMaster";
 import BtnsStateControl from "../../layouts/btnsStateControl";
+
+import { PairPanel } from "./pairPanel";
+
 import { Box, Typography } from "@mui/material";
-import CircleIcon from "@mui/icons-material/Circle";
-import SettingsIcon from "@mui/icons-material/Settings";
 import Collapse from "@mui/material/Collapse";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+
+import CircleIcon from "@mui/icons-material/Circle";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const NoPairs = (props) => {
   const pairState = props.state;
@@ -53,6 +56,11 @@ const PairsListByBot = () => {
     "bots",
     { id: botId }
   );
+
+  if (isLoadingBotData) {
+    return <Loading />;
+  }
+
   const [checked, setChecked] = useState(false);
 
   const handleChange = () => {
