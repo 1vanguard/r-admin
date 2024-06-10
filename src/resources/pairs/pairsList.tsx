@@ -26,6 +26,7 @@ import IdxMaster from "../../layouts/idxMaster";
 
 import CircleIcon from "@mui/icons-material/Circle";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { PairPanel } from "./pairPanel";
 
 //import { useMediaQuery, Theme } from "@mui/material";
 
@@ -114,7 +115,7 @@ export const PairsList = () => {
       filterDefaultValues={{ state: 1 }}
       pagination={<PairsPagination />}
     >
-      <Datagrid bulkActionButtons={false}>
+      <Datagrid bulkActionButtons={false} expand={<PairPanel />}>
         <TextField source="id" />
         <FunctionField
           source="state"
