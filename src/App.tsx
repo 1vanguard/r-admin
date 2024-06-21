@@ -32,6 +32,9 @@ import { BotCreate } from "./resources/bots/botCreate";
 import { PairsList } from "./resources/pairs/pairsList";
 import { PairEdit } from "./resources/pairs/pairEdit";
 import { PairCreate } from "./resources/pairs/pairCreate";
+import { WhitelistList } from "./resources/whitelist/whitelistList";
+import { WhitelistEdit } from "./resources/whitelist/whitelistEdit";
+import { WhitelistCreate } from "./resources/whitelist/whitelistCreate";
 import PairsListByBot from "./resources/pairs/pairsListByBot";
 
 export const App = () => {
@@ -69,6 +72,14 @@ export const App = () => {
                 list={ExchangesList}
                 create={ExchangeCreate}
                 edit={ExchangeEdit}
+              />
+            ) : null}
+            {permissions.role === 1 ? (
+              <Resource
+                name="whitelist"
+                list={WhitelistList}
+                create={WhitelistCreate}
+                edit={WhitelistEdit}
               />
             ) : null}
           </>

@@ -15,10 +15,15 @@ table caption.captionTop {
 
 .btns_state_control {
     align-items: center;
-    display: flex;
+    display: inline-flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: center;
+}
+
+.btns_state_control.isLoading {
+    display: block;
+    min-width: 6rem;
 }
 
 .btns_state_control button:first-child {
@@ -30,24 +35,22 @@ table caption.captionTop {
     min-width: 0;
 }
 
+.MuiTableCell-body.column-id {
+    text-align: end;
+}
+
+.MuiTableCell-body.column-id,
+.MuiTableCell-body.column-state {
+    width: 1%;
+}
+
+.MuiTableCell-body.column-state {
+    text-align: center;
+}
+
 .pairPanel .content {
     height: 100%;
     min-height: 300px;
     max-height: 40vh;
     overflow: auto;
 }
-
-/* .pairOrders {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.pairOrders .tableWrap {
-    max-height: 49%;
-    overflow: auto;
-}
-
-.pairOrders .tableWrap + .tableWrap {
-    margin-top: 2%;
-} */

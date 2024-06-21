@@ -1,3 +1,4 @@
+import { Role } from './types';
 import { type } from "os";
 
 // types.ts
@@ -5,6 +6,18 @@ export type Permissions = {
   role: string;
   age: string;
 };
+
+export type Role = {
+  id: number;
+  name: string;
+  state: number;
+  parent_role?: number;
+};
+
+export interface State {
+  id: number;
+  name: string;
+}
 
 export interface WebSocketContextType {
   sockets: (WebSocket | null)[];
@@ -20,7 +33,7 @@ export interface period {
   value: number;
 }
 
-export interface usersFilter {
+export interface usersPermanentFilter {
   officeId?: number;
   role?: number;
 }
@@ -77,6 +90,20 @@ export type BotGrid = {
   sell_done: number;
   in_trades: number;
   profit: number;
+}
+
+export type BotPause = {
+  id: number;
+  bot_id: number;
+  pause_start: string;
+  pause_end?: string;
+}
+
+export type PairPause = {
+  id: number;
+  pair_id: number;
+  pause_start: string;
+  pause_end?: string;
 }
 
 export type Exchange = {
@@ -148,4 +175,23 @@ export interface TabPanelProps {
   index: number;
   parentId?: number;
   tabValue: number;
+}
+
+export type Office = {
+  id: number;
+  title: string;
+  state: number;
+} & {
+  [key: string]: any;
+}
+
+export type User = {
+  id: number;
+  name?: string;
+  username: string;
+  officeId: number;
+  role:  number;
+  state: number;
+} & {
+  [key: string]: any;
 }

@@ -1,10 +1,14 @@
 import * as React from "react";
 import { useState } from "react";
 import {
+  AutocompleteArrayInput,
   AutocompleteInput,
   BooleanInput,
+  Datagrid,
+  DateField,
   // Datagrid,
   Edit,
+  FunctionField,
   /* EditButton,
   Filter,
   FunctionField,
@@ -15,10 +19,12 @@ import {
   Loading,
   NumberInput,
   ReferenceInput,
+  ReferenceManyField,
   // ReferenceManyField,
   required,
   SelectInput,
   TabbedForm,
+  TextField,
   // TextField,
   TextInput,
   useGetList,
@@ -44,6 +50,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { BotPause } from "../../types";
 /* import CircleIcon from "@mui/icons-material/Circle";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -63,11 +70,12 @@ const autoRsiPeriodOptionsToFilter = [6, 8, 10, 14],
 const timeframeToFilter = [1, 5, 15, 30, 60, 240, 1440, 10080, 43200];
 const periodToFilter = [6, 8, 10, 12, 14];
 
-const autoSortOptions = [
+/* const autoSortOptions = [
     { id: 1, name: "Value" },
     { id: 2, name: "Volatility" },
-  ],
-  baseMin = 0,
+  ], */
+
+const baseMin = 0,
   color01 = "#2196f3",
   color02 = "rgba(33, 150, 243, 0.2)",
   exchangeFilterToQuery = (searchText: any) => ({
@@ -87,11 +95,11 @@ const Editform = () => {
   const record = useRecordContext();
   const botId = Number(record?.id);
 
-  const {
+  /* const {
     data: states,
     isLoading: isLoadingStates,
     error,
-  } = useGetList("states");
+  } = useGetList("states"); */
 
   const {
     data: botPairs,
@@ -103,19 +111,27 @@ const Editform = () => {
     pagination: { page: 1, perPage: 1000000 },
   });
 
-  if (!record || isLoadingStates || isLoadingPairs) {
+  const {
+    data: whitelistData,
+    isLoading: isLoadingWhitelist,
+    error: errorWhitelist,
+  } = useGetList("whitelist");
+
+  if (
+    !record ||
+    /* isLoadingStates || */ isLoadingPairs ||
+    isLoadingWhitelist
+  ) {
     return <Loading />;
   }
-  if (error || errorPairs) {
+  if (/* error || */ errorPairs || errorWhitelist) {
     return <div>ERROR</div>;
   }
-
   const botLimit = record?.botlimit;
   const botProfit = record?.auto_profit;
   const botStartSum = record?.auto_start_sum;
   const botStep = record?.auto_step;
   const botTotalCustomerBalance = "??";
-
   const tablePrimaryDataHeadCellSx = {
     color: "white",
     fontSize: "1.1em",
@@ -126,15 +142,6 @@ const Editform = () => {
     fontSize: "1.1em",
     textAlign: "center",
   };
-
-  /* const tableBotPairsHeadCellSx = {
-    color: "white",
-    fontSize: "0.8em",
-    textAlign: "center",
-  };
-  const tableBotPairsDataCellSx = {
-    textAlign: "center",
-  }; */
 
   return (
     <div className="editBot">
@@ -176,10 +183,14 @@ const Editform = () => {
           </TableRow>
         </TableBody>
       </Table>
-      <TabbedForm toolbar={<PrymaryEditToolbar />} id="editBotForm" syncWithLocation={true}>
+      <TabbedForm
+        toolbar={<PrymaryEditToolbar />}
+        id="editBotForm"
+        syncWithLocation={true}
+      >
         <TabbedForm.Tab label="Main settings">
           <Container maxWidth="md" sx={{ ml: 0 }}>
-            <h2>Main bot settings</h2>
+            <h2>Bot main settings</h2>
           </Container>
           <Container maxWidth="md" sx={{ ml: 0 }}>
             <Grid container spacing={1}>
@@ -198,7 +209,7 @@ const Editform = () => {
                     verticalAlign: "top",
                   }}
                 >
-                  Bot ID
+                  ID
                 </div>
                 <div
                   style={{
@@ -220,7 +231,7 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} md={4}>
+              {/* <Grid item xs={12} md={4}>
                 <SelectInput
                   choices={states}
                   defaultValue={record.state}
@@ -230,8 +241,8 @@ const Editform = () => {
                   validate={required()}
                   variant="standard"
                 />
-              </Grid>
-              <Grid item xs={12} md={4}>
+              </Grid> */}
+              <Grid item xs={12} md={6}>
                 <ReferenceInput
                   label="Client"
                   reference="users"
@@ -247,7 +258,7 @@ const Editform = () => {
                   />
                 </ReferenceInput>
               </Grid>
-              <Grid item xs={12} md={4}>
+              <Grid item xs={12} md={6}>
                 <ReferenceInput
                   label="Exchange"
                   source="exchange_id"
@@ -294,13 +305,13 @@ const Editform = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                  <PeriodsSelectInput
-                    periodChoices={periodToFilter}
-                    fullWidth
-                    label="Period"
-                    sourceName="period"
-                    required={true}
-                  />
+                <PeriodsSelectInput
+                  periodChoices={periodToFilter}
+                  fullWidth
+                  label="Period"
+                  sourceName="period"
+                  required={true}
+                />
               </Grid>
               <Grid item xs={12} md={6}>
                 <BooleanInput
@@ -610,11 +621,21 @@ const Editform = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextInput
-                  defaultValue={record.whitelist}
-                  fullWidth
-                  margin="none"
-                  multiline
+                <AutocompleteArrayInput
+                  choices={whitelistData}
+                  optionText="symbol"
+                  optionValue="symbol"
+                  format={(value) =>
+                    typeof value === "string"
+                      ? value.split(";").map((pair) => pair.trim())
+                      : value
+                  }
+                  parse={(value) => {
+                    if (Array.isArray(value)) {
+                      value = value.join(";");
+                    }
+                    return value;
+                  }}
                   source="whitelist"
                   variant="standard"
                 />
@@ -862,15 +883,63 @@ const Editform = () => {
             </Grid>
           </Container>
         </TabbedForm.Tab>
-        <TabbedForm.Tab label="Pairs" path={`/bots/${botId}/pairs`}></TabbedForm.Tab>
+        <TabbedForm.Tab label="Pauses">
+          <Container maxWidth="xl" sx={{ ml: 0 }}>
+            <h2>Bot pauses log</h2>
+          </Container>
+          <Container maxWidth="md" sx={{ ml: 0 }}>
+            <ReferenceManyField
+              reference="bot_pause"
+              target="bot_id"
+              label="Bot pauses"
+            >
+              <Datagrid bulkActionButtons={false}>
+                <DateField
+                  source="pause_start"
+                  showTime
+                  sortable={false}
+                  label="Pause start"
+                />
+                <FunctionField
+                  source="pause_end"
+                  label="Pause end"
+                  sortable={false}
+                  render={(record: BotPause) => {
+                    if (record.pause_end) {
+                      return (
+                        <DateField
+                          source="pause_end"
+                          showTime
+                          sortable={false}
+                        />
+                      );
+                      1;
+                    } else {
+                      return <p style={{ color: "red" }}>Pause end not set</p>;
+                    }
+                  }}
+                />
+              </Datagrid>
+            </ReferenceManyField>
+          </Container>
+        </TabbedForm.Tab>
+        <TabbedForm.Tab
+          label="Pairs"
+          path={`/bots/${botId}/pairs`}
+        ></TabbedForm.Tab>
       </TabbedForm>
     </div>
   );
 };
 
+const BotTitle = () => {
+  const record = useRecordContext();
+  return <>Bot {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
+};
+
 export const BotEdit = () => {
   return (
-    <Edit redirect={false}>
+    <Edit redirect={false} title={<BotTitle />}>
       <Editform />
     </Edit>
   );

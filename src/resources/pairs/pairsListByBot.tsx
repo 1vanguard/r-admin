@@ -6,25 +6,27 @@ import {
   FunctionField,
   List,
   Loading,
+  ReferenceField,
   TextField,
   TextInput,
-  WithListContext,
   useGetOne,
+  WithListContext,
 } from "react-admin";
 import { Bot, BotPair } from "../../types";
 import GridData from "../../helpers/GridData";
-import IdxMaster from "../../layouts/idxMaster";
+
 import BtnsStateControl from "../../layouts/btnsStateControl";
+import IdxMaster from "../../layouts/idxMaster";
+import StateIcon from "../../layouts/stateIcon";
 
 import { PairPanel } from "./pairPanel";
 
 import { Box, Typography } from "@mui/material";
+import CircleIcon from "@mui/icons-material/Circle";
 import Collapse from "@mui/material/Collapse";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-
-import CircleIcon from "@mui/icons-material/Circle";
 import SettingsIcon from "@mui/icons-material/Settings";
+import Switch from "@mui/material/Switch";
 
 const NoPairs = (props) => {
   const pairState = props.state;
@@ -52,14 +54,13 @@ const inactivePairsFilters = [
 
 const PairsListByBot = () => {
   const { id: botId } = useParams();
-  const { data: botData, isLoading: isLoadingBotData } = useGetOne<Bot>(
+  const { data: botData, isLoading: isLoadingBotData, error: errorBotData } = useGetOne<Bot>(
     "bots",
     { id: botId }
   );
 
-  if (isLoadingBotData) {
-    return <Loading />;
-  }
+  isLoadingBotData && <Loading />
+  errorBotData && <div>Error bot data</div>
 
   const [checked, setChecked] = useState(false);
 
@@ -94,32 +95,7 @@ const PairsListByBot = () => {
             label="State"
             sortable={true}
             sortBy="state"
-            render={(record: BotPair) => {
-              let stateColor;
-
-              switch (record.state) {
-                case -1:
-                  stateColor = "disabled";
-                  break;
-                case 0:
-                  stateColor = "error";
-                  break;
-                case 1:
-                  stateColor = "success";
-                  break;
-                case 2:
-                  stateColor = "warning";
-                  break;
-                default:
-                  stateColor = "disabled";
-              }
-
-              return (
-                <div style={{ textAlign: "center" }}>
-                  <CircleIcon color={stateColor} sx={{ fontSize: "0.9em" }} />
-                </div>
-              );
-            }}
+            render={(record: Bot) => <StateIcon record={record} />}
           />
           <FunctionField
             source="symbol"
@@ -176,6 +152,14 @@ const PairsListByBot = () => {
               );
             }}
           />
+          <ReferenceField
+            label="Exchange"
+            link={(record: any, reference: any) => `/exchanges/${record.id}`}
+            reference="exchange"
+            source="exchangeId"
+          >
+            <FunctionField render={(record: Exchange) => record.title} />
+          </ReferenceField>
           <FunctionField
             label="RSI_S"
             render={(record: BotPair) => {

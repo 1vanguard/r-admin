@@ -2,11 +2,15 @@ import * as React from "react";
 import {
   AutocompleteInput,
   BooleanInput,
+  Datagrid,
+  DateField,
   DateTimeInput,
   Edit,
+  FunctionField,
   Loading,
   NumberInput,
   ReferenceInput,
+  ReferenceManyField,
   required,
   TabbedForm,
   TextInput,
@@ -23,6 +27,7 @@ import Container from "@mui/material/Container";
 import { Box } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Tooltip from "@mui/material/Tooltip";
+import { PairPause } from "../../types";
 
 const botFilterToQuery = (searchText: any) => ({
     title_like: `${searchText}`,
@@ -674,14 +679,60 @@ const Editform = () => {
             </Grid>
           </Container>
         </TabbedForm.Tab>
+        <TabbedForm.Tab label="Pauses">
+          <Container maxWidth="xl" sx={{ ml: 0 }}>
+            <h2>Pair pauses log</h2>
+          </Container>
+          <Container maxWidth="md" sx={{ ml: 0 }}>
+            <ReferenceManyField
+              reference="bot_pause"
+              target="pair_id"
+              label="Pair pauses"
+            >
+              <Datagrid bulkActionButtons={false}>
+                <DateField
+                  source="pause_start"
+                  showTime
+                  sortable={false}
+                  label="Pause start"
+                />
+                <FunctionField
+                  source="pause_end"
+                  label="Pause end"
+                  sortable={false}
+                  render={(record: PairPause) => {
+                    if (record.pause_end) {
+                      return (
+                        <DateField
+                          source="pause_end"
+                          showTime
+                          sortable={false}
+                        />
+                      );
+                    } else {
+                      return (
+                        <p style={{ color: "red" }}>Pause end not set</p>
+                      )
+                    }
+                  }}
+                />
+              </Datagrid>
+            </ReferenceManyField>
+          </Container>
+        </TabbedForm.Tab>
       </TabbedForm>
     </div>
   );
 };
 
+const PairTitle = () => {
+  const record = useRecordContext();
+  return <>Pair {record ? `"${record.symbol}" (id: ${record.id})` : ''}</>;
+};
+
 export const PairEdit = () => {
   return (
-    <Edit redirect={false}>
+    <Edit redirect={false} title={<PairTitle />}>
       <Editform />
     </Edit>
   );

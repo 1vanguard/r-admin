@@ -151,7 +151,7 @@ export default {
 
     if (resource === "users") {
       if (params.meta.creator_role === undefined) {
-        endPoint = "register";
+        endPoint = "";
       }
       if (params.meta.creator_role === 1 || params.meta.creator_role === 2) {
         endPoint = "create-user";
@@ -166,11 +166,11 @@ export default {
     if (resource === "bots" && (params.meta.creator_role === 1 || params.meta.creator_role === 2)) {
       endPoint = "create-bot";
     }
-    /* if (resource === "botgrid" && (params.meta.creator_role === 1 || params.meta.creator_role === 2)) {
-      endPoint = "botgrid";
-    } */
     if (resource === "pairs" && (params.meta.creator_role === 1 || params.meta.creator_role === 2)) {
       endPoint = "create-pair";
+    }
+    if (resource === "whitelist" && params.meta.creator_role === 1) {
+      endPoint = "create-whitelist";
     }
 
     const { json } = await httpClient(`${apiUrl}/${endPoint}`, {

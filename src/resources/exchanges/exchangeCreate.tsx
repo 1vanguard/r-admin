@@ -1,72 +1,79 @@
 import {
-  Loading,
   Create,
+  Loading,
+  ReferenceInput,
+  required,
+  SelectInput,
   SimpleForm,
   TextInput,
-  SelectInput,
-  required,
-  useGetList,
   usePermissions,
 } from "react-admin";
+
+import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
 const CreateForm = () => {
-  const {
-    data: states,
-    isLoading: isLoadingStates,
-    error,
-  } = useGetList("states");
-
-  if (isLoadingStates) {
-    return <Loading />;
-  }
-  if (error) {
-    return <p>ERROR</p>;
-  }
-
   return (
     <SimpleForm>
-      <Grid container spacing={2} maxWidth={700}>
-        <Grid item xs={12}>
-          <TextInput fullWidth source="title" validate={required()} />
+      <Container maxWidth="md" sx={{ ml: 0 }}>
+        <h2>Create new exchange</h2>
+      </Container>
+      <Container maxWidth="md" sx={{ ml: 0 }}>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <TextInput
+              fullWidth
+              source="title"
+              validate={required()}
+              variant="standard"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextInput
+              fullWidth
+              source="currencies"
+              validate={required()}
+              variant="standard"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <ReferenceInput label="State" source="state" reference="states">
+              <SelectInput
+                defaultValue={1}
+                fullWidth
+                optionText="name"
+                source="state"
+                validate={required()}
+                variant="standard"
+              />
+            </ReferenceInput>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <TextInput fullWidth source="currencies" validate={required()} />
-        </Grid>
-        <Grid item xs={12}>
-          <SelectInput
-            fullWidth
-            source="state"
-            choices={states}
-            validate={required()}
-            defaultValue={1}
-          />
-        </Grid>
-      </Grid>
+      </Container>
     </SimpleForm>
   );
 };
 
 export const ExchangeCreate = () => {
-  const { isLoading, permissions } = usePermissions(),
-    role = permissions.role;
+  const {
+    permissions,
+    isLoading: isLoadingPermissions,
+    error: errorPermissions,
+  } = usePermissions();
 
-  if (isLoading) {
-    return <Loading />;
-  } else {
-    return (
-      <Create
-        mutationOptions={{ meta: { creator_role: role } }}
-        redirect="list"
-      >
-        <>
-          {role === 1 ? (
-            <CreateForm />
-          ) : (
-            <div>Only admins can create exchanges</div>
-          )}
-        </>
-      </Create>
-    );
-  }
+  isLoadingPermissions && <Loading />;
+  errorPermissions && <div>Error loading permissions</div>;
+
+  return (
+    <Create
+      mutationOptions={{ meta: { creator_role: permissions.role } }}
+      redirect="list"
+    >
+      {permissions.role === 1 ? (
+        <CreateForm />
+      ) : (
+        <div>Only admins can create exchanges</div>
+      )}
+    </Create>
+  );
 };

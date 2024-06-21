@@ -1,40 +1,27 @@
 import {
-  Edit,
   Loading,
-  required,
-  SelectInput,
+  Edit,
   SimpleForm,
   TextInput,
-  useGetList,
-  usePermissions,
+  required,
   useRecordContext,
+  usePermissions,
 } from "react-admin";
-
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
-
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import Container from "@mui/material/Container";
 
 const Editform = () => {
   const record = useRecordContext();
 
-  const {
-    data: states,
-    isLoading: isLoadingStates,
-    error,
-  } = useGetList("states");
-
-  if (!record || isLoadingStates) {
-    return <Loading />;
-  }
-  if (error) {
-    return <div>ERROR</div>;
+  if (!record) {
+    return <div>Record error</div>;
   }
 
   return (
     <SimpleForm toolbar={<PrymaryEditToolbar />}>
       <Container maxWidth="md" sx={{ ml: 0 }}>
-        <h2>Office main settings</h2>
+        <h2>Whitelist settings</h2>
       </Container>
       <Container maxWidth="md" sx={{ ml: 0 }}>
         <Grid container spacing={1}>
@@ -58,31 +45,11 @@ const Editform = () => {
               {record.id}
             </div>
           </Grid>
-          <Grid item xs>
+          <Grid item xs={12} sm={8} md={10} lg={11}>
             <TextInput
-              defaultValue={record.title}
-              fullWidth
               margin="none"
-              source="title"
-              validate={required()}
-              variant="standard"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextInput
               fullWidth
-              source="currencies"
-              defaultValue={record.currencies}
-              validate={required()}
-              variant="standard"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <SelectInput
-              choices={states}
-              defaultValue={1}
-              fullWidth
-              source="state"
+              source="symbol"
               validate={required()}
               variant="standard"
             />
@@ -93,24 +60,34 @@ const Editform = () => {
   );
 };
 
-const ExchangeTitle = () => {
+const WhitelistTitle = () => {
   const record = useRecordContext();
-  return <>Exchange {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
+  return (
+    <>Whitelist {record ? `"${record.symbol}" (id: ${record.id})` : ""}</>
+  );
 };
 
-export const ExchangeEdit = () => {
+export const WhitelistEdit = () => {
   const {
     error: errorPermissions,
     isLoading: isLoadingPermissions,
     permissions,
   } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
-  permissions.role !== 1 && <div>Not enough permissions</div>;
+  if (isLoadingPermissions) {
+    return <Loading />;
+  }
+
+  if (errorPermissions) {
+    return <div>Error loading permissions</div>;
+  }
+
+  if (permissions.role !== 1 && permissions.role !== 2) {
+    return <div>Not enough permissions</div>;
+  }
 
   return (
-    <Edit title={<ExchangeTitle />}>
+    <Edit title={<WhitelistTitle />}>
       <Editform />
     </Edit>
   );

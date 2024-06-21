@@ -1,10 +1,7 @@
 import * as React from "react";
-import { useWatch } from "react-hook-form";
 import {
   AutocompleteInput,
-  AutocompleteInputProps,
   Datagrid,
-  DateField,
   EditButton,
   FunctionField,
   List,
@@ -12,23 +9,21 @@ import {
   Pagination,
   ReferenceField,
   ReferenceInput,
-  SearchInput,
   SelectInput,
   TextField,
   TextInput,
-  useListContext,
   usePermissions,
 } from "react-admin";
 import { Bot, BotPair, Exchange } from "../../types";
-import BtnsStateControl from "../../layouts/btnsStateControl";
 import GridData from "../../helpers/GridData";
-import IdxMaster from "../../layouts/idxMaster";
 
-import CircleIcon from "@mui/icons-material/Circle";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { PairPanel } from "./pairPanel";
 
-//import { useMediaQuery, Theme } from "@mui/material";
+import BtnsStateControl from "../../layouts/btnsStateControl";
+import IdxMaster from "../../layouts/idxMaster";
+
+import SettingsIcon from "@mui/icons-material/Settings";
+import StateIcon from "../../layouts/stateIcon";
 
 const botFilterToQuery = (searchText: any) => ({
     title_like: `${searchText}`,
@@ -38,10 +33,10 @@ const botFilterToQuery = (searchText: any) => ({
   });
 
 const botFilter = () => {
-  const { data, isLoading } = useListContext();
+  /* const { data, isLoading } = useListContext();
   const exchangeId = useWatch({
     name: "exchange_id_like",
-  });
+  }); */
 
   return (
     <ReferenceInput source="bot_id" reference="bots" allowEmpty>
@@ -96,24 +91,16 @@ export const PairsList = () => {
     permissions,
   } = usePermissions();
 
-  if (isLoadingPermissions) {
-    return <Loading />;
-  }
-
-  if (errorPermissions) {
-    return <div>Error loading permissions</div>;
-  }
-
-  if (permissions.role !== 1 && permissions.role !== 2) {
-    return <div>Not enough permissions</div>;
-  }
+  isLoadingPermissions && <Loading />
+  errorPermissions && <div>Error loading permissions</div>
+  permissions.role !== 1 && permissions.role !== 2 && <div>Not enough permissions</div>
 
   return (
     <List
-      perPage={50}
-      filters={pairsFilters}
       filterDefaultValues={{ state: 1 }}
+      filters={pairsFilters}
       pagination={<PairsPagination />}
+      perPage={50}
     >
       <Datagrid bulkActionButtons={false} expand={<PairPanel />}>
         <TextField source="id" />
@@ -122,32 +109,7 @@ export const PairsList = () => {
           label="State"
           sortable={true}
           sortBy="state"
-          render={(record: BotPair) => {
-            let stateColor;
-
-            switch (record.state) {
-              case -1:
-                stateColor = "disabled";
-                break;
-              case 0:
-                stateColor = "error";
-                break;
-              case 1:
-                stateColor = "success";
-                break;
-              case 2:
-                stateColor = "warning";
-                break;
-              default:
-                stateColor = "disabled";
-            }
-
-            return (
-              <div style={{ textAlign: "center" }}>
-                <CircleIcon color={stateColor} sx={{ fontSize: "0.9em" }} />
-              </div>
-            );
-          }}
+          render={(record: Bot) => <StateIcon record={record} />}
         />
         <FunctionField
           source="symbol"
@@ -157,7 +119,11 @@ export const PairsList = () => {
           render={(record: BotPair) => {
             let pairPauseUntil;
 
-            if (record.pause_until) {
+            if (
+              record.pause_until &&
+              new Date(record.pause_until).getTime() > new Date().getTime() &&
+              record.state === 2
+            ) {
               pairPauseUntil = (
                 <span style={{ fontSize: "0.8em" }}>
                   <span style={{ fontWeight: "700", marginRight: "5px" }}>
@@ -179,6 +145,7 @@ export const PairsList = () => {
                   <span style={{ marginRight: "0.7em" }}>{record.symbol}</span>
                   <span
                     style={{
+                      alignItems: "center",
                       display: "flex",
                       marginLeft: "auto",
                     }}
@@ -205,9 +172,15 @@ export const PairsList = () => {
         <ReferenceField label="Bot" source="bot_id" reference="bots">
           <FunctionField render={(record: Bot) => record.title} />
         </ReferenceField>
-        {/* <ReferenceField label="Exchange" source="exchange_id" reference="exchanges">
+        <ReferenceField
+          label="Exchange"
+          link={(record: any, reference: any) => `/${reference}s/${record.id}`}
+          reference="exchange"
+          sortable={false}
+          source="exchange_id"
+        >
           <FunctionField render={(record: Exchange) => record.title} />
-        </ReferenceField> */}
+        </ReferenceField>
         <FunctionField
           label="RSI_S"
           render={(record: BotPair) => {
