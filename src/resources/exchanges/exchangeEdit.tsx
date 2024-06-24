@@ -11,6 +11,7 @@ import {
 } from "react-admin";
 
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
+import IdMark from "../../layouts/idMark";
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -21,15 +22,11 @@ const Editform = () => {
   const {
     data: states,
     isLoading: isLoadingStates,
-    error,
+    error: errorStates,
   } = useGetList("states");
 
-  if (!record || isLoadingStates) {
-    return <Loading />;
-  }
-  if (error) {
-    return <div>ERROR</div>;
-  }
+  if (!record || isLoadingStates) return <Loading />
+  if (errorStates) return <div>Loading states error</div>
 
   return (
     <SimpleForm toolbar={<PrymaryEditToolbar />}>
@@ -39,24 +36,7 @@ const Editform = () => {
       <Container maxWidth="md" sx={{ ml: 0 }}>
         <Grid container spacing={1}>
           <Grid item xs={12} sm={4} md={2} lg={1} sx={{ textAlign: "center" }}>
-            <div
-              style={{
-                fontSize: "0.8em",
-                lineHeight: "0.8em",
-                verticalAlign: "top",
-              }}
-            >
-              ID
-            </div>
-            <div
-              style={{
-                fontSize: "1.2em",
-                fontWeight: 700,
-                lineHeight: "2.1em",
-              }}
-            >
-              {record.id}
-            </div>
+            <IdMark id={record.id} />
           </Grid>
           <Grid item xs>
             <TextInput

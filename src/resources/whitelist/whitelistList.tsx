@@ -14,17 +14,11 @@ export const WhitelistList = () => {
     permissions,
   } = usePermissions();
 
-  if (isLoadingPermissions) {
-    return <Loading />;
-  }
-
-  if (errorPermissions) {
-    return <div>Error loading permissions</div>;
-  }
-
-  if (permissions.role !== 1 && permissions.role !== 2) {
-    return <div>Not enough permissions</div>;
-  }
+  isLoadingPermissions && <Loading />;
+  errorPermissions && <div>Error loading permissions</div>;
+  permissions.role !== 1 && permissions.role !== 2 && (
+    <div>Not enough permissions</div>
+  );
 
   return (
     <List>

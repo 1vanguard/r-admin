@@ -14,16 +14,16 @@ import {
   useGetOne,
   usePermissions,
 } from "react-admin";
-import { Office, Role, User, usersPermanentFilter } from "../../types";
 
-import CircleIcon from "@mui/icons-material/Circle";
+import { Office, Role, User, usersPermanentFilter } from "../../types";
+import StateIcon from "../../layouts/stateIcon";
 
 export const UsersList = () => {
   const userId = localStorage.getItem("uid"),
     {
       data: user,
-      isLoading: isLoadingUser,
       error: errorUser,
+      isLoading: isLoadingUser,
     } = useGetOne("users", { id: userId });
 
   const {
@@ -32,20 +32,13 @@ export const UsersList = () => {
     permissions,
   } = usePermissions();
 
-  if (isLoadingPermissions || isLoadingUser) {
-    return <Loading />;
-  }
+  if (isLoadingPermissions || isLoadingUser) return <Loading />;
+  if (errorPermissions || errorUser) return <div>Error loading permissions</div>;
+  permissions.role !== 1 && permissions.role !== 2 && (
+    <div>Not enough permissions</div>
+  );
 
-  if (errorPermissions || errorUser) {
-    return <div>Error loading permissions</div>;
-  }
-
-  if (permissions.role !== 1 && permissions.role !== 2) {
-    return <div>Not enough permissions</div>;
-  }
-
-  const role = permissions.role,
-    userOfficeId = user?.officeId,
+  const userOfficeId = user?.officeId,
     usersPermanentFilter: usersPermanentFilter = {},
     usersFilter = [
       <TextInput label="Username" source="username_like" alwaysOn />,
@@ -54,14 +47,14 @@ export const UsersList = () => {
         alwaysOn
         label="State"
         reference="states"
-        source="state"
         sort={{ field: "name", order: "ASC" }}
+        source="state"
       >
         <SelectInput optionText="name" source="name" />
       </ReferenceInput>,
     ];
 
-  if (role === 1) {
+  if (permissions.role === 1) {
     usersFilter.push(
       <ReferenceInput
         allowEmpty
@@ -76,7 +69,7 @@ export const UsersList = () => {
       </ReferenceInput>
     );
   }
-  if (role === 2) {
+  if (permissions.role === 2) {
     usersPermanentFilter.officeId = userOfficeId;
     usersPermanentFilter.role = 3;
   }
@@ -91,36 +84,11 @@ export const UsersList = () => {
       <Datagrid bulkActionButtons={false}>
         <TextField source="id" />
         <FunctionField
-          source="state"
           label="State"
+          render={(record: User) => <StateIcon record={record} />}
           sortable={true}
           sortBy="state"
-          render={(record: User) => {
-            let stateColor;
-
-            switch (record.state) {
-              case -1:
-                stateColor = "disabled";
-                break;
-              case 0:
-                stateColor = "error";
-                break;
-              case 1:
-                stateColor = "success";
-                break;
-              case 2:
-                stateColor = "warning";
-                break;
-              default:
-                stateColor = "disabled";
-            }
-
-            return (
-              <div style={{ textAlign: "center" }}>
-                <CircleIcon color={stateColor} sx={{ fontSize: "0.9em" }} />
-              </div>
-            );
-          }}
+          source="state"
         />
         <TextField source="username" />
         <EmailField source="email" />
@@ -128,8 +96,6 @@ export const UsersList = () => {
         <TextField source="lastName" />
         <TextField source="telegram" />
         <DateField
-          source="registrationDate"
-          showTime
           options={{
             year: "numeric",
             month: "2-digit",
@@ -138,10 +104,10 @@ export const UsersList = () => {
             minute: "2-digit",
             second: "2-digit",
           }}
+          showTime
+          source="registrationDate"
         />
         <DateField
-          source="lastVisit"
-          showTime
           options={{
             year: "numeric",
             month: "2-digit",
@@ -150,6 +116,8 @@ export const UsersList = () => {
             minute: "2-digit",
             second: "2-digit",
           }}
+          showTime
+          source="lastVisit"
         />
         <ReferenceField label="Role" source="role" reference="roles">
           <FunctionField render={(record: Role) => record.name} />

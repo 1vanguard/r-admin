@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   AutocompleteInput,
   Datagrid,
-  EditButton,
   FunctionField,
   List,
   Loading,
@@ -14,36 +13,17 @@ import {
   TextInput,
   usePermissions,
 } from "react-admin";
+
 import { Bot, BotPair, Exchange } from "../../types";
-import GridData from "../../helpers/GridData";
-
 import { PairPanel } from "./pairPanel";
-
-import BtnsStateControl from "../../layouts/btnsStateControl";
+import GridData from "../../helpers/GridData";
 import IdxMaster from "../../layouts/idxMaster";
-
-import SettingsIcon from "@mui/icons-material/Settings";
+import ItemStateControlBar from "../../layouts/itemStateControlBar";
 import StateIcon from "../../layouts/stateIcon";
 
 const botFilterToQuery = (searchText: any) => ({
-    title_like: `${searchText}`,
-  }),
-  exchangeFilterToQuery = (searchText: any) => ({
-    title_like: `${searchText}`,
-  });
-
-const botFilter = () => {
-  /* const { data, isLoading } = useListContext();
-  const exchangeId = useWatch({
-    name: "exchange_id_like",
-  }); */
-
-  return (
-    <ReferenceInput source="bot_id" reference="bots" allowEmpty>
-      <AutocompleteInput optionText="title" filterToQuery={botFilterToQuery} />
-    </ReferenceInput>
-  );
-};
+  title_like: `${searchText}`,
+});
 
 const pairsFilters = [
   <TextInput label="Symbol" source="symbol_like" alwaysOn />,
@@ -91,9 +71,11 @@ export const PairsList = () => {
     permissions,
   } = usePermissions();
 
-  isLoadingPermissions && <Loading />
-  errorPermissions && <div>Error loading permissions</div>
-  permissions.role !== 1 && permissions.role !== 2 && <div>Not enough permissions</div>
+  isLoadingPermissions && <Loading />;
+  errorPermissions && <div>Error loading permissions</div>;
+  permissions.role !== 1 && permissions.role !== 2 && (
+    <div>Not enough permissions</div>
+  );
 
   return (
     <List
@@ -105,69 +87,18 @@ export const PairsList = () => {
       <Datagrid bulkActionButtons={false} expand={<PairPanel />}>
         <TextField source="id" />
         <FunctionField
-          source="state"
           label="State"
+          render={(record: Bot) => <StateIcon record={record} />}
           sortable={true}
           sortBy="state"
-          render={(record: Bot) => <StateIcon record={record} />}
+          source="state"
         />
         <FunctionField
-          source="symbol"
           label="Pair"
+          render={(record: BotPair) => <ItemStateControlBar record={record} />}
           sortable={true}
           sortBy="symbol"
-          render={(record: BotPair) => {
-            let pairPauseUntil;
-
-            if (
-              record.pause_until &&
-              new Date(record.pause_until).getTime() > new Date().getTime() &&
-              record.state === 2
-            ) {
-              pairPauseUntil = (
-                <span style={{ fontSize: "0.8em" }}>
-                  <span style={{ fontWeight: "700", marginRight: "5px" }}>
-                    Pause until:
-                  </span>
-                  {new Date(record.pause_until).toLocaleString()}
-                </span>
-              );
-            }
-
-            return (
-              <div>
-                <span
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <span style={{ marginRight: "0.7em" }}>{record.symbol}</span>
-                  <span
-                    style={{
-                      alignItems: "center",
-                      display: "flex",
-                      marginLeft: "auto",
-                    }}
-                  >
-                    <BtnsStateControl />
-                    <EditButton
-                      label=""
-                      color="inherit"
-                      variant="contained"
-                      className="btn_iconOnly"
-                      style={{
-                        marginLeft: "0.3em",
-                        minWidth: "0",
-                      }}
-                      icon={<SettingsIcon style={{ fontSize: "1em" }} />}
-                    />
-                  </span>
-                </span>
-                {pairPauseUntil}
-              </div>
-            );
-          }}
+          source="symbol"
         />
         <ReferenceField label="Bot" source="bot_id" reference="bots">
           <FunctionField render={(record: Bot) => record.title} />

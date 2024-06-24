@@ -18,16 +18,17 @@ import {
   useRecordContext,
 } from "react-admin";
 
-import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
+import { PairPause } from "../../types";
 import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
+import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
+import IdMark from "../../layouts/idMark";
 
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
 import { Box } from "@mui/material";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Tooltip from "@mui/material/Tooltip";
-import { PairPause } from "../../types";
 
 const botFilterToQuery = (searchText: any) => ({
     title_like: `${searchText}`,
@@ -60,13 +61,8 @@ const Editform = () => {
     id: botId,
   });
 
-  if (isLoadingBoatData) {
-    return <Loading />;
-  }
-
-  if (errorBotData) {
-    return <div>ERROR</div>;
-  }
+  if (isLoadingBoatData) return <Loading />
+  if (errorBotData) return <div>ERROR</div> 
 
   return (
     <div>
@@ -87,24 +83,7 @@ const Editform = () => {
                 lg={1}
                 sx={{ textAlign: "center" }}
               >
-                <div
-                  style={{
-                    fontSize: "0.8em",
-                    lineHeight: "0.8em",
-                    verticalAlign: "top",
-                  }}
-                >
-                  Pair ID
-                </div>
-                <div
-                  style={{
-                    fontSize: "1.2em",
-                    fontWeight: 700,
-                    lineHeight: "2.1em",
-                  }}
-                >
-                  {record.id}
-                </div>
+                <IdMark id={record.id} />
               </Grid>
               <Grid item xs={12} sm={8} md={10} lg={11}>
                 <TextInput

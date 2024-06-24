@@ -2,14 +2,16 @@ import * as React from "react";
 import { useEffect } from "react";
 import {
   Create,
+  PasswordInput,
   SimpleForm,
   TextInput,
-  PasswordInput,
   useNotify,
   useRedirect,
   useTranslate,
 } from "react-admin";
+
 import { authProvider } from "../../authProvider";
+
 import Box from "@mui/material/Grid";
 import Grid from "@mui/material/Grid";
 
@@ -34,7 +36,7 @@ const RegistrationPage = (props) => {
     redirect(`/login`);
   };
 
-  return (
+  /* return (
     <Box
       sx={{
         alignItems: "center",
@@ -66,7 +68,10 @@ const RegistrationPage = (props) => {
         </Grid>
       </Grid>
     </Box>
-  );
+  ); */
+  return (
+    <div>No registration</div>
+  )
 };
 
 export default RegistrationPage;

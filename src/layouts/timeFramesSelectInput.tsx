@@ -36,7 +36,6 @@ interface TimeFramesSelectInputProps {
   frameChoices: number[];
   fullWidth?: boolean;
   label: string;
-  // recordValue?: number;
   required?: boolean;
   sourceName: string;
 }
@@ -47,15 +46,11 @@ export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (
   const {
     data: choices,
     isLoading: isLoadingChoices,
-    error,
+    error: errorChoices,
   } = useGetList("timeframes");
 
-  if (isLoadingChoices) {
-    return <Loading />;
-  }
-  if (error) {
-    return <p>ERROR</p>;
-  }
+  if (isLoadingChoices) return <Loading />
+  if (errorChoices) return <p>ERROR</p>
 
   const frameChoices = props.frameChoices;
   const timeFrameChoices = calculateChoices(choices, frameChoices);
@@ -67,10 +62,11 @@ export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (
 
   return (
     <SelectInput
+      {...(props.required ? { validate: required() } : {})}
+      // emptyValue={minChoiceId}
       choices={timeFrameChoices}
       disabled={isLoadingChoices}
       emptyText="Do not use"
-      // emptyValue={minChoiceId}
       fullWidth={props.fullWidth ? true : false}
       isLoading={isLoadingChoices}
       label={props.label}
@@ -79,7 +75,6 @@ export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (
       optionValue="minutes"
       source={props.sourceName}
       variant="standard"
-      {...(props.required ? { validate: required() } : {})}
     />
   );
 };

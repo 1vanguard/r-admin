@@ -6,18 +6,20 @@ import CandlestickChartIcon from "@mui/icons-material/CandlestickChart";
 interface BtnPairsListProps {
   botId: number;
   btnText?: string;
+  style?: React.CSSProperties;
   useIcon?: boolean;
 }
 
 const BtnPairsList: React.FC<BtnPairsListProps> = (props) => {
   return (
     <Button
-      component={RouterLink}
-      color="secondary"
       className="btn_iconOnly"
-      variant="contained"
+      color="secondary"
+      component={RouterLink}
+      style={{...props.style}}
       sx={{ minWidth: 0 }}
       to={`/bots/${props.botId}/pairs`}
+      variant="contained"
     >
       {props.btnText ? props.btnText : null}
       {props.useIcon === false ? null : <CandlestickChartIcon sx={{ fontSize: "1em" }} />}

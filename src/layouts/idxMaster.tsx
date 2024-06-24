@@ -11,9 +11,7 @@ interface IdxMasterProps {
 const IdxMaster: React.FC<IdxMasterProps> = ({ idxName, pairId, style }) => {
   const { idxs } = useWebSocketDataContext();
 
-  if (!idxs) {
-    return <Loading />;
-  }
+  if (!idxs) return <Loading />;
 
   const targetIdx = idxs[pairId]?.find((idx) => idx.indicator === idxName);
   if (!targetIdx) {

@@ -20,6 +20,7 @@ import {
 } from "react-admin";
 
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
+import IdMark from "../../layouts/idMark";
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -30,15 +31,11 @@ const Editform = () => {
   const {
     data: states,
     isLoading: isLoadingStates,
-    error,
+    error: errorStates,
   } = useGetList("states");
 
-  if (!record || isLoadingStates) {
-    return <Loading />;
-  }
-  if (error) {
-    return <div>ERROR</div>;
-  }
+  if (!record || isLoadingStates) return <Loading />
+  errorStates && <div>Loading states error</div>
 
   return (
     <TabbedForm toolbar={<PrymaryEditToolbar />} id="editOfficeForm">
@@ -56,24 +53,7 @@ const Editform = () => {
               lg={1}
               sx={{ textAlign: "center" }}
             >
-              <div
-                style={{
-                  fontSize: "0.8em",
-                  lineHeight: "0.8em",
-                  verticalAlign: "top",
-                }}
-              >
-                ID
-              </div>
-              <div
-                style={{
-                  fontSize: "1.2em",
-                  fontWeight: 700,
-                  lineHeight: "2.1em",
-                }}
-              >
-                {record.id}
-              </div>
+              <IdMark id={record.id} />
             </Grid>
             <Grid item xs={12} sm={8} md={10} lg={11}>
               <TextInput
@@ -87,7 +67,6 @@ const Editform = () => {
             </Grid>
             <Grid item xs={12}>
               <SelectInput
-                //defaultValue={record.state}
                 choices={states}
                 fullWidth
                 source="state"
@@ -138,7 +117,6 @@ const Editform = () => {
           <ReferenceManyField
             reference="users"
             filter={{ officeId: record.id }}
-            //sx={{ width: "100%" }}
             label="Office users"
             target="officeId"
             perPage={10}

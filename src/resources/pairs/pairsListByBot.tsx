@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Datagrid,
-  EditButton,
   FunctionField,
   List,
   Loading,
@@ -12,23 +11,20 @@ import {
   useGetOne,
   WithListContext,
 } from "react-admin";
-import { Bot, BotPair } from "../../types";
-import GridData from "../../helpers/GridData";
 
-import BtnsStateControl from "../../layouts/btnsStateControl";
+import { Bot, BotPair, Exchange } from "../../types";
+import { PairPanel } from "./pairPanel";
+import GridData from "../../helpers/GridData";
 import IdxMaster from "../../layouts/idxMaster";
+import ItemStateControlBar from "../../layouts/itemStateControlBar";
 import StateIcon from "../../layouts/stateIcon";
 
-import { PairPanel } from "./pairPanel";
-
 import { Box, Typography } from "@mui/material";
-import CircleIcon from "@mui/icons-material/Circle";
 import Collapse from "@mui/material/Collapse";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import SettingsIcon from "@mui/icons-material/Settings";
 import Switch from "@mui/material/Switch";
 
-const NoPairs = (props) => {
+const NoPairs = (props: any) => {
   const pairState = props.state;
   let noText = "No Pairs";
 
@@ -54,13 +50,14 @@ const inactivePairsFilters = [
 
 const PairsListByBot = () => {
   const { id: botId } = useParams();
-  const { data: botData, isLoading: isLoadingBotData, error: errorBotData } = useGetOne<Bot>(
-    "bots",
-    { id: botId }
-  );
+  const {
+    data: botData,
+    isLoading: isLoadingBotData,
+    error: errorBotData,
+  } = useGetOne<Bot>("bots", { id: botId });
 
-  isLoadingBotData && <Loading />
-  errorBotData && <div>Error bot data</div>
+  isLoadingBotData && <Loading />;
+  errorBotData && <div>Error bot data</div>;
 
   const [checked, setChecked] = useState(false);
 
@@ -70,19 +67,21 @@ const PairsListByBot = () => {
 
   return (
     <Box className="pairsListByBot">
-      <h2>Bot <small>(id:{botId})</small> {botData?.title} pairs</h2>
+      <h2>
+        Bot <small>(id:{botId})</small> {botData?.title} pairs
+      </h2>
       <List
-        resource="pairs"
+        disableSyncWithLocation
         filter={{ bot_id: botId, state: [1, 2] }}
         filters={pairsFilters}
-        perPage={1000000}
         pagination={false}
+        perPage={1000000}
+        resource="pairs"
         sx={{ marginBottom: 3 }}
-        disableSyncWithLocation
       >
         <Datagrid
-          expand={<PairPanel />}
           bulkActionButtons={false}
+          expand={<PairPanel />}
           sx={{
             "& .RaDatagrid-row": {
               backgroundColor: "rgb(46 125 50 / 5%)",
@@ -91,72 +90,29 @@ const PairsListByBot = () => {
         >
           <TextField source="id" />
           <FunctionField
-            source="state"
             label="State"
+            render={(record: Bot) => <StateIcon record={record} />}
             sortable={true}
             sortBy="state"
-            render={(record: Bot) => <StateIcon record={record} />}
+            source="state"
           />
           <FunctionField
-            source="symbol"
             label="Pair"
+            render={(record: BotPair) => (
+              <ItemStateControlBar record={record} />
+            )}
             sortable={true}
             sortBy="symbol"
-            render={(record: BotPair) => {
-              let pairPauseUntil;
-
-              if (record.pause_until) {
-                pairPauseUntil = (
-                  <span style={{ fontSize: "0.8em" }}>
-                    <span style={{ fontWeight: "700", marginRight: "5px" }}>
-                      Pause until:
-                    </span>
-                    {new Date(record.pause_until).toLocaleString()}
-                  </span>
-                );
-              }
-
-              return (
-                <div>
-                  <span
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <span style={{ marginRight: "0.7em" }}>
-                      {record.symbol}
-                    </span>
-                    <span
-                      style={{
-                        display: "flex",
-                        marginLeft: "auto",
-                      }}
-                    >
-                      <BtnsStateControl />
-                      <EditButton
-                        label=""
-                        color="inherit"
-                        variant="contained"
-                        className="btn_iconOnly"
-                        style={{
-                          marginLeft: "0.3em",
-                          minWidth: "0",
-                        }}
-                        icon={<SettingsIcon style={{ fontSize: "1em" }} />}
-                      />
-                    </span>
-                  </span>
-                  {pairPauseUntil}
-                </div>
-              );
-            }}
+            source="symbol"
           />
           <ReferenceField
             label="Exchange"
-            link={(record: any, reference: any) => `/exchanges/${record.id}`}
+            link={(record: any, reference: any) =>
+              `/${reference}s/${record.id}`
+            }
             reference="exchange"
-            source="exchangeId"
+            sortable={false}
+            source="exchange_id"
           >
             <FunctionField render={(record: Exchange) => record.title} />
           </ReferenceField>
@@ -211,15 +167,15 @@ const PairsListByBot = () => {
           />
         </Datagrid>
       </List>
-      <h2>Inactive pairs</h2>
+      <h2 style={{ marginBottom: 0 }}>Inactive pairs</h2>
       <List
-        resource="pairs"
-        filter={{ bot_id: botId, state: 0 }}
-        filters={inactivePairsFilters}
-        perPage={1000000}
-        pagination={false}
         disableSyncWithLocation
         empty={<NoPairs state={0} />}
+        filter={{ bot_id: botId, state: 0 }}
+        filters={inactivePairsFilters}
+        pagination={false}
+        perPage={1000000}
+        resource="pairs"
       >
         <WithListContext
           render={({
@@ -241,79 +197,34 @@ const PairsListByBot = () => {
                     />
                   </Box>
                   <Collapse in={checked}>
-                    {
-                      <Datagrid
-                        bulkActionButtons={false}
-                        sx={{
-                          "& .RaDatagrid-table": {
-                            width: "auto",
-                          },
-                        }}
-                      >
-                        <TextField source="id" />
-                        <FunctionField
-                          source="state"
-                          label="State"
-                          sortable={true}
-                          sortBy="state"
-                          render={() => {
-                            return (
-                              <div style={{ textAlign: "center" }}>
-                                <CircleIcon
-                                  color={"error"}
-                                  sx={{ fontSize: "0.9em" }}
-                                />
-                              </div>
-                            );
-                          }}
-                        />
-                        <FunctionField
-                          source="symbol"
-                          label="Pair"
-                          sortable={true}
-                          sortBy="symbol"
-                          render={(record: BotPair) => {
-                            return (
-                              <div>
-                                <span
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <span style={{ marginRight: "0.7em" }}>
-                                    {record.symbol}
-                                  </span>
-                                  <span
-                                    style={{
-                                      display: "flex",
-                                      marginLeft: "auto",
-                                    }}
-                                  >
-                                    <BtnsStateControl />
-                                    <EditButton
-                                      label=""
-                                      color="inherit"
-                                      variant="contained"
-                                      className="btn_iconOnly"
-                                      style={{
-                                        marginLeft: "0.3em",
-                                        minWidth: "0",
-                                      }}
-                                      icon={
-                                        <SettingsIcon
-                                          style={{ fontSize: "1em" }}
-                                        />
-                                      }
-                                    />
-                                  </span>
-                                </span>
-                              </div>
-                            );
-                          }}
-                        />
-                      </Datagrid>
-                    }
+                    <Datagrid
+                      bulkActionButtons={false}
+                      sx={{
+                        "& .RaDatagrid-row": {
+                          backgroundColor: "rgb(211 47 47 / 5%)",
+                        },
+                        "& .RaDatagrid-table": {
+                          width: "auto",
+                        },
+                      }}
+                    >
+                      <TextField source="id" />
+                      <FunctionField
+                        label="State"
+                        render={(record: Bot) => <StateIcon record={record} />}
+                        sortable={false}
+                        source="state"
+                      />
+                      <FunctionField
+                        label="Pair"
+                        render={(record: BotPair) => (
+                          <ItemStateControlBar record={record} />
+                        )}
+                        sortable={true}
+                        sortBy="symbol"
+                        source="symbol"
+                      />
+                    </Datagrid>
                   </Collapse>
                 </Box>
               );

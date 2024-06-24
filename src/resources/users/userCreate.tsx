@@ -13,6 +13,8 @@ import {
   useRedirect,
   AutocompleteInput,
 } from "react-admin";
+
+import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
 const officeFilterToQuery = (searchText: any) => ({
@@ -29,102 +31,132 @@ const CreateForm = () => {
     { permissions, isLoading: isLoadingPermissions } = usePermissions();
 
   if (isLoadingPermissions || isLoadingUser) return <Loading />;
-  if (errorUser) {
-    return <p>ERROR</p>;
-  }
+  if (errorUser) return <div>Error loading user</div>;
 
-  const role = permissions.role,
-    userOfficeId = user?.officeId;
+  const userOfficeId = user?.officeId;
 
   return (
     <SimpleForm>
-      <Grid container spacing={2} maxWidth={700}>
-        <Grid item xs={12} sm={role === 1 ? 6 : 12}>
-          <TextInput fullWidth source="username" validate={required()} />
-        </Grid>
-        {role === 1 && (
+      <Container maxWidth="md" sx={{ ml: 0 }}>
+        <h2>Create new user</h2>
+      </Container>
+      <Container maxWidth="md" sx={{ ml: 0 }}>
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={permissions.role === 1 ? 6 : 12}>
+            <TextInput
+              fullWidth
+              source="username"
+              validate={required()}
+              variant="standard"
+            />
+          </Grid>
+          {permissions.role === 1 && (
+            <Grid item xs={12} sm={6}>
+              <TextInput
+                fullWidth
+                source="password"
+                type="password"
+                validate={required()}
+                variant="standard"
+              />
+            </Grid>
+          )}
+          <Grid item xs={12} sm={4}>
+            <ReferenceInput label="State" source="state" reference="states">
+              <SelectInput
+                defaultValue={1}
+                fullWidth
+                optionText="name"
+                source="state"
+                validate={required()}
+                variant="standard"
+              />
+            </ReferenceInput>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <ReferenceInput
+              label="Role"
+              reference="roles"
+              source="role"
+              {...(permissions.role === 2 && { filter: { id: 3 } })}
+            >
+              <SelectInput
+                fullWidth
+                optionText="name"
+                source="role"
+                validate={required()}
+                variant="standard"
+                {...(permissions.role === 2 && { defaultValue: 3 })}
+              />
+            </ReferenceInput>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <ReferenceInput
+              label="Office"
+              reference="offices"
+              source="officeId"
+              {...(permissions.role === 2 && { filter: { id: userOfficeId } })}
+            >
+              <>
+                {permissions.role === 1 && (
+                  <AutocompleteInput
+                    filterToQuery={officeFilterToQuery}
+                    fullWidth
+                    optionText="title"
+                    validate={required()}
+                    variant="standard"
+                  />
+                )}
+                {permissions.role === 2 && (
+                  <SelectInput
+                    fullWidth
+                    optionText="title"
+                    optionValue="id"
+                    validate={required()}
+                    variant="standard"
+                    {...(permissions.role === 2 && {
+                      defaultValue: userOfficeId,
+                    })}
+                  />
+                )}
+              </>
+            </ReferenceInput>
+          </Grid>
           <Grid item xs={12} sm={6}>
             <TextInput
               fullWidth
-              source="password"
-              type="password"
+              source="firstName"
               validate={required()}
+              variant="standard"
             />
           </Grid>
-        )}
-        <Grid item xs={12} sm={6}>
-          <TextInput fullWidth source="firstName" validate={required()} />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextInput fullWidth source="lastName" validate={required()} />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextInput
-            fullWidth
-            source="email"
-            type="email"
-            validate={required()}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextInput fullWidth source="telegram" validate={required()} />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <ReferenceInput
-            label="Office"
-            source="officeId"
-            reference="offices"
-            {...(role === 2 && { filter: { id: userOfficeId } })}
-          >
-            <>
-              {role === 1 && (
-                <AutocompleteInput
-                  fullWidth
-                  optionText="title"
-                  validate={required()}
-                  filterToQuery={officeFilterToQuery}
-                />
-              )}
-              {role === 2 && (
-                <SelectInput
-                  fullWidth
-                  optionText="title"
-                  optionValue="id"
-                  validate={required()}
-                  {...(role === 2 && { defaultValue: userOfficeId })}
-                />
-              )}
-            </>
-          </ReferenceInput>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <ReferenceInput
-            label="Role"
-            source="role"
-            reference="roles"
-            {...(role === 2 && { filter: { id: 3 } })}
-          >
-            <SelectInput
+          <Grid item xs={12} sm={6}>
+            <TextInput
               fullWidth
-              optionText="name"
-              source="role"
+              source="lastName"
               validate={required()}
-              {...(role === 2 && { defaultValue: 3 })}
+              variant="standard"
             />
-          </ReferenceInput>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <ReferenceInput label="State" source="state" reference="states">
-            <SelectInput
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextInput
               fullWidth
-              optionText="name"
-              source="state"
+              source="email"
+              type="email"
               validate={required()}
-              defaultValue={1}
+              variant="standard"
             />
-          </ReferenceInput>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextInput
+              fullWidth
+              source="telegram"
+              validate={required()}
+              variant="standard"
+            />
+          </Grid>
         </Grid>
-      </Grid>
+      </Container>
     </SimpleForm>
   );
 };
@@ -142,12 +174,12 @@ export const UserCreate = () => {
       error: errorOffices,
     } = useGetList("offices"),
     notify = useNotify(),
-    redirect = useRedirect(),
-    role = permissions.role;
+    redirect = useRedirect()
 
   if (isLoadingPermissions || isLoadingExchanges || isLoadingOffices)
     return <Loading />;
-  if (errorExchanges || errorOffices) return <p>ERROR</p>;
+  if (errorExchanges || errorOffices)
+    return <div>Error loading permissions or offices</div>;
 
   if (offices.length === 0) {
     notify(`Offices are not created. Please, create offices first`);
@@ -159,14 +191,15 @@ export const UserCreate = () => {
   }
 
   return (
-    <Create mutationOptions={{ meta: { creator_role: role } }} redirect="list">
-      <>
-        {role === 1 || role === 2 ? (
-          <CreateForm />
-        ) : (
-          <div>Only admins and managers can create users</div>
-        )}
-      </>
+    <Create
+      mutationOptions={{ meta: { creator_role: permissions.role } }}
+      redirect="list"
+    >
+      {permissions.role === 1 || permissions.role === 2 ? (
+        <CreateForm />
+      ) : (
+        <div>Only admins and managers can create users</div>
+      )}
     </Create>
   );
 };

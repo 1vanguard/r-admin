@@ -7,16 +7,17 @@ import {
   useRecordContext,
   usePermissions,
 } from "react-admin";
+
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
-import Grid from "@mui/material/Grid";
+import IdMark from "../../layouts/idMark";
+
 import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 
 const Editform = () => {
   const record = useRecordContext();
 
-  if (!record) {
-    return <div>Record error</div>;
-  }
+  if (!record) return <div>Record error</div>
 
   return (
     <SimpleForm toolbar={<PrymaryEditToolbar />}>
@@ -26,24 +27,7 @@ const Editform = () => {
       <Container maxWidth="md" sx={{ ml: 0 }}>
         <Grid container spacing={1}>
           <Grid item xs={12} sm={4} md={2} lg={1} sx={{ textAlign: "center" }}>
-            <div
-              style={{
-                fontSize: "0.8em",
-                lineHeight: "0.8em",
-                verticalAlign: "top",
-              }}
-            >
-              ID
-            </div>
-            <div
-              style={{
-                fontSize: "1.2em",
-                fontWeight: 700,
-                lineHeight: "2.1em",
-              }}
-            >
-              {record.id}
-            </div>
+            <IdMark id={record.id} />
           </Grid>
           <Grid item xs={12} sm={8} md={10} lg={11}>
             <TextInput
@@ -74,17 +58,11 @@ export const WhitelistEdit = () => {
     permissions,
   } = usePermissions();
 
-  if (isLoadingPermissions) {
-    return <Loading />;
-  }
-
-  if (errorPermissions) {
-    return <div>Error loading permissions</div>;
-  }
-
-  if (permissions.role !== 1 && permissions.role !== 2) {
-    return <div>Not enough permissions</div>;
-  }
+  if (isLoadingPermissions) return <Loading />
+  if (errorPermissions) return <div>Error loading permissions</div>
+  permissions.role !== 1 && permissions.role !== 2 && (
+    <div>Not enough permissions</div>
+  )
 
   return (
     <Edit title={<WhitelistTitle />}>

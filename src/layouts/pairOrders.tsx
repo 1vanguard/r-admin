@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { Loading, useGetManyReference, useRecordContext } from "react-admin";
 import { BotPair, PairOrder, TabPanelProps } from "../types";
+
 import {
   Table,
   TableBody,
@@ -87,21 +88,11 @@ const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
     }
   );
 
-  /* if (isLoadingOrdersSellDone || isLoadingOrdersLatest) {
-    console.log("isLoadingOrdersSellDone: ", isLoadingOrdersSellDone);
-    return <Loading />;
-  }
-  if (errorOrdersSellDone || errorOrdersLatest) {
-    return <p>ERROR</p>;
-  } */
 
   const handleTabsChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  // console.log("ordersLatest: ", ordersLatest);
-  // console.log("isLoadingOrdersSellDone: ", isLoadingOrdersSellDone);
-  // console.log("isLoadingOrdersLatest: ", isLoadingOrdersLatest);
   return (
     <Box className="pairOrders" sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -116,9 +107,6 @@ const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
         </Tabs>
       </Box>
       <CustomTabPanel tabValue={tabValue} index={0} parentId={pair.id}>
-        {/* <button onClick={() => refetchOrdersSellDone()} type="button">
-          Refresh sell done orders
-        </button> */}
         <div className="tableWrap">
           <Table aria-labelledby="Sell done orders" size="small" stickyHeader>
             <TableHead>
@@ -188,21 +176,8 @@ const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
         </div>
       </CustomTabPanel>
       <CustomTabPanel tabValue={tabValue} index={1} parentId={pair.id}>
-        {/* <button onClick={() => refetchOrdersLatest()} type="button">
-          Refresh last orders
-        </button> */}
         <div className="tableWrap">
           <Table aria-labelledby="Last orders" size="small" stickyHeader>
-            {/* <caption
-                className="captionTop"
-                style={{
-                  paddingTop: "5px",
-                  paddingBottom: "5px",
-                  textAlign: "center",
-                }}
-              >
-                Newest orders
-              </caption> */}
             <TableHead>
               <TableRow>
                 <TableCell>Price</TableCell>

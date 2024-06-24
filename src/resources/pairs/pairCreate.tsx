@@ -11,6 +11,8 @@ import {
   usePermissions,
   NumberInput,
 } from "react-admin";
+
+import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
 const botFilterToQuery = (searchText: any) => ({
@@ -20,140 +22,134 @@ const botFilterToQuery = (searchText: any) => ({
 const CreateForm = () => {
   const baseMin = 0;
 
-  const {
-    data: states,
-    isLoading: isLoadingStates,
-    error: errorStates,
-  } = useGetList("states");
-
-  const {
-    data: strategies,
-    isLoading: isLoadingStrategies,
-    error: errorStrategies,
-  } = useGetList("strategies");
-
-  if (isLoadingStates || isLoadingStrategies) {
-    return <Loading />;
-  }
-  if (errorStates || errorStrategies) {
-    return <p>ERROR</p>;
-  }
-
   return (
     <SimpleForm>
-      <Grid container spacing={2} maxWidth={700}>
-        <Grid item xs={12}>
-          <TextInput fullWidth source="symbol" validate={required()} />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <ReferenceInput label="Bot" source="bot_id" reference="bots">
-            <AutocompleteInput
+      <Container maxWidth="md" sx={{ ml: 0 }}>
+        <h2>Create new pair</h2>
+      </Container>
+      <Container maxWidth="md" sx={{ ml: 0 }}>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <TextInput
               fullWidth
-              optionText="title"
+              source="symbol"
               validate={required()}
-              filterToQuery={botFilterToQuery}
+              variant="standard"
             />
-          </ReferenceInput>
-        </Grid>
-        {/* <Grid item xs={12} md={4}>
-          <ReferenceInput
-            label="Exchange"
-            source="exchange"
-            reference="exchange"
-          >
-            <AutocompleteInput
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <ReferenceInput label="State" source="state" reference="states">
+              <SelectInput
+                defaultValue={1}
+                fullWidth
+                optionText="name"
+                source="state"
+                validate={required()}
+                variant="standard"
+              />
+            </ReferenceInput>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <ReferenceInput
+              filter={{ state: 1 }}
+              label="Bot"
+              reference="bots"
+              source="bot_id"
+            >
+              <AutocompleteInput
+                filterToQuery={botFilterToQuery}
+                fullWidth
+                optionText="title"
+                validate={required()}
+                variant="standard"
+              />
+            </ReferenceInput>
+          </Grid>
+          {/*
+            <Grid item xs={12} sm={4}>
+              <SelectInput
+                fullWidth
+                source="strategy"
+                choices={strategies}
+                validate={required()}
+                defaultValue={1}
+              />
+            </Grid> */}
+          <Grid item xs={12} sm={4}>
+            <NumberInput
               fullWidth
-              optionText="title"
+              label="Start Orders"
+              min={baseMin}
+              source="start_orders"
               validate={required()}
-              filterToQuery={exchangeFilterToQuery}
+              variant="standard"
             />
-          </ReferenceInput>
-        </Grid> */}
-        <Grid item xs={12} sm={4}>
-          <SelectInput
-            fullWidth
-            source="strategy"
-            choices={strategies}
-            validate={required()}
-            defaultValue={1}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <NumberInput
-            fullWidth
-            label="Start Orders"
-            source="start_orders"
-            validate={required()}
-            min={baseMin}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <NumberInput
-            fullWidth
-            label="Pair limit"
-            source="pair_limit"
-            validate={required()}
-            min={baseMin}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <NumberInput
-            fullWidth
-            label="Step"
-            source="step"
-            validate={required()}
-            min={baseMin}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <NumberInput
-            fullWidth
-            label="Profit in %"
-            source="profit"
-            validate={required()}
-            min={baseMin}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <NumberInput
-            fullWidth
-            label="Trailing stop"
-            source="stop_offset"
-            validate={required()}
-            min={baseMin}
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <ReferenceInput label="State" source="state" reference="states">
-            <SelectInput
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <NumberInput
               fullWidth
-              optionText="name"
-              source="state"
+              label="Pair limit"
+              min={baseMin}
+              source="pair_limit"
               validate={required()}
-              defaultValue={1}
+              variant="standard"
             />
-          </ReferenceInput>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <NumberInput
+              fullWidth
+              label="Step"
+              min={baseMin}
+              source="step"
+              validate={required()}
+              variant="standard"
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <NumberInput
+              fullWidth
+              label="Profit in %"
+              min={baseMin}
+              source="profit"
+              validate={required()}
+              variant="standard"
+            />
+          </Grid>
+          {/* <Grid item xs={12} sm={4}>
+            <NumberInput
+              fullWidth
+              label="Trailing stop"
+              source="stop_offset"
+              validate={required()}
+              min={baseMin}
+            />
+          </Grid> */}
         </Grid>
-      </Grid>
+      </Container>
     </SimpleForm>
   );
 };
 
 export const PairCreate = () => {
-  const { permissions, isLoading: isLoadingPermissions } = usePermissions(),
-    role = permissions.role;
+  const {
+    permissions,
+    isLoading: isLoadingPermissions,
+    error: errorPermissions,
+  } = usePermissions();
 
-  if (isLoadingPermissions) return <Loading />;
+  isLoadingPermissions && <Loading />;
+  errorPermissions && <div>Error loading permissions</div>;
 
   return (
-    <Create mutationOptions={{ meta: { creator_role: role } }} redirect="list">
-      <>
-        {role === 1 || role === 2 ? (
-          <CreateForm />
-        ) : (
-          <div>Only admins and managers can create pairs</div>
-        )}
-      </>
+    <Create
+      mutationOptions={{ meta: { creator_role: permissions.role } }}
+      redirect="list"
+    >
+      {permissions.role === 1 || permissions.role === 2 ? (
+        <CreateForm />
+      ) : (
+        <div>Only admins and managers can create pairs</div>
+      )}
     </Create>
   );
 };

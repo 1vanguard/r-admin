@@ -72,6 +72,7 @@ export interface LogEntry {
 
 export type Bot = {
   id: number;
+  api_ready: number;
   state: number;
   title: string;
   exchange_id: number;

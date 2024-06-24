@@ -1,10 +1,8 @@
 import * as React from "react";
 import { Loading, required, SelectInput, useGetList } from "react-admin";
-// import { period } from "../../types";
 
 const calculateChoices = (periods, filter) => {
-  return periods
-    .filter((period) => filter.includes(period.value))
+  return periods.filter((period) => filter.includes(period.value));
 };
 
 interface PeriodsSelectInputProps {
@@ -15,24 +13,23 @@ interface PeriodsSelectInputProps {
   sourceName: string;
 }
 
-export const PeriodsSelectInput: React.FC<PeriodsSelectInputProps> = (props) => {
+export const PeriodsSelectInput: React.FC<PeriodsSelectInputProps> = (
+  props
+) => {
   const {
-      data: choices,
-      isLoading: isLoadingChoices,
-      error,
-    } = useGetList("periods")
+    data: choices,
+    isLoading: isLoadingChoices,
+    error: errorChoices,
+  } = useGetList("periods");
 
-  if (isLoadingChoices) {
-    return <Loading />;
-  }
-  if (error) {
-    return <p>ERROR</p>;
-  }
+  if (isLoadingChoices) return <Loading />;
+  if (errorChoices) return <p>ERROR</p>;
 
   const periodChoices = calculateChoices(choices, props.periodChoices);
 
   return (
     <SelectInput
+      {...(props.required ? { validate: required() } : {})}
       choices={periodChoices}
       disabled={isLoadingChoices}
       emptyText="Do not use"
@@ -44,7 +41,6 @@ export const PeriodsSelectInput: React.FC<PeriodsSelectInputProps> = (props) => 
       optionValue="value"
       source={props.sourceName}
       variant="standard"
-      {...(props.required ? { validate: required() } : {})}
     />
   );
 };

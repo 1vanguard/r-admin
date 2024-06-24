@@ -4,11 +4,11 @@ import {
   SimpleForm,
   TextInput,
   required,
-  useGetList,
   usePermissions,
 } from "react-admin";
-import Grid from "@mui/material/Grid";
+
 import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 
 const CreateForm = () => {
   return (
@@ -39,17 +39,11 @@ export const WhitelistCreate = () => {
     permissions,
   } = usePermissions();
 
-  if (isLoadingPermissions) {
-    return <Loading />;
-  }
-
-  if (errorPermissions) {
-    return <div>Error loading permissions</div>;
-  }
-
-  if (permissions.role !== 1 && permissions.role !== 2) {
-    return <div>Not enough permissions</div>;
-  }
+  if (isLoadingPermissions) return <Loading />
+  if (errorPermissions) return <div>Error loading permissions</div>
+  permissions.role !== 1 && permissions.role !== 2 && (
+    <div>Not enough permissions</div>
+  )
 
   return (
     <Create

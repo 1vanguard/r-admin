@@ -20,21 +20,18 @@ import {
   useRecordContext,
   WithListContext,
 } from "react-admin";
+
 import { Bot, Exchange } from "../../types";
 import { BotPanel } from "../bots/botPanel";
-import BotPairsCounter from "../../layouts/botPairsCounter";
-import BtnPairsList from "../../layouts/btnPairList";
-import BtnsStateControl from "../../layouts/btnsStateControl";
-import GridData from "../../helpers/GridData";
-
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
+import BotPairsCounter from "../../layouts/botPairsCounter";
+import GridData from "../../helpers/GridData";
+import IdMark from "../../layouts/idMark";
+import ItemStateControlBar from "../../layouts/itemStateControlBar";
+import StateIcon from "../../layouts/stateIcon";
 
-import CircleIcon from "@mui/icons-material/Circle";
-import KeyIcon from "@mui/icons-material/Key";
-import KeyOffIcon from "@mui/icons-material/KeyOff";
-import SettingsIcon from "@mui/icons-material/Settings";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 
 const officeFilterToQuery = (searchText: any) => ({
@@ -71,15 +68,12 @@ const Editform = () => {
     isLoadingRoles ||
     isLoadingPermissions ||
     isLoadingUser
-  ) {
+  )
     return <Loading />;
-  }
-  if (errorStates || errorRoles || errorUser) {
-    return <p>ERROR</p>;
-  }
 
-  const role = permissions.role,
-    userOfficeId = user?.officeId;
+  if (errorStates || errorRoles || errorUser) return <div>Error loading data</div>;
+
+  const userOfficeId = user?.officeId;
 
   return (
     <TabbedForm
@@ -101,24 +95,7 @@ const Editform = () => {
               lg={1}
               sx={{ textAlign: "center" }}
             >
-              <div
-                style={{
-                  fontSize: "0.8em",
-                  lineHeight: "0.8em",
-                  verticalAlign: "top",
-                }}
-              >
-                ID
-              </div>
-              <div
-                style={{
-                  fontSize: "1.2em",
-                  fontWeight: 700,
-                  lineHeight: "2.1em",
-                }}
-              >
-                {record.id}
-              </div>
+              <IdMark id={record.id} />
             </Grid>
             <Grid item xs={12} sm={8} md={10} lg={11}>
               <TextInput
@@ -131,7 +108,7 @@ const Editform = () => {
                 variant="standard"
               />
             </Grid>
-            {role === 1 && (
+            {permissions.role === 1 && (
               <Grid item xs={12}>
                 <TextInput
                   fullWidth
@@ -168,12 +145,14 @@ const Editform = () => {
             <Grid item xs={12} sm={4}>
               <ReferenceInput
                 label="Office"
-                source="officeId"
                 reference="offices"
-                {...(role === 2 && { filter: { id: userOfficeId } })}
+                source="officeId"
+                {...(permissions.role === 2 && {
+                  filter: { id: userOfficeId },
+                })}
               >
                 <>
-                  {role === 1 && (
+                  {permissions.role === 1 && (
                     <AutocompleteInput
                       filterToQuery={officeFilterToQuery}
                       fullWidth
@@ -182,9 +161,11 @@ const Editform = () => {
                       variant="standard"
                     />
                   )}
-                  {role === 2 && (
+                  {permissions.role === 2 && (
                     <SelectInput
-                      {...(role === 2 && { defaultValue: userOfficeId })}
+                      {...(permissions.role === 2 && {
+                        defaultValue: userOfficeId,
+                      })}
                       fullWidth
                       optionText="title"
                       optionValue="id"
@@ -243,104 +224,16 @@ const Editform = () => {
           <Datagrid bulkActionButtons={false} expand={<BotPanel />}>
             <TextField source="id" />
             <FunctionField
-              source="state"
               label="State"
+              render={(record: Bot) => <StateIcon record={record} />}
               sortable={true}
               sortBy="state"
-              render={(record: Bot) => {
-                let stateColor;
-
-                switch (record.state) {
-                  case -1:
-                    stateColor = "disabled";
-                    break;
-                  case 0:
-                    stateColor = "error";
-                    break;
-                  case 1:
-                    stateColor = "success";
-                    break;
-                  case 2:
-                    stateColor = "warning";
-                    break;
-                  default:
-                    stateColor = "disabled";
-                }
-
-                return (
-                  <div style={{ textAlign: "center" }}>
-                    <CircleIcon color={stateColor} sx={{ fontSize: "0.9em" }} />
-                  </div>
-                );
-              }}
+              source="state"
             />
             <FunctionField
-              source="title"
               label="Bot"
-              render={(record: Bot) => {
-                let botApiState = (
-                    <KeyIcon
-                      style={{ color: "green", marginRight: "5px" }}
-                      sx={{ fontSize: "1.1em" }}
-                    />
-                  ),
-                  botPauseUntil;
-
-                if (record.api_ready === 0) {
-                  botApiState = (
-                    <KeyOffIcon
-                      style={{ color: "red", marginRight: "5px" }}
-                      sx={{ fontSize: "1.1em" }}
-                    />
-                  );
-                }
-
-                if (
-                  record.pause_until &&
-                  new Date(record.pause_until).getTime() >
-                    new Date().getTime() &&
-                  record.state === 2
-                ) {
-                  botPauseUntil = (
-                    <span style={{ fontSize: "0.8em" }}>
-                      <span style={{ fontWeight: "700", marginRight: "5px" }}>
-                        Pause until:
-                      </span>
-                      {new Date(record.pause_until).toLocaleString()}
-                    </span>
-                  );
-                }
-
-                return (
-                  <div>
-                    <span style={{ display: "flex", alignItems: "center" }}>
-                      {botApiState}
-                      <span style={{ marginRight: "0.7em" }}>
-                        {record.title}
-                      </span>
-                      <span
-                        style={{
-                          alignItems: "center",
-                          display: "flex",
-                          marginLeft: "auto",
-                        }}
-                      >
-                        <BtnsStateControl style={{ marginRight: "0.7rem" }} />
-                        <BtnPairsList botId={record.id} />
-                        <EditButton
-                          label=""
-                          color="inherit"
-                          variant="contained"
-                          className="btn_iconOnly"
-                          style={{ marginLeft: "0.3em", minWidth: "0" }}
-                          icon={<SettingsIcon style={{ fontSize: "1em" }} />}
-                        />
-                      </span>
-                    </span>
-                    {botPauseUntil}
-                  </div>
-                );
-              }}
+              render={(record: Bot) => <ItemStateControlBar record={record} />}
+              source="title"
             />
             <ReferenceField
               label="Exchange"
@@ -373,13 +266,17 @@ const Editform = () => {
             <FunctionField
               label="In trades"
               render={(record: Bot) => {
-                return <GridData type="bot" id={record.id} parameter="in_trades" />;
+                return (
+                  <GridData type="bot" id={record.id} parameter="in_trades" />
+                );
               }}
             />
             <FunctionField
               label="Profit"
               render={(record: Bot) => {
-                return <GridData type="bot" id={record.id} parameter="profit" />;
+                return (
+                  <GridData type="bot" id={record.id} parameter="profit" />
+                );
               }}
             />
           </Datagrid>

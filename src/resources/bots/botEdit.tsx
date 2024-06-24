@@ -1,48 +1,34 @@
 import * as React from "react";
-import { useState } from "react";
 import {
   AutocompleteArrayInput,
   AutocompleteInput,
   BooleanInput,
   Datagrid,
   DateField,
-  // Datagrid,
   Edit,
   FunctionField,
-  /* EditButton,
-  Filter,
-  FunctionField,
-  List,
-  ListActions,
-  ListBase,
-  ListToolbar, */
   Loading,
   NumberInput,
   ReferenceInput,
   ReferenceManyField,
-  // ReferenceManyField,
   required,
-  SelectInput,
   TabbedForm,
-  TextField,
-  // TextField,
   TextInput,
   useGetList,
   useGetManyReference,
   useRecordContext,
-  // WithListContext,
 } from "react-admin";
 
-import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
+import { BotPause } from "../../types";
 import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
+import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
-import GridData from "../../helpers/GridData";
-/* import { PairPanel } from "../pairs/pairPanel";
-import BtnsStateControl from "../../layouts/btnsStateControl";
-import IdxMaster from "../../layouts/idxMaster"; */
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
 import BotPairsCounter from "../../layouts/botPairsCounter";
+import GridData from "../../helpers/GridData";
+import IdMark from "../../layouts/idMark";
+
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import {
   Table,
   TableBody,
@@ -50,13 +36,6 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { BotPause } from "../../types";
-/* import CircleIcon from "@mui/icons-material/Circle";
-import SettingsIcon from "@mui/icons-material/Settings";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import Collapse from "@mui/material/Collapse";
-import { BotPair } from "../../types"; */
 
 const autoPairTfToFilter = [0, 5, 15, 30, 60, 240, 1440, 10080, 43200],
   autoShortTfToFilter = [5, 15, 30, 60, 240],
@@ -70,11 +49,6 @@ const autoRsiPeriodOptionsToFilter = [6, 8, 10, 14],
 const timeframeToFilter = [1, 5, 15, 30, 60, 240, 1440, 10080, 43200];
 const periodToFilter = [6, 8, 10, 12, 14];
 
-/* const autoSortOptions = [
-    { id: 1, name: "Value" },
-    { id: 2, name: "Volatility" },
-  ], */
-
 const baseMin = 0,
   color01 = "#2196f3",
   color02 = "rgba(33, 150, 243, 0.2)",
@@ -86,20 +60,8 @@ const baseMin = 0,
   });
 
 const Editform = () => {
-  /* const [checked, setChecked] = useState(false);
-
-  const handleChange = () => {
-    setChecked((prev) => !prev);
-  }; */
-
   const record = useRecordContext();
   const botId = Number(record?.id);
-
-  /* const {
-    data: states,
-    isLoading: isLoadingStates,
-    error,
-  } = useGetList("states"); */
 
   const {
     data: botPairs,
@@ -117,16 +79,9 @@ const Editform = () => {
     error: errorWhitelist,
   } = useGetList("whitelist");
 
-  if (
-    !record ||
-    /* isLoadingStates || */ isLoadingPairs ||
-    isLoadingWhitelist
-  ) {
-    return <Loading />;
-  }
-  if (/* error || */ errorPairs || errorWhitelist) {
-    return <div>ERROR</div>;
-  }
+  if (!record || isLoadingPairs || isLoadingWhitelist) return <Loading />
+  if (errorPairs || errorWhitelist) return <div>ERROR</div>;
+
   const botLimit = record?.botlimit;
   const botProfit = record?.auto_profit;
   const botStartSum = record?.auto_start_sum;
@@ -202,24 +157,7 @@ const Editform = () => {
                 lg={1}
                 sx={{ textAlign: "center" }}
               >
-                <div
-                  style={{
-                    fontSize: "0.8em",
-                    lineHeight: "0.8em",
-                    verticalAlign: "top",
-                  }}
-                >
-                  ID
-                </div>
-                <div
-                  style={{
-                    fontSize: "1.2em",
-                    fontWeight: 700,
-                    lineHeight: "2.1em",
-                  }}
-                >
-                  {record.id}
-                </div>
+                <IdMark id={botId} />
               </Grid>
               <Grid item xs={12} sm={8} md={10} lg={11}>
                 <TextInput

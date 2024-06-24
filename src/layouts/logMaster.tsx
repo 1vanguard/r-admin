@@ -13,9 +13,7 @@ const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {
 
   let targetEntityLogsArray: any[] = [];
 
-  if (!logs) {
-    return "No data accepted";
-  }
+  if (!logs)return "No data accepted"
 
   const baseLogs = Object.entries(logs);
 
@@ -49,13 +47,9 @@ const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {
         <Grid key={index} container spacing={2} sx={{ fontSize: "88%" }}>
           <Grid item xs="auto">
             {new Date(item.date).toLocaleString("ru", {
-              // year: "numeric",
-              // month: "numeric",
-              // day: "numeric",
               hour: "numeric",
               minute: "numeric",
               second: "numeric",
-              // fractionalSecondDigits: 3,
             })}
           </Grid>
           <Grid item xs>

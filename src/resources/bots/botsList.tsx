@@ -18,11 +18,10 @@ import {
 
 import { Bot, Exchange } from "../../types";
 import { BotPanel } from "./botPanel";
-import GridData from "../../helpers/GridData";
-
 import BotPairsCounter from "../../layouts/botPairsCounter";
-import StateIcon from "../../layouts/stateIcon";
+import GridData from "../../helpers/GridData";
 import ItemStateControlBar from "../../layouts/itemStateControlBar";
+import StateIcon from "../../layouts/stateIcon";
 
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -71,37 +70,37 @@ export const BotsList = () => {
 
   return (
     <List
-      filters={botsFilter}
       filterDefaultValues={{ state: 1 }}
-      perPage={50}
+      filters={botsFilter}
       pagination={<BotsPagination />}
+      perPage={50}
     >
       <Datagrid bulkActionButtons={false} expand={<BotPanel />}>
         <TextField source="id" />
         <FunctionField
-          source="state"
           label="State"
+          render={(record: Bot) => <StateIcon record={record} />}
           sortable={true}
           sortBy="state"
-          render={(record: Bot) => <StateIcon record={record} />}
+          source="state"
         />
         <FunctionField
-          source="title"
           label="Bot"
           render={(record: Bot) => <ItemStateControlBar record={record} />}
+          source="title"
         />
         <ReferenceField
           label="Exchange"
-          source="exchange_id"
           reference="exchanges"
+          source="exchange_id"
         >
           <FunctionField render={(record: Exchange) => record.title} />
         </ReferenceField>
         <ReferenceManyField
-          reference="pairs"
-          target="bot_id"
           label="Pairs count"
           perPage={1000000}
+          reference="pairs"
+          target="bot_id"
         >
           <WithListContext
             render={({ isLoading: isLoadingPairs, data: dataPairs }) => {

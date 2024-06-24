@@ -4,9 +4,11 @@ import {
   useGetManyReference,
   useRecordContext,
 } from "react-admin";
-//import { useMediaQuery, Theme } from "@mui/material";
+
 import { BotPair } from "../../types";
 import LogMaster from "../../layouts/logMaster";
+
+import CircleIcon from "@mui/icons-material/Circle";
 import Grid from "@mui/material/Grid";
 import {
   Table,
@@ -15,7 +17,6 @@ import {
   TableCell,
   TableRow,
 } from "@mui/material";
-import CircleIcon from "@mui/icons-material/Circle";
 
 export const BotPanel = (props: any) => {
   const record = useRecordContext(),
@@ -30,13 +31,8 @@ export const BotPanel = (props: any) => {
     pagination: { page: 1, perPage: 1000000 },
   });
 
-  if (botPairsLoading) {
-    return <Loading />;
-  }
-
-  if (botPairsError) {
-    return <div>Bot pairs error</div>;
-  }
+  if (botPairsLoading) return <Loading />
+  if (botPairsError) return <div>Bot pairs error</div>
 
   return (
     <div className="botPanel">
