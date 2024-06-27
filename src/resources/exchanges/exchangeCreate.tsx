@@ -22,7 +22,6 @@ const CreateForm = () => {
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <TextInput
-              fullWidth
               source="title"
               validate={required()}
               variant="standard"
@@ -30,7 +29,6 @@ const CreateForm = () => {
           </Grid>
           <Grid item xs={12}>
             <TextInput
-              fullWidth
               source="currencies"
               validate={required()}
               variant="standard"
@@ -40,7 +38,6 @@ const CreateForm = () => {
             <ReferenceInput label="State" source="state" reference="states">
               <SelectInput
                 defaultValue={1}
-                fullWidth
                 optionText="name"
                 source="state"
                 validate={required()}

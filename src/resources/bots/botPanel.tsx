@@ -19,8 +19,9 @@ import {
 } from "@mui/material";
 
 export const BotPanel = (props: any) => {
-  const record = useRecordContext(),
-    botId = parseInt(record.id);
+  const record = useRecordContext()
+  if (!record) return null
+  const botId = parseInt(record?.id);
   const {
     data: botPairs,
     isLoading: botPairsLoading,
@@ -31,8 +32,8 @@ export const BotPanel = (props: any) => {
     pagination: { page: 1, perPage: 1000000 },
   });
 
-  if (botPairsLoading) return <Loading />
-  if (botPairsError) return <div>Bot pairs error</div>
+  botPairsLoading && <Loading />
+  botPairsError && <div>Bot pairs error</div>
 
   return (
     <div className="botPanel">

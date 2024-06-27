@@ -22,7 +22,7 @@ export const WhitelistList = () => {
 
   return (
     <List>
-      <Datagrid bulkActionButtons={false}>
+      <Datagrid bulkActionButtons={false} rowClick={false}>
         <TextField source="id" />
         <TextField source="symbol" />
         <EditButton />

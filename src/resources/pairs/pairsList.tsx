@@ -84,7 +84,11 @@ export const PairsList = () => {
       pagination={<PairsPagination />}
       perPage={50}
     >
-      <Datagrid bulkActionButtons={false} expand={<PairPanel />}>
+      <Datagrid
+        bulkActionButtons={false}
+        expand={<PairPanel />}
+        rowClick={false}
+      >
         <TextField source="id" />
         <FunctionField
           label="State"

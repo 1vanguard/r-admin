@@ -26,7 +26,7 @@ export const OfficesList = () => {
 
   return (
     <List>
-      <Datagrid bulkActionButtons={false}>
+      <Datagrid bulkActionButtons={false} rowClick={false}>
         <TextField source="id" />
         <FunctionField
           label="State"

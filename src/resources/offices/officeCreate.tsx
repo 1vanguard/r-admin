@@ -22,7 +22,6 @@ const CreateForm = () => {
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <TextInput
-              fullWidth
               source="title"
               validate={required()}
               variant="standard"
@@ -32,7 +31,6 @@ const CreateForm = () => {
             <ReferenceInput label="State" source="state" reference="states">
               <SelectInput
                 defaultValue={1}
-                fullWidth
                 optionText="name"
                 source="state"
                 validate={required()}
@@ -41,25 +39,19 @@ const CreateForm = () => {
             </ReferenceInput>
           </Grid>
         </Grid>
-          <Grid item xs={12}>
-            <TextInput
-              fullWidth
-              source="address"
-              validate={required()}
-              variant="standard"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextInput
-              fullWidth
-              source="phone"
-              validate={required()}
-              variant="standard"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextInput fullWidth source="url" variant="standard" />
-          </Grid>
+        <Grid item xs={12}>
+          <TextInput
+            source="address"
+            validate={required()}
+            variant="standard"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextInput source="phone" validate={required()} variant="standard" />
+        </Grid>
+        <Grid item xs={12}>
+          <TextInput source="url" variant="standard" />
+        </Grid>
       </Container>
     </SimpleForm>
   );
@@ -72,8 +64,8 @@ export const OfficeCreate = () => {
     error: errorPermissions,
   } = usePermissions();
 
-  isLoadingPermissions && <Loading />
-  errorPermissions && <div>Error loading permissions</div>
+  isLoadingPermissions && <Loading />;
+  errorPermissions && <div>Error loading permissions</div>;
 
   return (
     <Create

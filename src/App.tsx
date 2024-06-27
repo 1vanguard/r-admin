@@ -4,7 +4,7 @@ import { Admin, CustomRoutes, Resource } from "react-admin";
 
 // Providers
 import { authProvider } from "./authProvider";
-import dataProvider from "./dataProvider";
+import { dataProvider } from "./dataProvider";
 import { i18nProvider } from "./i18nProvider";
 // import { Permissions } from "./types";
 
@@ -13,7 +13,7 @@ import "./styles/app.css";
 
 // Pages
 import CabLogin from "./resources/cabinet/CabLoginPage";
-import CabRegistration from "./resources/cabinet/CabRegistrationPage";
+// import CabRegistration from "./resources/cabinet/CabRegistrationPage";
 import { Dashboard } from "./resources/cabinet/Dashboard";
 
 // Resources

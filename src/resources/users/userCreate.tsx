@@ -31,7 +31,7 @@ const CreateForm = () => {
     { permissions, isLoading: isLoadingPermissions } = usePermissions();
 
   if (isLoadingPermissions || isLoadingUser) return <Loading />;
-  if (errorUser) return <div>Error loading user</div>;
+  errorUser && <div>Error loading user</div>;
 
   const userOfficeId = user?.officeId;
 
@@ -44,7 +44,6 @@ const CreateForm = () => {
         <Grid container spacing={1}>
           <Grid item xs={12} sm={permissions.role === 1 ? 6 : 12}>
             <TextInput
-              fullWidth
               source="username"
               validate={required()}
               variant="standard"
@@ -53,7 +52,6 @@ const CreateForm = () => {
           {permissions.role === 1 && (
             <Grid item xs={12} sm={6}>
               <TextInput
-                fullWidth
                 source="password"
                 type="password"
                 validate={required()}
@@ -65,7 +63,6 @@ const CreateForm = () => {
             <ReferenceInput label="State" source="state" reference="states">
               <SelectInput
                 defaultValue={1}
-                fullWidth
                 optionText="name"
                 source="state"
                 validate={required()}
@@ -81,7 +78,6 @@ const CreateForm = () => {
               {...(permissions.role === 2 && { filter: { id: 3 } })}
             >
               <SelectInput
-                fullWidth
                 optionText="name"
                 source="role"
                 validate={required()}
@@ -101,7 +97,6 @@ const CreateForm = () => {
                 {permissions.role === 1 && (
                   <AutocompleteInput
                     filterToQuery={officeFilterToQuery}
-                    fullWidth
                     optionText="title"
                     validate={required()}
                     variant="standard"
@@ -109,7 +104,6 @@ const CreateForm = () => {
                 )}
                 {permissions.role === 2 && (
                   <SelectInput
-                    fullWidth
                     optionText="title"
                     optionValue="id"
                     validate={required()}
@@ -124,7 +118,6 @@ const CreateForm = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextInput
-              fullWidth
               source="firstName"
               validate={required()}
               variant="standard"
@@ -132,7 +125,6 @@ const CreateForm = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextInput
-              fullWidth
               source="lastName"
               validate={required()}
               variant="standard"
@@ -140,7 +132,6 @@ const CreateForm = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextInput
-              fullWidth
               source="email"
               type="email"
               validate={required()}
@@ -149,7 +140,6 @@ const CreateForm = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextInput
-              fullWidth
               source="telegram"
               validate={required()}
               variant="standard"
@@ -174,7 +164,7 @@ export const UserCreate = () => {
       error: errorOffices,
     } = useGetList("offices"),
     notify = useNotify(),
-    redirect = useRedirect()
+    redirect = useRedirect();
 
   if (isLoadingPermissions || isLoadingExchanges || isLoadingOffices)
     return <Loading />;

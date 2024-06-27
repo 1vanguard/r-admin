@@ -20,7 +20,6 @@ const CreateForm = () => {
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <TextInput
-              fullWidth
               source="symbol"
               validate={required()}
               variant="standard"
@@ -39,11 +38,11 @@ export const WhitelistCreate = () => {
     permissions,
   } = usePermissions();
 
-  if (isLoadingPermissions) return <Loading />
-  if (errorPermissions) return <div>Error loading permissions</div>
+  isLoadingPermissions && <Loading />;
+  errorPermissions && <div>Error loading permissions</div>;
   permissions.role !== 1 && permissions.role !== 2 && (
     <div>Not enough permissions</div>
-  )
+  );
 
   return (
     <Create

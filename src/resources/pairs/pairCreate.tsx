@@ -31,7 +31,6 @@ const CreateForm = () => {
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <TextInput
-              fullWidth
               source="symbol"
               validate={required()}
               variant="standard"
@@ -41,7 +40,6 @@ const CreateForm = () => {
             <ReferenceInput label="State" source="state" reference="states">
               <SelectInput
                 defaultValue={1}
-                fullWidth
                 optionText="name"
                 source="state"
                 validate={required()}
@@ -58,7 +56,6 @@ const CreateForm = () => {
             >
               <AutocompleteInput
                 filterToQuery={botFilterToQuery}
-                fullWidth
                 optionText="title"
                 validate={required()}
                 variant="standard"
@@ -68,7 +65,6 @@ const CreateForm = () => {
           {/*
             <Grid item xs={12} sm={4}>
               <SelectInput
-                fullWidth
                 source="strategy"
                 choices={strategies}
                 validate={required()}
@@ -77,7 +73,6 @@ const CreateForm = () => {
             </Grid> */}
           <Grid item xs={12} sm={4}>
             <NumberInput
-              fullWidth
               label="Start Orders"
               min={baseMin}
               source="start_orders"
@@ -87,7 +82,6 @@ const CreateForm = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <NumberInput
-              fullWidth
               label="Pair limit"
               min={baseMin}
               source="pair_limit"
@@ -97,7 +91,6 @@ const CreateForm = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <NumberInput
-              fullWidth
               label="Step"
               min={baseMin}
               source="step"
@@ -107,7 +100,6 @@ const CreateForm = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <NumberInput
-              fullWidth
               label="Profit in %"
               min={baseMin}
               source="profit"
@@ -117,7 +109,6 @@ const CreateForm = () => {
           </Grid>
           {/* <Grid item xs={12} sm={4}>
             <NumberInput
-              fullWidth
               label="Trailing stop"
               source="stop_offset"
               validate={required()}

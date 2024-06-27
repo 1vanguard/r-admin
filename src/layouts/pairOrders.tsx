@@ -42,6 +42,8 @@ function a11yProps(index: number, pairId: number) {
 
 const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
   const pair = useRecordContext<BotPair>();
+  if (!pair) return null;
+
   const [tabValue, setValue] = useState(0);
   const {
     data: ordersSellDone,
@@ -87,7 +89,6 @@ const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
       refetchOnReconnect: autoUpdate ? true : false,
     }
   );
-
 
   const handleTabsChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);

@@ -6,7 +6,6 @@ const calculateChoices = (periods, filter) => {
 };
 
 interface PeriodsSelectInputProps {
-  fullWidth?: boolean;
   label: string;
   periodChoices?: number[];
   required?: boolean;
@@ -23,7 +22,7 @@ export const PeriodsSelectInput: React.FC<PeriodsSelectInputProps> = (
   } = useGetList("periods");
 
   if (isLoadingChoices) return <Loading />;
-  if (errorChoices) return <p>ERROR</p>;
+  if (errorChoices) return <div>ERROR</div>;
 
   const periodChoices = calculateChoices(choices, props.periodChoices);
 
@@ -33,7 +32,6 @@ export const PeriodsSelectInput: React.FC<PeriodsSelectInputProps> = (
       choices={periodChoices}
       disabled={isLoadingChoices}
       emptyText="Do not use"
-      fullWidth={props.fullWidth ? true : false}
       isLoading={isLoadingChoices}
       label={props.label}
       margin="none"

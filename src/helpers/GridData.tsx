@@ -1,6 +1,6 @@
 import { useGetOne } from "react-admin";
 import { BotGrid, PairGrid } from "../types";
-import LinearProgress from '@mui/material/LinearProgress';
+import LinearProgress from "@mui/material/LinearProgress";
 
 interface GridDataProps {
   type: string;
@@ -22,9 +22,7 @@ const GridData: React.FC<GridDataProps> = ({ type, id, parameter }) => {
   if (isLoading) {
     return <LinearProgress />;
   }
-  if (error) {
-    return <p>ERROR</p>;
-  }
+  if (error) return <div>ERROR</div>;
 
   let displayData: any = "";
   if (type === "bot") {

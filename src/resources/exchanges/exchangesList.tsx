@@ -18,13 +18,13 @@ export const ExchangesList = () => {
     permissions,
   } = usePermissions();
 
-  isLoadingPermissions && <Loading />
-  errorPermissions && <div>Error loading permissions</div>
-  permissions.role !== 1 &&<div>Not enough permissions</div>
+  isLoadingPermissions && <Loading />;
+  errorPermissions && <div>Error loading permissions</div>;
+  permissions.role !== 1 && <div>Not enough permissions</div>;
 
   return (
     <List>
-      <Datagrid bulkActionButtons={false}>
+      <Datagrid bulkActionButtons={false} rowClick={false}>
         <TextField source="id" />
         <FunctionField
           label="State"

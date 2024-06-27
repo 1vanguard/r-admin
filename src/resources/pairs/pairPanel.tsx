@@ -7,8 +7,9 @@ import PairOrders from "../../layouts/pairOrders";
 import Grid from "@mui/material/Grid";
 
 export const PairPanel = (props: any) => {
-  const record = useRecordContext(),
-    pairId = parseInt(record.id);
+  const record = useRecordContext();
+  if (!record) return null;
+  const pairId = parseInt(record?.id);
 
   return (
     <div className="pairPanel">

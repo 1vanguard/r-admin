@@ -18,15 +18,15 @@ import Grid from "@mui/material/Grid";
 
 const Editform = () => {
   const record = useRecordContext();
-
+  if (!record) return null;
   const {
     data: states,
     isLoading: isLoadingStates,
     error: errorStates,
   } = useGetList("states");
 
-  if (!record || isLoadingStates) return <Loading />
-  if (errorStates) return <div>Loading states error</div>
+  isLoadingStates && <Loading />;
+  errorStates && <div>Loading states error</div>;
 
   return (
     <SimpleForm toolbar={<PrymaryEditToolbar />}>
@@ -41,7 +41,6 @@ const Editform = () => {
           <Grid item xs>
             <TextInput
               defaultValue={record.title}
-              fullWidth
               margin="none"
               source="title"
               validate={required()}
@@ -50,7 +49,6 @@ const Editform = () => {
           </Grid>
           <Grid item xs={12}>
             <TextInput
-              fullWidth
               source="currencies"
               defaultValue={record.currencies}
               validate={required()}
@@ -61,7 +59,6 @@ const Editform = () => {
             <SelectInput
               choices={states}
               defaultValue={1}
-              fullWidth
               source="state"
               validate={required()}
               variant="standard"
@@ -75,6 +72,7 @@ const Editform = () => {
 
 const ExchangeTitle = () => {
   const record = useRecordContext();
+  if (!record) return null;
   return <>Exchange {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
 };
 

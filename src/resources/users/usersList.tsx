@@ -81,7 +81,7 @@ export const UsersList = () => {
       sort={{ field: "id", order: "DESC" }}
       title="Users"
     >
-      <Datagrid bulkActionButtons={false}>
+      <Datagrid bulkActionButtons={false} rowClick={false}>
         <TextField source="id" />
         <FunctionField
           label="State"

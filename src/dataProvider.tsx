@@ -1,4 +1,4 @@
-import { fetchUtils } from "react-admin";
+import { DataProvider, fetchUtils } from "react-admin";
 import { authProvider } from "./authProvider";
 import { stringify } from "query-string";
 import { json } from "stream/consumers";
@@ -7,7 +7,7 @@ import { error } from "console";
 const apiUrl = import.meta.env.VITE_JSON_SERVER_URL;
 const httpClient = fetchUtils.fetchJson;
 
-export default {
+export const dataProvider: DataProvider = {
   getList: async (resource, params) => {
     console.log("Работает dataProvider getList");
     const { page, perPage } = params.pagination,

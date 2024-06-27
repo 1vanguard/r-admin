@@ -27,15 +27,15 @@ import Grid from "@mui/material/Grid";
 
 const Editform = () => {
   const record = useRecordContext();
-
+  if (!record) return null;
   const {
     data: states,
     isLoading: isLoadingStates,
     error: errorStates,
   } = useGetList("states");
 
-  if (!record || isLoadingStates) return <Loading />
-  errorStates && <div>Loading states error</div>
+  isLoadingStates && <Loading />;
+  errorStates && <div>Loading states error</div>;
 
   return (
     <TabbedForm toolbar={<PrymaryEditToolbar />} id="editOfficeForm">
@@ -58,7 +58,6 @@ const Editform = () => {
             <Grid item xs={12} sm={8} md={10} lg={11}>
               <TextInput
                 defaultValue={record.title}
-                fullWidth
                 margin="none"
                 source="title"
                 validate={required()}
@@ -68,7 +67,6 @@ const Editform = () => {
             <Grid item xs={12}>
               <SelectInput
                 choices={states}
-                fullWidth
                 source="state"
                 validate={required()}
                 variant="standard"
@@ -77,7 +75,6 @@ const Editform = () => {
             <Grid item xs={12}>
               <TextInput
                 defaultValue={record.address}
-                fullWidth
                 source="address"
                 validate={required()}
                 variant="standard"
@@ -86,7 +83,6 @@ const Editform = () => {
             <Grid item xs={12}>
               <TextInput
                 defaultValue={record.phone}
-                fullWidth
                 source="phone"
                 validate={required()}
                 variant="standard"
@@ -95,7 +91,6 @@ const Editform = () => {
             <Grid item xs={12}>
               <TextInput
                 defaultValue={record.url}
-                fullWidth
                 source="url"
                 validate={required()}
                 variant="standard"
@@ -170,6 +165,7 @@ const Editform = () => {
 
 const OfficeTitle = () => {
   const record = useRecordContext();
+  if (!record) return null;
   return <>Office {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
 };
 
@@ -180,9 +176,11 @@ export const OfficeEdit = () => {
     permissions,
   } = usePermissions();
 
-  isLoadingPermissions && <Loading />
-  errorPermissions && <div>Error loading permissions</div>
-  permissions.role !== 1 && permissions.role !== 2 && <div>Not enough permissions</div>
+  isLoadingPermissions && <Loading />;
+  errorPermissions && <div>Error loading permissions</div>;
+  permissions.role !== 1 && permissions.role !== 2 && (
+    <div>Not enough permissions</div>
+  );
 
   return (
     <Edit title={<OfficeTitle />}>

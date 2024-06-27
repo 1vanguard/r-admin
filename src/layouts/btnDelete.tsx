@@ -1,8 +1,9 @@
 import { useDelete, useRecordContext } from "react-admin";
 
 const btnDelete = (props) => {
-  const record = useRecordContext(),
-    [deleteOne, { isLoading, error }] = useDelete(),
+  const record = useRecordContext();
+  if (!record) return null;
+  const [deleteOne, { isLoading, error }] = useDelete(),
     resourseType = props.resource;
   const handleClick = () => {
     deleteOne(resourseType, {
@@ -10,9 +11,8 @@ const btnDelete = (props) => {
       previousData: record,
     });
   };
-  if (error) {
-    return <p>ERROR</p>;
-  }
+  if (error) return <div>ERROR</div>;
+
   return (
     <button disabled={isLoading} onClick={handleClick}>
       Delete

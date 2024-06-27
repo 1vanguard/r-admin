@@ -34,7 +34,6 @@ const calculateChoices = (timeFrames, filter) => {
 
 interface TimeFramesSelectInputProps {
   frameChoices: number[];
-  fullWidth?: boolean;
   label: string;
   required?: boolean;
   sourceName: string;
@@ -49,8 +48,8 @@ export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (
     error: errorChoices,
   } = useGetList("timeframes");
 
-  if (isLoadingChoices) return <Loading />
-  if (errorChoices) return <p>ERROR</p>
+  isLoadingChoices && <Loading />
+  errorChoices && <div>ERROR</div>
 
   const frameChoices = props.frameChoices;
   const timeFrameChoices = calculateChoices(choices, frameChoices);
@@ -67,7 +66,6 @@ export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (
       choices={timeFrameChoices}
       disabled={isLoadingChoices}
       emptyText="Do not use"
-      fullWidth={props.fullWidth ? true : false}
       isLoading={isLoadingChoices}
       label={props.label}
       margin="none"

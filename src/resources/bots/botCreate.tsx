@@ -30,7 +30,6 @@ const CreateForm = () => {
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <TextInput
-              fullWidth
               source="title"
               validate={required()}
               variant="standard"
@@ -40,7 +39,6 @@ const CreateForm = () => {
             <ReferenceInput label="State" source="state" reference="states">
               <SelectInput
                 defaultValue={1}
-                fullWidth
                 optionText="name"
                 source="state"
                 validate={required()}
@@ -57,7 +55,6 @@ const CreateForm = () => {
             >
               <AutocompleteInput
                 filterToQuery={usernameFilterToQuery}
-                fullWidth
                 optionText="username"
                 validate={required()}
                 variant="standard"
@@ -73,7 +70,6 @@ const CreateForm = () => {
             >
               <AutocompleteInput
                 filterToQuery={exchangeFilterToQuery}
-                fullWidth
                 optionText="title"
                 validate={required()}
                 variant="standard"
@@ -93,8 +89,8 @@ export const BotCreate = () => {
     error: errorPermissions,
   } = usePermissions();
 
-  isLoadingPermissions && <Loading />
-  errorPermissions && <div>Error loading permissions</div>
+  isLoadingPermissions && <Loading />;
+  errorPermissions && <div>Error loading permissions</div>;
 
   return (
     <Create

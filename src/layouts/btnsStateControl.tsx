@@ -26,6 +26,7 @@ const BtnsStateControl: React.FC<BtnsStateControlProps> = ({
   const refresh = useRefresh();
   const resource = useResourceContext();
   const record = useRecordContext();
+  if (!record) return null;
 
   let playPauseBtnColor = "default",
     playPauseIcon,

@@ -60,9 +60,9 @@ const RegistrationPage = (props) => {
               <h1 style={{ margin: 0, textAlign: "center", width: "100%" }}>
                 Registration
               </h1>
-              <TextInput source="username" label="Username" fullWidth />
-              <TextInput source="email" type="email" label="E-mail" fullWidth />
-              <PasswordInput source="password" fullWidth />
+              <TextInput source="username" label="Username" />
+              <TextInput source="email" type="email" label="E-mail" />
+              <PasswordInput source="password" />
             </SimpleForm>
           </Create>
         </Grid>

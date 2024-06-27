@@ -61,8 +61,9 @@ const baseMin = 0,
 
 const Editform = () => {
   const record = useRecordContext();
-  const botId = Number(record?.id);
+  if (!record) return null;
 
+  const botId = Number(record?.id);
   const {
     data: botPairs,
     isLoading: isLoadingPairs,
@@ -79,7 +80,7 @@ const Editform = () => {
     error: errorWhitelist,
   } = useGetList("whitelist");
 
-  if (!record || isLoadingPairs || isLoadingWhitelist) return <Loading />
+  if (isLoadingPairs || isLoadingWhitelist) return <Loading />;
   if (errorPairs || errorWhitelist) return <div>ERROR</div>;
 
   const botLimit = record?.botlimit;
@@ -162,7 +163,6 @@ const Editform = () => {
               <Grid item xs={12} sm={8} md={10} lg={11}>
                 <TextInput
                   defaultValue={record.title}
-                  fullWidth
                   margin="none"
                   source="title"
                   validate={required()}
@@ -173,7 +173,6 @@ const Editform = () => {
                 <SelectInput
                   choices={states}
                   defaultValue={record.state}
-                  fullWidth
                   margin="none"
                   source="state"
                   validate={required()}
@@ -188,7 +187,6 @@ const Editform = () => {
                 >
                   <AutocompleteInput
                     filterToQuery={usernameFilterToQuery}
-                    fullWidth
                     margin="none"
                     optionText="username"
                     validate={required()}
@@ -203,7 +201,6 @@ const Editform = () => {
                   reference="exchanges"
                 >
                   <AutocompleteInput
-                    fullWidth
                     optionText="title"
                     margin="none"
                     validate={required()}
@@ -214,7 +211,6 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextInput
-                  fullWidth
                   label="Replenishment currency"
                   margin="none"
                   source="baseAsset"
@@ -224,7 +220,6 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <NumberInput
-                  fullWidth
                   label="Trading limit"
                   margin="none"
                   min={baseMin}
@@ -236,7 +231,6 @@ const Editform = () => {
               <Grid item xs={12} md={6}>
                 <TimeFramesSelectInput
                   frameChoices={timeframeToFilter}
-                  fullWidth
                   label="Timeframe"
                   sourceName="timeframe"
                   required={true}
@@ -245,7 +239,6 @@ const Editform = () => {
               <Grid item xs={12} md={6}>
                 <PeriodsSelectInput
                   periodChoices={periodToFilter}
-                  fullWidth
                   label="Period"
                   sourceName="period"
                   required={true}
@@ -273,16 +266,10 @@ const Editform = () => {
                 <BooleanInput label="Enable autotrading" source="auto_on" />
               </Grid>
               <Grid item xs={12}>
-                <TextInput
-                  fullWidth
-                  label="API Key"
-                  margin="none"
-                  source="apikey"
-                />
+                <TextInput label="API Key" margin="none" source="apikey" />
               </Grid>
               <Grid item xs={12}>
                 <TextInput
-                  fullWidth
                   label="API Secret"
                   margin="none"
                   source="apisecret"
@@ -291,7 +278,6 @@ const Editform = () => {
               {record.exchange_id === 3 && (
                 <Grid item xs={12}>
                   <TextInput
-                    fullWidth
                     label="API Password"
                     margin="none"
                     source="apipassword"
@@ -310,7 +296,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Pairs quantity"
                   margin="none"
                   min={baseMin}
@@ -321,7 +306,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Limit for a pair"
                   margin="none"
                   min={baseMin}
@@ -332,7 +316,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Number of orders in a pair"
                   margin="none"
                   min={baseMin}
@@ -343,7 +326,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Indent in %"
                   margin="none"
                   min={baseMin}
@@ -354,7 +336,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Initial order amount"
                   margin="none"
                   min={baseMin}
@@ -365,7 +346,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Order step, in %"
                   margin="none"
                   min={baseMin}
@@ -375,7 +355,6 @@ const Editform = () => {
               </Grid>
               {/* <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
-                  fullWidth
                   label="Martingale, in %"
                   margin="none"
                   min={baseMin}
@@ -387,7 +366,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Profit, in %"
                   margin="none"
                   min={baseMin}
@@ -398,7 +376,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Slippage, in %"
                   margin="none"
                   min={baseMin}
@@ -408,7 +385,6 @@ const Editform = () => {
               </Grid>
               {/* <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
-                  fullWidth
                   label="Min. daily trading volume"
                   margin="none"
                   min={baseMin}
@@ -419,7 +395,6 @@ const Editform = () => {
               </Grid> */}
               {/* <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
-                  fullWidth
                   label="Max. daily trading volume"
                   margin="none"
                   min={baseMin}
@@ -432,7 +407,6 @@ const Editform = () => {
                 <SelectInput
                   choices={autoSortOptions}
                   defaultValue={record.auto_sort}
-                  fullWidth
                   margin="none"
                   source="auto_sort"
                   validate={required()}
@@ -442,7 +416,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Timeout in seconds for entering the pair"
                   margin="none"
                   min={baseMin}
@@ -453,7 +426,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Timeout until the next purchase (in seconds)"
                   margin="none"
                   min={baseMin}
@@ -464,7 +436,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <TimeFramesSelectInput
                   frameChoices={autoPairTfToFilter}
-                  fullWidth
                   label="The RSI timeframe for choosing a pair"
                   required={true}
                   sourceName="auto_pair_tf"
@@ -473,7 +444,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Min. RSI to enter the pair"
                   margin="none"
                   min={baseMin}
@@ -484,7 +454,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Max. RSI to enter the pair"
                   margin="none"
                   min={baseMin}
@@ -495,7 +464,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Max growth per day, %"
                   margin="none"
                   min={baseMin}
@@ -506,7 +474,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Max drop per day, %"
                   margin="none"
                   min={baseMin}
@@ -517,7 +484,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Pause for a pair, hours"
                   margin="none"
                   min={baseMin}
@@ -528,7 +494,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Max BTC growth per hour, %"
                   margin="none"
                   min={baseMin}
@@ -539,7 +504,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Max BTC drop per hour, %"
                   margin="none"
                   min={baseMin}
@@ -550,7 +514,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  fullWidth
                   label="Pause for the bot, hours"
                   margin="none"
                   min={baseMin}
@@ -607,14 +570,12 @@ const Editform = () => {
                   <Grid item xs={12} md={6}>
                     <TimeFramesSelectInput
                       frameChoices={autoShortTfToFilter}
-                      fullWidth
                       label="RSI timeframe for entry"
                       sourceName="auto_short_tf"
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
-                      fullWidth
                       label="The RSI period for entry"
                       sourceName="auto_rsi_period"
                       periodChoices={autoRsiPeriodOptionsToFilter}
@@ -632,7 +593,6 @@ const Editform = () => {
                 >
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      fullWidth
                       label="Min. RSI for entry"
                       margin="none"
                       min={baseMin}
@@ -642,7 +602,6 @@ const Editform = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      fullWidth
                       label="Max. RSI for entry"
                       margin="none"
                       min={baseMin}
@@ -673,14 +632,12 @@ const Editform = () => {
                     <Grid item xs={12} md={6}>
                       <TimeFramesSelectInput
                         frameChoices={autoLongTfToFilter}
-                        fullWidth
                         label="RSI timeframe for entry"
                         sourceName="auto_long_tf"
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <PeriodsSelectInput
-                        fullWidth
                         sourceName="auto_rsi_period_1h"
                         label="The RSI period for entry"
                         periodChoices={autoRsiPeriod1hOptionsToFilter}
@@ -699,7 +656,6 @@ const Editform = () => {
                 >
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      fullWidth
                       label="Min. RSI for entry"
                       margin="none"
                       min={baseMin}
@@ -709,7 +665,6 @@ const Editform = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      fullWidth
                       label="Max. RSI for entry"
                       margin="none"
                       min={baseMin}
@@ -740,14 +695,12 @@ const Editform = () => {
                   <Grid item xs={12} md={6}>
                     <TimeFramesSelectInput
                       frameChoices={autoSellTfToFilter}
-                      fullWidth
                       label="The RSI timeframe for sale"
                       sourceName="auto_sell_tf"
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
-                      fullWidth
                       label="RSI period for Sale"
                       periodChoices={autoSellPeriodOptionsToFilter}
                       sourceName="auto_sell_period"
@@ -764,7 +717,6 @@ const Editform = () => {
                 >
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      fullWidth
                       label="Min. RSI for sale"
                       margin="none"
                       min={baseMin}
@@ -774,7 +726,6 @@ const Editform = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      fullWidth
                       label="Max. RSI for sale"
                       margin="none"
                       min={baseMin}
@@ -786,7 +737,6 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} md={6} xl={5}>
                 <NumberInput
-                  fullWidth
                   label="Difference from the previous RSI value for purchase, %"
                   margin="none"
                   min={baseMin}
@@ -794,7 +744,6 @@ const Editform = () => {
                   variant="standard"
                 />
                 <NumberInput
-                  fullWidth
                   label="Difference from the previous RSI value for sale, %"
                   margin="none"
                   min={baseMin}
@@ -802,7 +751,6 @@ const Editform = () => {
                   variant="standard"
                 />
                 <NumberInput
-                  fullWidth
                   label="Percentage price drop for blocking for a month"
                   margin="none"
                   min={baseMin}
@@ -810,7 +758,6 @@ const Editform = () => {
                   variant="standard"
                 />
                 <NumberInput
-                  fullWidth
                   label="Percentage price increase for blocking for a month"
                   margin="none"
                   min={baseMin}
@@ -831,7 +778,7 @@ const Editform = () => {
               target="bot_id"
               label="Bot pauses"
             >
-              <Datagrid bulkActionButtons={false}>
+              <Datagrid bulkActionButtons={false} rowClick={false}>
                 <DateField
                   source="pause_start"
                   showTime
@@ -872,6 +819,7 @@ const Editform = () => {
 
 const BotTitle = () => {
   const record = useRecordContext();
+  if (!record) return null;
   return <>Bot {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
 };
 

@@ -2,7 +2,6 @@ import {
   AutocompleteInput,
   Datagrid,
   Edit,
-  EditButton,
   FunctionField,
   Loading,
   Pagination,
@@ -39,8 +38,9 @@ const officeFilterToQuery = (searchText: any) => ({
 });
 
 const Editform = () => {
-  const record = useRecordContext(),
-    userId = localStorage.getItem("uid");
+  const record = useRecordContext();
+  if (!record) return null;
+  const userId = localStorage.getItem("uid");
 
   const {
     data: states,
@@ -71,7 +71,8 @@ const Editform = () => {
   )
     return <Loading />;
 
-  if (errorStates || errorRoles || errorUser) return <div>Error loading data</div>;
+  if (errorStates || errorRoles || errorUser)
+    return <div>Error loading data</div>;
 
   const userOfficeId = user?.officeId;
 
@@ -101,7 +102,6 @@ const Editform = () => {
               <TextInput
                 defaultValue={record.username}
                 disabled
-                fullWidth
                 margin="none"
                 source="username"
                 validate={required()}
@@ -111,7 +111,6 @@ const Editform = () => {
             {permissions.role === 1 && (
               <Grid item xs={12}>
                 <TextInput
-                  fullWidth
                   margin="none"
                   source="password"
                   type="password"
@@ -124,7 +123,6 @@ const Editform = () => {
               <SelectInput
                 choices={states}
                 defaultValue={record.state}
-                fullWidth
                 source="state"
                 validate={required()}
                 variant="standard"
@@ -135,7 +133,6 @@ const Editform = () => {
                 <SelectInput
                   choices={roles}
                   defaultValue={"2"}
-                  fullWidth
                   source="role"
                   validate={required()}
                   variant="standard"
@@ -155,7 +152,6 @@ const Editform = () => {
                   {permissions.role === 1 && (
                     <AutocompleteInput
                       filterToQuery={officeFilterToQuery}
-                      fullWidth
                       optionText="title"
                       validate={required()}
                       variant="standard"
@@ -166,7 +162,6 @@ const Editform = () => {
                       {...(permissions.role === 2 && {
                         defaultValue: userOfficeId,
                       })}
-                      fullWidth
                       optionText="title"
                       optionValue="id"
                       validate={required()}
@@ -179,7 +174,6 @@ const Editform = () => {
             <Grid item xs={12} sm={6}>
               <TextInput
                 defaultValue={record.email}
-                fullWidth
                 source="email"
                 type="email"
                 validate={required()}
@@ -189,7 +183,6 @@ const Editform = () => {
             <Grid item xs={12} sm={6}>
               <TextInput
                 defaultValue={record.telegram}
-                fullWidth
                 source="telegram"
                 variant="standard"
               />
@@ -197,7 +190,6 @@ const Editform = () => {
             <Grid item xs={12} sm={6}>
               <TextInput
                 defaultValue={record.firstName}
-                fullWidth
                 source="firstName"
                 variant="standard"
               />
@@ -205,7 +197,6 @@ const Editform = () => {
             <Grid item xs={12} sm={6}>
               <TextInput
                 defaultValue={record.lastName}
-                fullWidth
                 source="lastName"
                 variant="standard"
               />
@@ -221,7 +212,11 @@ const Editform = () => {
           perPage={10}
           pagination={<Pagination />}
         >
-          <Datagrid bulkActionButtons={false} expand={<BotPanel />}>
+          <Datagrid
+            bulkActionButtons={false}
+            expand={<BotPanel />}
+            rowClick={false}
+          >
             <TextField source="id" />
             <FunctionField
               label="State"
@@ -251,6 +246,7 @@ const Editform = () => {
               <WithListContext
                 render={({ isLoading: isLoadingPairs, data: dataPairs }) => {
                   const record = useRecordContext();
+                  if (!record) return null;
                   if (isLoadingPairs) return <LinearProgress />;
                   return (
                     !isLoadingPairs && (
@@ -288,6 +284,7 @@ const Editform = () => {
 
 const UserTitle = () => {
   const record = useRecordContext();
+  if (!record) return null;
   return <>User {record ? `"${record.name}" (id: ${record.id})` : ""}</>;
 };
 

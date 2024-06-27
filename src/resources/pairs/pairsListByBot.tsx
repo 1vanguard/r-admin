@@ -82,6 +82,7 @@ const PairsListByBot = () => {
         <Datagrid
           bulkActionButtons={false}
           expand={<PairPanel />}
+          rowClick={false}
           sx={{
             "& .RaDatagrid-row": {
               backgroundColor: "rgb(46 125 50 / 5%)",
@@ -182,9 +183,7 @@ const PairsListByBot = () => {
             isLoading: isLoadingInactivePairs,
             data: inactivePairsData,
           }) => {
-            if (isLoadingInactivePairs) {
-              return <Loading />;
-            }
+            isLoadingInactivePairs && <Loading />;
             if (inactivePairsData && inactivePairsData.length > 0) {
               return (
                 <Box>
@@ -199,6 +198,7 @@ const PairsListByBot = () => {
                   <Collapse in={checked}>
                     <Datagrid
                       bulkActionButtons={false}
+                      rowClick={false}
                       sx={{
                         "& .RaDatagrid-row": {
                           backgroundColor: "rgb(211 47 47 / 5%)",

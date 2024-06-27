@@ -75,7 +75,11 @@ export const BotsList = () => {
       pagination={<BotsPagination />}
       perPage={50}
     >
-      <Datagrid bulkActionButtons={false} expand={<BotPanel />}>
+      <Datagrid
+        bulkActionButtons={false}
+        expand={<BotPanel />}
+        rowClick={false}
+      >
         <TextField source="id" />
         <FunctionField
           label="State"
@@ -105,6 +109,7 @@ export const BotsList = () => {
           <WithListContext
             render={({ isLoading: isLoadingPairs, data: dataPairs }) => {
               const record = useRecordContext();
+              if (!record) return null;
               if (isLoadingPairs) return <LinearProgress />;
               return (
                 !isLoadingPairs && (

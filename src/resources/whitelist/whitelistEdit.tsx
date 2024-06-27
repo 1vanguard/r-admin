@@ -16,8 +16,7 @@ import Grid from "@mui/material/Grid";
 
 const Editform = () => {
   const record = useRecordContext();
-
-  if (!record) return <div>Record error</div>
+  if (!record) return null;
 
   return (
     <SimpleForm toolbar={<PrymaryEditToolbar />}>
@@ -32,7 +31,6 @@ const Editform = () => {
           <Grid item xs={12} sm={8} md={10} lg={11}>
             <TextInput
               margin="none"
-              fullWidth
               source="symbol"
               validate={required()}
               variant="standard"
@@ -46,9 +44,8 @@ const Editform = () => {
 
 const WhitelistTitle = () => {
   const record = useRecordContext();
-  return (
-    <>Whitelist {record ? `"${record.symbol}" (id: ${record.id})` : ""}</>
-  );
+  if (!record) return null;
+  return <>Whitelist {record ? `"${record.symbol}" (id: ${record.id})` : ""}</>;
 };
 
 export const WhitelistEdit = () => {
@@ -58,11 +55,11 @@ export const WhitelistEdit = () => {
     permissions,
   } = usePermissions();
 
-  if (isLoadingPermissions) return <Loading />
-  if (errorPermissions) return <div>Error loading permissions</div>
+  isLoadingPermissions && <Loading />;
+  errorPermissions && <div>Error loading permissions</div>;
   permissions.role !== 1 && permissions.role !== 2 && (
     <div>Not enough permissions</div>
-  )
+  );
 
   return (
     <Edit title={<WhitelistTitle />}>
