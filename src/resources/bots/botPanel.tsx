@@ -3,6 +3,7 @@ import {
   Loading,
   useGetManyReference,
   useRecordContext,
+  useTranslate,
 } from "react-admin";
 
 import { BotPair } from "../../types";
@@ -19,7 +20,8 @@ import {
 } from "@mui/material";
 
 export const BotPanel = (props: any) => {
-  const record = useRecordContext()
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null
   const botId = parseInt(record?.id);
   const {
@@ -39,7 +41,7 @@ export const BotPanel = (props: any) => {
     <div className="botPanel">
       <div className="header">
         <h3 style={{ marginTop: 0 }}>
-          {record.title}: <small>created at</small>{" "}
+          {record.title}: <small>{translate("common.created_at")}</small>{" "}
           {new Date(record.created).toLocaleString()}
         </h3>
       </div>
@@ -53,7 +55,7 @@ export const BotPanel = (props: any) => {
               textTransform: "uppercase",
             }}
           >
-            Logs
+            {translate("common.logs")}
           </h4>
           <div className="content">
             <LogMaster entityType="bot" entityId={botId} />
@@ -68,12 +70,12 @@ export const BotPanel = (props: any) => {
               textTransform: "uppercase",
             }}
           >
-            Pairs
+            {translate("common.pairs")}
           </h4>
           <div className="content">
             {botPairs?.length === 0 ? (
               <div style={{ fontWeight: "700", textAlign: "center" }}>
-                Bot has no pairs
+                {translate("state.spec_states.no_pairs")}
               </div>
             ) : (
               <Table

@@ -1,6 +1,6 @@
 import englishMessages from 'ra-language-english';
 
- const en = {
+const en = {
     ...englishMessages,
     notification: {
         registrationSuccess: "Registration is done. User successfully created. You can sign in with your credentials."
@@ -10,14 +10,11 @@ import englishMessages from 'ra-language-english';
     },
     resources: {
         bots: {
-            name: 'Bot |||| Bots'
-        },
-        posts: {
-            name: 'Post |||| Posts',
+            name: 'Bot |||| Bots',
             fields: {
-                body: 'Text',
+                id: 'ID',
+                state: 'State',
                 title: 'Title',
-                userId: 'User'
             }
         },
         users: {

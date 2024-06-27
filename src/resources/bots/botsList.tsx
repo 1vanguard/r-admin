@@ -13,6 +13,7 @@ import {
   TextInput,
   usePermissions,
   useRecordContext,
+  useTranslate,
   WithListContext,
 } from "react-admin";
 
@@ -26,12 +27,15 @@ import StateIcon from "../../layouts/stateIcon";
 import LinearProgress from "@mui/material/LinearProgress";
 
 const botsFilter = [
-  <TextInput label="Title" source="title_like" alwaysOn />,
-  <TextInput label="Id" source="id_like" alwaysOn />,
+  <TextInput
+    label="resources.bots.fields.title"
+    source="title_like"
+    alwaysOn
+  />,
+  <TextInput label="resources.bots.fields.id" source="id_like" alwaysOn />,
   <ReferenceInput
     allowEmpty
     alwaysOn
-    label="State"
     reference="states"
     source="state"
     sort={{ field: "name", order: "ASC" }}
@@ -56,6 +60,7 @@ const BotsPagination = () => (
 );
 
 export const BotsList = () => {
+  const translate = useTranslate();
   const {
     error: errorPermissions,
     isLoading: isLoadingPermissions,
@@ -82,26 +87,20 @@ export const BotsList = () => {
       >
         <TextField source="id" />
         <FunctionField
-          label="State"
           render={(record: Bot) => <StateIcon record={record} />}
           sortable={true}
           sortBy="state"
           source="state"
         />
         <FunctionField
-          label="Bot"
           render={(record: Bot) => <ItemStateControlBar record={record} />}
           source="title"
         />
-        <ReferenceField
-          label="Exchange"
-          reference="exchanges"
-          source="exchange_id"
-        >
+        <ReferenceField reference="exchanges" source="exchange_id">
           <FunctionField render={(record: Exchange) => record.title} />
         </ReferenceField>
         <ReferenceManyField
-          label="Pairs count"
+          label={translate("resources.bots.fields.pairs")}
           perPage={1000000}
           reference="pairs"
           target="bot_id"
@@ -119,17 +118,17 @@ export const BotsList = () => {
             }}
           />
         </ReferenceManyField>
-        <TextField label="Order" source="auto_start_sum" />
-        <TextField label="Profit %" source="auto_profit" />
-        <TextField label="Limit" source="botlimit" />
+        <TextField source="auto_start_sum" />
+        <TextField source="auto_profit" />
+        <TextField source="botlimit" />
         <FunctionField
-          label="In trades"
+          label={translate("resources.bots.fields.in_trades")}
           render={(record: Bot) => {
             return <GridData type="bot" id={record.id} parameter="in_trades" />;
           }}
         />
         <FunctionField
-          label="Profit"
+          label={translate("resources.bots.fields.profit")}
           render={(record: Bot) => {
             return <GridData type="bot" id={record.id} parameter="profit" />;
           }}

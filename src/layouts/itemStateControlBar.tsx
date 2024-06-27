@@ -1,5 +1,5 @@
 import React from "react";
-import { EditButton } from "react-admin";
+import { EditButton, useTranslate } from "react-admin";
 
 import { Bot, BotPair } from "../types";
 import BtnPairsList from "../layouts/btnPairList";
@@ -20,6 +20,7 @@ interface ItemApiIconProps {
 }
 
 const ItemApiIcon: React.FC<ItemApiIconProps> = ({ isBot, apiReady }) => {
+  const translate = useTranslate();
   if (isBot) {
     return (
       <Tooltip
@@ -29,9 +30,9 @@ const ItemApiIcon: React.FC<ItemApiIconProps> = ({ isBot, apiReady }) => {
         title={
           isBot
             ? apiReady !== 1
-              ? "API Not Ready"
-              : "API Ready"
-            : "No API Data"
+              ? <>{translate("state.spec_states.api_not_ready")}</>
+              : <>{translate("state.spec_states.api_ready")}</>
+            : <>{translate("state.spec_states.no_api_data")}</>
         }
         style={{ textAlign: "center" }}
       >
@@ -56,10 +57,11 @@ const ItemApiIcon: React.FC<ItemApiIconProps> = ({ isBot, apiReady }) => {
 };
 
 const PauseUntil = (pauseUntil: string) => {
+  const translate = useTranslate();
   return (
     <span style={{ fontSize: "0.8em" }}>
       <span style={{ fontWeight: "700", marginRight: "5px" }}>
-        Pause until:
+        {translate("common.pause_until")}:
       </span>
       {new Date(pauseUntil).toLocaleString()}
     </span>
@@ -67,6 +69,7 @@ const PauseUntil = (pauseUntil: string) => {
 };
 
 const ItemStateControlBar = ({ record }: ItemStateControlBarProps) => {
+  const translate = useTranslate();
   const itemBot = "api_ready" in record ? true : false,
     botApiIcon = <ItemApiIcon isBot={itemBot} apiReady={record.api_ready} />,
     itemPair = "bot_id" in record ? false : true;
@@ -96,10 +99,10 @@ const ItemStateControlBar = ({ record }: ItemStateControlBarProps) => {
             }}
           >
             {record.api_ready !== 1 && (
-              <span style={{ display: "inline-block" }}>API not ready</span>
+              <span style={{ display: "inline-block" }}>{translate("state.spec_states.api_not_ready")}</span>
             )}
             {record.exchange_id === 0 && (
-              <span style={{ display: "inline-block" }}>Exchange not set</span>
+              <span style={{ display: "inline-block" }}>{translate("state.spec_states.exchange_not_set")}</span>
             )}
           </span>
         ) : (
