@@ -12,6 +12,7 @@ import {
   TextField,
   TextInput,
   usePermissions,
+  useTranslate,
 } from "react-admin";
 
 import { Bot, BotPair, Exchange } from "../../types";
@@ -26,8 +27,8 @@ const botFilterToQuery = (searchText: any) => ({
 });
 
 const pairsFilters = [
-  <TextInput label="Symbol" source="symbol_like" alwaysOn />,
-  <TextInput label="Id" source="id_like" alwaysOn />,
+  <TextInput label="resources.pairs.fields.symbol" source="symbol_like" alwaysOn />,
+  <TextInput label="resources.pairs.fields.id" source="id_like" alwaysOn />,
   <ReferenceInput
     allowEmpty
     alwaysOn
@@ -65,16 +66,17 @@ const PairsPagination = () => (
 );
 
 export const PairsList = () => {
+  const translate = useTranslate();
   const {
     error: errorPermissions,
     isLoading: isLoadingPermissions,
     permissions,
   } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
+  if (isLoadingPermissions) return <Loading />;
+  if (errorPermissions) return <div className="error loadPermissions">{translate("error.loadPermissionsError")}</div>;
   permissions.role !== 1 && permissions.role !== 2 && (
-    <div>Not enough permissions</div>
+    <div className="warning notEnoughPermissions">{translate("warnings.not_enough_permissions")}</div>
   );
 
   return (
@@ -91,24 +93,22 @@ export const PairsList = () => {
       >
         <TextField source="id" />
         <FunctionField
-          label="State"
           render={(record: Bot) => <StateIcon record={record} />}
           sortable={true}
           sortBy="state"
           source="state"
         />
         <FunctionField
-          label="Pair"
+          label="common.pair"
           render={(record: BotPair) => <ItemStateControlBar record={record} />}
           sortable={true}
           sortBy="symbol"
           source="symbol"
         />
-        <ReferenceField label="Bot" source="bot_id" reference="bots">
+        <ReferenceField source="bot_id" reference="bots">
           <FunctionField render={(record: Bot) => record.title} />
         </ReferenceField>
         <ReferenceField
-          label="Exchange"
           link={(record: any, reference: any) => `/${reference}s/${record.id}`}
           reference="exchange"
           sortable={false}
@@ -117,19 +117,19 @@ export const PairsList = () => {
           <FunctionField render={(record: Exchange) => record.title} />
         </ReferenceField>
         <FunctionField
-          label="RSI_S"
+          label="common.rsi_s"
           render={(record: BotPair) => {
             return <IdxMaster idxName="RSI_S" pairId={record.id}></IdxMaster>;
           }}
         />
         <FunctionField
-          label="RSI_L"
+          label="common.rsi_l"
           render={(record: BotPair) => {
             return <IdxMaster idxName="RSI_L" pairId={record.id}></IdxMaster>;
           }}
         />
         <FunctionField
-          label="RSI_SELL"
+          label="common.rsi_sell"
           render={(record: BotPair) => {
             return (
               <IdxMaster idxName="RSI_SELL" pairId={record.id}></IdxMaster>
@@ -137,14 +137,14 @@ export const PairsList = () => {
           }}
         />
         <FunctionField
-          label="Price"
+          label="common.price"
           style={{ textAlign: "center" }}
           render={(record: BotPair) => {
             return <IdxMaster idxName="Price" pairId={record.id}></IdxMaster>;
           }}
         />
         <FunctionField
-          label="In orders (USDT)"
+          label={translate("common.in_orders") + " (" + translate("common.usdt") + ")"}
           render={(record: BotPair) => {
             return (
               <GridData type="pair" id={record.id} parameter="in_orders" />
@@ -152,7 +152,7 @@ export const PairsList = () => {
           }}
         />
         <FunctionField
-          label="Purchases"
+          label="common.purchases"
           render={(record: BotPair) => {
             return (
               <GridData type="pair" id={record.id} parameter="purchases" />
@@ -160,7 +160,7 @@ export const PairsList = () => {
           }}
         />
         <FunctionField
-          label="Sales"
+          label="common.sales"
           render={(record: BotPair) => {
             return <GridData type="pair" id={record.id} parameter="sales" />;
           }}

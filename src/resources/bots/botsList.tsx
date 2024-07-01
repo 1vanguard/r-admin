@@ -67,10 +67,10 @@ export const BotsList = () => {
     permissions,
   } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
+  if (isLoadingPermissions) return <Loading />;
+  if (errorPermissions) return <div className="error loadPermissions">{translate("error.loadPermissionsError")}</div>;
   permissions.role !== 1 && permissions.role !== 2 && (
-    <div>Not enough permissions</div>
+    <div className="warning notEnoughPermissions">{translate("warnings.not_enough_permissions")}</div>
   );
 
   return (
@@ -93,6 +93,7 @@ export const BotsList = () => {
           source="state"
         />
         <FunctionField
+          label={translate("common.bot")}
           render={(record: Bot) => <ItemStateControlBar record={record} />}
           source="title"
         />
