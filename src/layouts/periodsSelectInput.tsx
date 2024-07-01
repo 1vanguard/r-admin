@@ -34,7 +34,7 @@ export const PeriodsSelectInput: React.FC<PeriodsSelectInputProps> = (
   });
 
   if (isPendingChoices) return <Loading />;
-  if (errorChoices) return <div>ERROR</div>;
+  if (errorChoices) return <div className="error dataError">{translate("errors.loadDataError")}</div>;
 
   const periodChoices = calculateChoices(choices, props.periodChoices);
 

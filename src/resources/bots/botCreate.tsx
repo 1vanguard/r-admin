@@ -93,7 +93,7 @@ export const BotCreate = () => {
   } = usePermissions();
 
   if (isLoadingPermissions) return <Loading />;
-  if (errorPermissions) return <div className="error loadingPermissionsError">{translate("error.loadPermissionsError")}</div>;
+  if (errorPermissions) return <div className="error loadPermissions">{translate("error.loadPermissionsError")}</div>;
 
   return (
     <Create

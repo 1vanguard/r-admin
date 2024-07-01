@@ -14,7 +14,8 @@ const ru = {
     errors: {
         error: "Ошибка",
         loadDataError: "Ошибка загрузки данных",
-        loadPermissionsError: 'Error loading permissions'
+        loadPermissionsError: 'Ошибка загрузки прав',
+        loadTimeFramesError: 'Ошибка загрузки таймфреймов'
     },
     common: {
         actual: 'Реально',

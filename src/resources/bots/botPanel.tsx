@@ -35,7 +35,7 @@ export const BotPanel = () => {
   });
 
   if (botPairsLoading) return <Loading />
-  if (botPairsError) return <div className="error loadingDataError">{translate("errors.loadDataError")}</div>
+  if (botPairsError) return <div className="error dataError">{translate("errors.loadDataError")}</div>
 
   return (
     <div className="botPanel">

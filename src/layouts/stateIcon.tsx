@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetOne } from "react-admin";
+import { useGetOne, useTranslate } from "react-admin";
 import { State } from "../types";
 
 import CircleIcon from "@mui/icons-material/Circle";
@@ -15,6 +15,7 @@ function capitalizeFirstLetter(str: string) {
 }
 
 const StateIcon: React.FC<StateIconProps> = ({ record }) => {
+  const translate = useTranslate();
   const {
     data: stateData,
     isLoading: isStateLoading,
@@ -22,7 +23,7 @@ const StateIcon: React.FC<StateIconProps> = ({ record }) => {
   } = useGetOne<State>("states", { id: record.state });
 
   if (isStateLoading) return <LinearProgress />;
-  if (stateError) return <div>ERROR</div>;
+  if (stateError) return <div className="error dataError">{translate("errors.loadDataError")}</div>;
 
   const stateName = stateData?.name;
   const stateNameCapitalize = capitalizeFirstLetter(stateName || "");

@@ -14,6 +14,8 @@ const en = {
     errors: {
         error: "Error",
         loadDataError: "Loading data error",
+        loadPermissionsError: 'Error loading permissions',
+        loadTimeFramesError: 'Error loading timeframes'
     },
     common: {
         actual: 'Actual',
