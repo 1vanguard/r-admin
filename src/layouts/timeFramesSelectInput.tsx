@@ -1,36 +1,13 @@
 import * as React from "react";
-import { Loading, required, SelectInput, useGetList } from "react-admin";
+import {
+  Loading,
+  required,
+  SelectInput,
+  useGetList,
+  useTranslate,
+} from "react-admin";
 
-const calculateChoices = (timeFrames, filter) => {
-  return timeFrames
-    .filter((timeFrame) => filter.includes(timeFrame.minutes)) // Filter time frames based on values in the filter array
-    .map((timeFrame) => {
-      let name = "";
-
-      if (timeFrame.minutes < 60) {
-        // If the duration is less than 60 minutes, format the name as "{minutes} min."
-        name = `${timeFrame.minutes} min.`;
-      } else if (timeFrame.minutes >= 60 && timeFrame.minutes < 1440) {
-        // If the duration is between 60 and 1440 minutes (one day), format the name as "{hours} hour{s}"
-        const hours = Math.floor(timeFrame.minutes / 60);
-        name = `${hours} hour${hours > 1 ? "s" : ""}`;
-      } else if (timeFrame.minutes < 10080) {
-        // If the duration is between 1440 and 10080 minutes (one week), format the name as "{days} day{s}"
-        const days = Math.floor(timeFrame.minutes / 1440);
-        name = `${days} day${days > 1 ? "s" : ""}`;
-      } else if (timeFrame.minutes < 43200) {
-        // If the duration is between 10080 and 43200 minutes (one month), format the name as "{weeks} week{s}"
-        const weeks = Math.floor(timeFrame.minutes / 10080);
-        name = `${weeks} week${weeks > 1 ? "s" : ""}`;
-      } else {
-        // If the duration is more than 43200 minutes (more than one month), format the name as "{months} month{s}"
-        const months = Math.floor(timeFrame.minutes / 43200);
-        name = `${months} month${months > 1 ? "s" : ""}`;
-      }
-
-      return { ...timeFrame, name: name }; // Return the time frame with the added name property
-    });
-};
+import { timeFrame } from "../types";
 
 interface TimeFramesSelectInputProps {
   frameChoices: number[];
@@ -42,14 +19,64 @@ interface TimeFramesSelectInputProps {
 export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (
   props
 ) => {
+  const translate = useTranslate();
+  const calculateChoices = (timeFrames: timeFrame[], filter: number[]) => {
+    return timeFrames
+      .filter((timeFrame) => filter.includes(timeFrame.minutes))
+      .map((timeFrame) => {
+        let name = "";
+
+        if (timeFrame.minutes < 60) {
+          name = `${timeFrame.minutes} ${
+            timeFrame.minutes > 1
+              ? translate("timeFrames.minShortPlural")
+              : translate("timeFrames.minShort")
+          }`;
+        } else if (timeFrame.minutes >= 60 && timeFrame.minutes < 1440) {
+          const hours = Math.floor(timeFrame.minutes / 60);
+          name = `${hours} ${
+            hours > 1
+              ? translate("timeFrames.hourShortPlural")
+              : translate("timeFrames.hourShort")
+          }`;
+        } else if (timeFrame.minutes < 10080) {
+          const days = Math.floor(timeFrame.minutes / 1440);
+          name = `${days} ${
+            days > 1
+              ? translate("timeFrames.dayShortPlural")
+              : translate("timeFrames.dayShort")
+          }`;
+        } else if (timeFrame.minutes < 43200) {
+          const weeks = Math.floor(timeFrame.minutes / 10080);
+          name = `${weeks} ${
+            weeks > 1
+              ? translate("timeFrames.weekShortPlural")
+              : translate("timeFrames.weekShort")
+          }`;
+        } else {
+          const months = Math.floor(timeFrame.minutes / 43200);
+          name = `${months} ${
+            months > 1
+              ? translate("timeFrames.monthShortPlural")
+              : translate("timeFrames.monthShort")
+          }`;
+        }
+
+        return { ...timeFrame, name: name };
+      });
+  };
   const {
     data: choices,
-    isLoading: isLoadingChoices,
+    total: totalChoices,
+    isPending: isPendingChoices,
     error: errorChoices,
-  } = useGetList("timeframes");
+  } = useGetList<timeFrame>("timeframes", {
+    pagination: { page: 1, perPage: 10 },
+    sort: { field: "minutes", order: "DESC" },
+  });
 
-  isLoadingChoices && <Loading />
-  errorChoices && <div>ERROR</div>
+  if (isPendingChoices) return <Loading />;
+  if (errorChoices) return <div>ERROR</div>;
 
   const frameChoices = props.frameChoices;
   const timeFrameChoices = calculateChoices(choices, frameChoices);
@@ -64,9 +91,9 @@ export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (
       {...(props.required ? { validate: required() } : {})}
       // emptyValue={minChoiceId}
       choices={timeFrameChoices}
-      disabled={isLoadingChoices}
-      emptyText="Do not use"
-      isLoading={isLoadingChoices}
+      disabled={isPendingChoices}
+      emptyText={translate("common.do_not_use")}
+      isLoading={isPendingChoices}
       label={props.label}
       margin="none"
       optionText="name"

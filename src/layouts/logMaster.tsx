@@ -13,7 +13,7 @@ const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {
 
   let targetEntityLogsArray: any[] = [];
 
-  if (!logs)return "No data accepted"
+  if (!logs) return "No data accepted"
 
   const baseLogs = Object.entries(logs);
 

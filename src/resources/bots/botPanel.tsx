@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@mui/material";
 
-export const BotPanel = (props: any) => {
+export const BotPanel = () => {
   const record = useRecordContext(),
     translate = useTranslate();
   if (!record) return null
@@ -34,8 +34,8 @@ export const BotPanel = (props: any) => {
     pagination: { page: 1, perPage: 1000000 },
   });
 
-  botPairsLoading && <Loading />
-  botPairsError && <div>Bot pairs error</div>
+  if (botPairsLoading) return <Loading />
+  if (botPairsError) return <div className="error loadingDataError">{translate("errors.loadDataError")}</div>
 
   return (
     <div className="botPanel">
@@ -46,7 +46,7 @@ export const BotPanel = (props: any) => {
         </h3>
       </div>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item xs={5}>
           <h4
             style={{
               marginBottom: 0,
@@ -61,7 +61,7 @@ export const BotPanel = (props: any) => {
             <LogMaster entityType="bot" entityId={botId} />
           </div>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={7}>
           <h4
             style={{
               marginBottom: 0,
@@ -85,10 +85,10 @@ export const BotPanel = (props: any) => {
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell>Pair</TableCell>
-                    <TableCell>Opened orders</TableCell>
-                    <TableCell>In trades</TableCell>
-                    <TableCell>Profit</TableCell>
+                    <TableCell>{translate("common.pair")}</TableCell>
+                    <TableCell>{translate("common.opened_orders")}</TableCell>
+                    <TableCell>{translate("common.in_trades")}</TableCell>
+                    <TableCell>{translate("common.profit")}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

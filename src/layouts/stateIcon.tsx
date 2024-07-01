@@ -21,8 +21,8 @@ const StateIcon: React.FC<StateIconProps> = ({ record }) => {
     error: stateError,
   } = useGetOne<State>("states", { id: record.state });
 
-  isStateLoading && <LinearProgress />;
-  stateError && <div>ERROR</div>;
+  if (isStateLoading) return <LinearProgress />;
+  if (stateError) return <div>ERROR</div>;
 
   const stateName = stateData?.name;
   const stateNameCapitalize = capitalizeFirstLetter(stateName || "");

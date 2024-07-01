@@ -6,7 +6,7 @@ import PairOrders from "../../layouts/pairOrders";
 
 import Grid from "@mui/material/Grid";
 
-export const PairPanel = (props: any) => {
+export const PairPanel = () => {
   const record = useRecordContext();
   if (!record) return null;
   const pairId = parseInt(record?.id);

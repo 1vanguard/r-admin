@@ -8,6 +8,7 @@ import {
   SimpleForm,
   TextInput,
   usePermissions,
+  useTranslate,
 } from "react-admin";
 
 import Container from "@mui/material/Container";
@@ -21,10 +22,11 @@ const exchangeFilterToQuery = (searchText: any) => ({
   });
 
 const CreateForm = () => {
+  const translate = useTranslate();
   return (
     <SimpleForm>
       <Container maxWidth="md" sx={{ ml: 0 }}>
-        <h2>Create new bot</h2>
+        <h2>{translate("common.bot_create_heading")}</h2>
       </Container>
       <Container maxWidth="md" sx={{ ml: 0 }}>
         <Grid container spacing={1}>
@@ -49,12 +51,12 @@ const CreateForm = () => {
           <Grid item xs={12} md={4}>
             <ReferenceInput
               filter={{ state: 1 }}
-              label="Client"
               reference="users"
               source="client_id"
             >
               <AutocompleteInput
                 filterToQuery={usernameFilterToQuery}
+                label="common.client"
                 optionText="username"
                 validate={required()}
                 variant="standard"
@@ -64,12 +66,12 @@ const CreateForm = () => {
           <Grid item xs={12} md={4}>
             <ReferenceInput
               filter={{ state: 1 }}
-              label="Exchange"
               reference="exchange"
               source="exchange"
             >
               <AutocompleteInput
                 filterToQuery={exchangeFilterToQuery}
+                label="resources.bots.fields.exchange_id"
                 optionText="title"
                 validate={required()}
                 variant="standard"
@@ -83,14 +85,15 @@ const CreateForm = () => {
 };
 
 export const BotCreate = () => {
+  const translate = useTranslate();
   const {
     permissions,
     isLoading: isLoadingPermissions,
     error: errorPermissions,
   } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
+  if (isLoadingPermissions) return <Loading />;
+  if (errorPermissions) return <div className="error loadingPermissionsError">{translate("error.loadPermissionsError")}</div>;
 
   return (
     <Create
@@ -100,7 +103,7 @@ export const BotCreate = () => {
       {permissions.role === 1 || permissions.role === 2 ? (
         <CreateForm />
       ) : (
-        <div>Only admins and managers can create bots</div>
+        <div className="warning createBotWarning">{translate("warnings.create_bot_warning_01")}</div>
       )}
     </Create>
   );

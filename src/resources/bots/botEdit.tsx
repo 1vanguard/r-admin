@@ -17,6 +17,7 @@ import {
   useGetList,
   useGetManyReference,
   useRecordContext,
+  useTranslate,
 } from "react-admin";
 
 import { BotPause } from "../../types";
@@ -60,7 +61,8 @@ const baseMin = 0,
   });
 
 const Editform = () => {
-  const record = useRecordContext();
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
 
   const botId = Number(record?.id);
@@ -93,6 +95,7 @@ const Editform = () => {
     fontSize: "1.1em",
     fontWeight: "bold",
     textAlign: "center",
+    verticalAlign: "top",
   };
   const tablePrimaryDataCellSx = {
     fontSize: "1.1em",
@@ -104,20 +107,64 @@ const Editform = () => {
       <Table size="small">
         <TableHead sx={{ bgcolor: color01 }}>
           <TableRow>
-            <TableCell sx={tablePrimaryDataHeadCellSx}>Limit</TableCell>
-            <TableCell sx={tablePrimaryDataHeadCellSx}>Profit (%)</TableCell>
-            <TableCell sx={tablePrimaryDataHeadCellSx}>Start sum</TableCell>
-            <TableCell sx={tablePrimaryDataHeadCellSx}>Step</TableCell>
             <TableCell sx={tablePrimaryDataHeadCellSx}>
-              Total customer balance, (USDT)
+              {translate("common.limit")}
             </TableCell>
             <TableCell sx={tablePrimaryDataHeadCellSx}>
-              Total amount in the trades of all pairs, (USDT)
+              {translate("common.profit")}{" "}
+              <span
+                style={{
+                  display: "inline-block",
+                  fontSize: "0.8em",
+                  lineHeight: "0.9em",
+                }}
+              >
+                (%)
+              </span>
             </TableCell>
             <TableCell sx={tablePrimaryDataHeadCellSx}>
-              Number of pairs
+              {translate("common.start_sum")}
+            </TableCell>
+            <TableCell sx={tablePrimaryDataHeadCellSx}>
+              {translate("common.step")}
+            </TableCell>
+            <TableCell sx={tablePrimaryDataHeadCellSx}>
+              {translate("common.total_customer_balance")},{" "}
+              <span
+                style={{
+                  display: "inline-block",
+                  fontSize: "0.8em",
+                  lineHeight: "0.9em",
+                }}
+              >
+                ({translate("common.usdt")})
+              </span>
+            </TableCell>
+            <TableCell sx={tablePrimaryDataHeadCellSx}>
+              {translate("common.total_amount_in_trades_of_all_pairs")},{" "}
+              <span
+                style={{
+                  display: "inline-block",
+                  fontSize: "0.8em",
+                  lineHeight: "0.9em",
+                }}
+              >
+                ({translate("common.usdt")})
+              </span>
+            </TableCell>
+            <TableCell sx={tablePrimaryDataHeadCellSx}>
+              {translate("common.number_of_pairs")}
               <br />
-              (settings / actual)
+              <span
+                style={{
+                  display: "inline-block",
+                  fontSize: "0.8em",
+                  lineHeight: "0.9em",
+                  textTransform: "lowercase",
+                }}
+              >
+                ({translate("common.settings")} / {translate("common.actual")})
+              </span>
             </TableCell>
           </TableRow>
         </TableHead>
@@ -144,9 +191,9 @@ const Editform = () => {
         id="editBotForm"
         syncWithLocation={true}
       >
-        <TabbedForm.Tab label="Main settings">
+        <TabbedForm.Tab label="common.bot_edit_tab_01">
           <Container maxWidth="md" sx={{ ml: 0 }}>
-            <h2>Bot main settings</h2>
+            <h2>{translate("common.bot_edit_tab_01_main_heading")}</h2>
           </Container>
           <Container maxWidth="md" sx={{ ml: 0 }}>
             <Grid container spacing={1}>
@@ -180,13 +227,10 @@ const Editform = () => {
                 />
               </Grid> */}
               <Grid item xs={12} md={6}>
-                <ReferenceInput
-                  label="Client"
-                  reference="users"
-                  source="user_id"
-                >
+                <ReferenceInput reference="users" source="user_id">
                   <AutocompleteInput
                     filterToQuery={usernameFilterToQuery}
+                    label="common.client"
                     margin="none"
                     optionText="username"
                     validate={required()}
@@ -195,11 +239,7 @@ const Editform = () => {
                 </ReferenceInput>
               </Grid>
               <Grid item xs={12} md={6}>
-                <ReferenceInput
-                  label="Exchange"
-                  source="exchange_id"
-                  reference="exchanges"
-                >
+                <ReferenceInput source="exchange_id" reference="exchanges">
                   <AutocompleteInput
                     optionText="title"
                     margin="none"
@@ -211,7 +251,6 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextInput
-                  label="Replenishment currency"
                   margin="none"
                   source="baseAsset"
                   validate={required()}
@@ -220,7 +259,7 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <NumberInput
-                  label="Trading limit"
+                  label="common.botlimit_label"
                   margin="none"
                   min={baseMin}
                   source="botlimit"
@@ -231,7 +270,7 @@ const Editform = () => {
               <Grid item xs={12} md={6}>
                 <TimeFramesSelectInput
                   frameChoices={timeframeToFilter}
-                  label="Timeframe"
+                  label="common.timeframe"
                   sourceName="timeframe"
                   required={true}
                 />
@@ -239,64 +278,53 @@ const Editform = () => {
               <Grid item xs={12} md={6}>
                 <PeriodsSelectInput
                   periodChoices={periodToFilter}
-                  label="Period"
+                  label="common.period"
                   sourceName="period"
                   required={true}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <BooleanInput
-                  label="Use a limit order when selling"
+                  label="common.auto_sell_limit_label"
                   source="auto_sell_limit"
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <BooleanInput
-                  label="Use a limit order when buying"
+                  label="common.auto_buy_limit_label"
                   source="auto_buy_limit"
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <BooleanInput
-                  label="Use exchange token to pay commissions"
-                  source="useBNB"
-                />
+                <BooleanInput label="common.useBNB_label" source="useBNB" />
               </Grid>
               <Grid item xs={12} md={6}>
-                <BooleanInput label="Enable autotrading" source="auto_on" />
+                <BooleanInput label="common.auto_on_label" source="auto_on" />
               </Grid>
               <Grid item xs={12}>
-                <TextInput label="API Key" margin="none" source="apikey" />
+                <TextInput margin="none" source="apikey" />
               </Grid>
               <Grid item xs={12}>
-                <TextInput
-                  label="API Secret"
-                  margin="none"
-                  source="apisecret"
-                />
+                <TextInput margin="none" source="apisecret" />
               </Grid>
               {record.exchange_id === 3 && (
                 <Grid item xs={12}>
-                  <TextInput
-                    label="API Password"
-                    margin="none"
-                    source="apipassword"
-                  />
+                  <TextInput margin="none" source="apipassword" />
                 </Grid>
               )}
             </Grid>
           </Container>
         </TabbedForm.Tab>
-        <TabbedForm.Tab label="Auto">
+        <TabbedForm.Tab label="common.bot_edit_tab_02">
           <Container maxWidth="xl" sx={{ ml: 0 }}>
-            <h2>Auto bot settings</h2>
+            <h2>{translate("common.bot_edit_tab_02_main_heading")}</h2>
           </Container>
           <Container sx={{ ml: 0, maxWidth: "1598px" }}>
             <Grid container spacing={1}>
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Pairs quantity"
+                  label="common.auto_pair_count_label"
                   margin="none"
                   min={baseMin}
                   source="auto_pair_count"
@@ -306,7 +334,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Limit for a pair"
+                  label="common.auto_limit_pair_label"
                   margin="none"
                   min={baseMin}
                   source="auto_limit_pair"
@@ -316,7 +344,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Number of orders in a pair"
+                  label="common.auto_order_count_label"
                   margin="none"
                   min={baseMin}
                   source="auto_order_count"
@@ -326,7 +354,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Indent in %"
+                  label="common.auto_offset_label"
                   margin="none"
                   min={baseMin}
                   source="auto_offset"
@@ -336,7 +364,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Initial order amount"
+                  label="common.auto_start_sum_label"
                   margin="none"
                   min={baseMin}
                   source="auto_start_sum"
@@ -346,7 +374,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Order step, in %"
+                  label="common.auto_step_label"
                   margin="none"
                   min={baseMin}
                   source="auto_step"
@@ -366,7 +394,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Profit, in %"
+                  label="common.auto_profit_label"
                   margin="none"
                   min={baseMin}
                   source="auto_profit"
@@ -376,7 +404,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Slippage, in %"
+                  label="common.auto_squiz_label"
                   margin="none"
                   min={baseMin}
                   source="auto_squiz"
@@ -416,7 +444,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Timeout in seconds for entering the pair"
+                  label="common.timeout_label"
                   margin="none"
                   min={baseMin}
                   source="timeout"
@@ -426,7 +454,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Timeout until the next purchase (in seconds)"
+                  label="common.next_buy_timeout_label"
                   margin="none"
                   min={baseMin}
                   source="next_buy_timeout"
@@ -436,7 +464,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <TimeFramesSelectInput
                   frameChoices={autoPairTfToFilter}
-                  label="The RSI timeframe for choosing a pair"
+                  label="common.auto_pair_tf_label"
                   required={true}
                   sourceName="auto_pair_tf"
                 />
@@ -444,7 +472,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Min. RSI to enter the pair"
+                  label="common.auto_rsi_min_big_label"
                   margin="none"
                   min={baseMin}
                   source="auto_rsi_min_big"
@@ -454,7 +482,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Max. RSI to enter the pair"
+                  label="common.auto_rsi_max_big_label"
                   margin="none"
                   min={baseMin}
                   source="auto_rsi_max_big"
@@ -464,7 +492,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Max growth per day, %"
+                  label="common.auto_pd_up_label"
                   margin="none"
                   min={baseMin}
                   source="auto_pd_up"
@@ -474,7 +502,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Max drop per day, %"
+                  label="common.auto_pd_down_label"
                   margin="none"
                   min={baseMin}
                   source="auto_pd_down"
@@ -484,7 +512,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Pause for a pair, hours"
+                  label="common.auto_pd_pause_label"
                   margin="none"
                   min={baseMin}
                   source="auto_pd_pause"
@@ -494,7 +522,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Max BTC growth per hour, %"
+                  label="common.pd_up_label"
                   margin="none"
                   min={baseMin}
                   source="pd_up"
@@ -504,7 +532,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Max BTC drop per hour, %"
+                  label="common.pd_down_label"
                   margin="none"
                   min={baseMin}
                   source="pd_down"
@@ -514,7 +542,7 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="Pause for the bot, hours"
+                  label="common.pd_pause_label"
                   margin="none"
                   min={baseMin}
                   source="pd_pause"
@@ -524,6 +552,7 @@ const Editform = () => {
               <Grid item xs={12}>
                 <AutocompleteArrayInput
                   choices={whitelistData}
+                  label={"common.whitelist_label"}
                   optionText="symbol"
                   optionValue="symbol"
                   format={(value) =>
@@ -544,9 +573,9 @@ const Editform = () => {
             </Grid>
           </Container>
         </TabbedForm.Tab>
-        <TabbedForm.Tab label="RSI">
+        <TabbedForm.Tab label="common.bot_edit_tab_03">
           <Container maxWidth="xl" sx={{ ml: 0 }}>
-            <h2>RSI settings</h2>
+            <h2>{translate("common.bot_edit_tab_03_main_heading")}</h2>
           </Container>
           <Container sx={{ ml: 0, maxWidth: "1598px" }}>
             <Grid container justifyContent={"space-between"} spacing={1}>
@@ -554,7 +583,7 @@ const Editform = () => {
                 <BooleanInput label="Sell by RSI" source="rsi_sell" />
               </Grid> */}
               <Grid item xs={12} lg={6} xl={5}>
-                <h3>Short RSI</h3>
+                <h3>{translate("common.rsi_heading_01")}</h3>
                 <Grid
                   container
                   sx={{
@@ -570,13 +599,13 @@ const Editform = () => {
                   <Grid item xs={12} md={6}>
                     <TimeFramesSelectInput
                       frameChoices={autoShortTfToFilter}
-                      label="RSI timeframe for entry"
+                      label="common.auto_short_tf_label"
                       sourceName="auto_short_tf"
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
-                      label="The RSI period for entry"
+                      label="common.auto_rsi_period_label"
                       sourceName="auto_rsi_period"
                       periodChoices={autoRsiPeriodOptionsToFilter}
                     />
@@ -593,7 +622,7 @@ const Editform = () => {
                 >
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      label="Min. RSI for entry"
+                      label="common.auto_rsi_min_label"
                       margin="none"
                       min={baseMin}
                       source="auto_rsi_min"
@@ -602,7 +631,7 @@ const Editform = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      label="Max. RSI for entry"
+                      label="common.auto_rsi_max_label"
                       margin="none"
                       min={baseMin}
                       source="auto_rsi_max"
@@ -613,7 +642,7 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} lg={6} xl={5}>
                 <BooleanInput
-                  label="Use a long timeframe when buying"
+                  label="common.auto_use_ltf_label"
                   source="auto_use_ltf"
                 />
                 <Grid item xs={12}>
@@ -632,15 +661,15 @@ const Editform = () => {
                     <Grid item xs={12} md={6}>
                       <TimeFramesSelectInput
                         frameChoices={autoLongTfToFilter}
-                        label="RSI timeframe for entry"
+                        label="common.auto_long_tf_label"
                         sourceName="auto_long_tf"
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <PeriodsSelectInput
-                        sourceName="auto_rsi_period_1h"
-                        label="The RSI period for entry"
+                        label="common.auto_rsi_period_1h_label"
                         periodChoices={autoRsiPeriod1hOptionsToFilter}
+                        sourceName="auto_rsi_period_1h"
                       />
                     </Grid>
                   </Grid>
@@ -656,7 +685,7 @@ const Editform = () => {
                 >
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      label="Min. RSI for entry"
+                      label="common.auto_rsi_min_1h_label"
                       margin="none"
                       min={baseMin}
                       source="auto_rsi_min_1h"
@@ -665,7 +694,7 @@ const Editform = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      label="Max. RSI for entry"
+                      label="common.auto_rsi_max_1h_label"
                       margin="none"
                       min={baseMin}
                       source="auto_rsi_max_1h"
@@ -677,7 +706,7 @@ const Editform = () => {
             </Grid>
             <Grid container justifyContent={"space-between"} spacing={1}>
               <Grid item xs={12}>
-                <h2>RSI for sale</h2>
+                <h2>{translate("common.rsi_heading_02")}</h2>
               </Grid>
               <Grid item xs={12} lg={6} xl={5}>
                 <Grid
@@ -695,13 +724,13 @@ const Editform = () => {
                   <Grid item xs={12} md={6}>
                     <TimeFramesSelectInput
                       frameChoices={autoSellTfToFilter}
-                      label="The RSI timeframe for sale"
+                      label="common.auto_sell_tf_label"
                       sourceName="auto_sell_tf"
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
-                      label="RSI period for Sale"
+                      label="common.auto_sell_period_label"
                       periodChoices={autoSellPeriodOptionsToFilter}
                       sourceName="auto_sell_period"
                     />
@@ -717,7 +746,7 @@ const Editform = () => {
                 >
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      label="Min. RSI for sale"
+                      label="common.auto_rsi_min_sell_label"
                       margin="none"
                       min={baseMin}
                       source="auto_rsi_min_sell"
@@ -726,7 +755,7 @@ const Editform = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      label="Max. RSI for sale"
+                      label="common.auto_rsi_max_sell_label"
                       margin="none"
                       min={baseMin}
                       source="auto_rsi_max_sell"
@@ -737,28 +766,28 @@ const Editform = () => {
               </Grid>
               <Grid item xs={12} md={6} xl={5}>
                 <NumberInput
-                  label="Difference from the previous RSI value for purchase, %"
+                  label="common.auto_rsi_diff_label"
                   margin="none"
                   min={baseMin}
                   source="auto_rsi_diff"
                   variant="standard"
                 />
                 <NumberInput
-                  label="Difference from the previous RSI value for sale, %"
+                  label="common.rsi_sell_diff_label"
                   margin="none"
                   min={baseMin}
                   source="rsi_sell_diff"
                   variant="standard"
                 />
                 <NumberInput
-                  label="Percentage price drop for blocking for a month"
+                  label="common.long_dump_label"
                   margin="none"
                   min={baseMin}
                   source="long_dump"
                   variant="standard"
                 />
                 <NumberInput
-                  label="Percentage price increase for blocking for a month"
+                  label="common.long_pump_label"
                   margin="none"
                   min={baseMin}
                   source="long_pump"
@@ -768,9 +797,9 @@ const Editform = () => {
             </Grid>
           </Container>
         </TabbedForm.Tab>
-        <TabbedForm.Tab label="Pauses">
+        <TabbedForm.Tab label="common.bot_edit_tab_04">
           <Container maxWidth="xl" sx={{ ml: 0 }}>
-            <h2>Bot pauses log</h2>
+            <h2>{translate("common.bot_edit_tab_04_main_heading")}</h2>
           </Container>
           <Container maxWidth="md" sx={{ ml: 0 }}>
             <ReferenceManyField
@@ -780,15 +809,13 @@ const Editform = () => {
             >
               <Datagrid bulkActionButtons={false} rowClick={false}>
                 <DateField
-                  source="pause_start"
                   showTime
                   sortable={false}
-                  label="Pause start"
+                  source="pause_start"
                 />
                 <FunctionField
-                  source="pause_end"
-                  label="Pause end"
                   sortable={false}
+                  source="pause_end"
                   render={(record: BotPause) => {
                     if (record.pause_end) {
                       return (
@@ -798,9 +825,8 @@ const Editform = () => {
                           sortable={false}
                         />
                       );
-                      1;
                     } else {
-                      return <p style={{ color: "red" }}>Pause end not set</p>;
+                      return <p style={{ color: "red" }}>{translate("common.pause_end_not_set")}</p>;
                     }
                   }}
                 />
@@ -809,7 +835,7 @@ const Editform = () => {
           </Container>
         </TabbedForm.Tab>
         <TabbedForm.Tab
-          label="Pairs"
+          label="common.bot_edit_tab_05"
           path={`/bots/${botId}/pairs`}
         ></TabbedForm.Tab>
       </TabbedForm>
@@ -818,9 +844,10 @@ const Editform = () => {
 };
 
 const BotTitle = () => {
-  const record = useRecordContext();
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
-  return <>Bot {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
+  return <>{translate("common.bot")} {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
 };
 
 export const BotEdit = () => {
