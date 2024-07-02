@@ -1,11 +1,12 @@
 import React from "react";
+import { Identifier } from "react-admin";
+import { useWebSocketDataContext } from "../helpers/WebSocketDataContext";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { useWebSocketDataContext } from "../helpers/WebSocketDataContext";
 
 interface LogMasterProps {
   entityType: string;
-  entityId: number;
+  entityId: Identifier;
 }
 
 const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {

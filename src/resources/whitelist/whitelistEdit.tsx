@@ -6,6 +6,7 @@ import {
   required,
   useRecordContext,
   usePermissions,
+  useTranslate,
 } from "react-admin";
 
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
@@ -15,13 +16,14 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
 const Editform = () => {
-  const record = useRecordContext();
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
 
   return (
     <SimpleForm toolbar={<PrymaryEditToolbar />}>
       <Container maxWidth="md" sx={{ ml: 0 }}>
-        <h2>Whitelist settings</h2>
+        <h2>{translate("common.whitelist_main_heading")}</h2>
       </Container>
       <Container maxWidth="md" sx={{ ml: 0 }}>
         <Grid container spacing={1}>
@@ -43,22 +45,36 @@ const Editform = () => {
 };
 
 const WhitelistTitle = () => {
-  const record = useRecordContext();
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
-  return <>Whitelist {record ? `"${record.symbol}" (id: ${record.id})` : ""}</>;
+  return (
+    <>
+      {translate("common.whitelist")}{" "}
+      {record ? `"${record.symbol}" (id: ${record.id})` : ""}
+    </>
+  );
 };
 
 export const WhitelistEdit = () => {
-  const {
-    error: errorPermissions,
-    isLoading: isLoadingPermissions,
-    permissions,
-  } = usePermissions();
+  const translate = useTranslate(),
+    {
+      error: errorPermissions,
+      isLoading: isLoadingPermissions,
+      permissions,
+    } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
-  permissions.role !== 1 && permissions.role !== 2 && (
-    <div>Not enough permissions</div>
+  if (isLoadingPermissions) return <Loading />;
+  if (errorPermissions)
+    return (
+      <div className="error loadPermissions">
+        {translate("errors.loadPermissionsError")}
+      </div>
+    );
+  if (permissions.role !== 1 && permissions.role !== 2) return (
+    <div className="warning notEnoughPermissions">
+      {translate("warnings.not_enough_permissions")}
+    </div>
   );
 
   return (

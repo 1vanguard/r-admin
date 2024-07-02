@@ -8,6 +8,7 @@ import {
   useGetList,
   usePermissions,
   useRecordContext,
+  useTranslate,
 } from "react-admin";
 
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
@@ -17,7 +18,8 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
 const Editform = () => {
-  const record = useRecordContext();
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
   const {
     data: states,
@@ -25,13 +27,18 @@ const Editform = () => {
     error: errorStates,
   } = useGetList("states");
 
-  isLoadingStates && <Loading />;
-  errorStates && <div>Loading states error</div>;
+  if (isLoadingStates) return <Loading />;
+  if (errorStates)
+    return (
+      <div className="error loadStates">
+        {translate("errors.loadDataError")}
+      </div>
+    );
 
   return (
     <SimpleForm toolbar={<PrymaryEditToolbar />}>
       <Container maxWidth="md" sx={{ ml: 0 }}>
-        <h2>Office main settings</h2>
+        <h2>{translate("common.exchange_main_heading")}</h2>
       </Container>
       <Container maxWidth="md" sx={{ ml: 0 }}>
         <Grid container spacing={1}>
@@ -71,21 +78,28 @@ const Editform = () => {
 };
 
 const ExchangeTitle = () => {
-  const record = useRecordContext();
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
-  return <>Exchange {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
+  return (
+    <>
+      {translate("common.exchange")}{" "}
+      {record ? `"${record.title}" (id: ${record.id})` : ""}
+    </>
+  );
 };
 
 export const ExchangeEdit = () => {
-  const {
-    error: errorPermissions,
-    isLoading: isLoadingPermissions,
-    permissions,
-  } = usePermissions();
+  const translate = useTranslate(),
+    {
+      error: errorPermissions,
+      isLoading: isLoadingPermissions,
+      permissions,
+    } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
-  permissions.role !== 1 && <div>Not enough permissions</div>;
+  if (isLoadingPermissions) return <Loading />;
+  if (errorPermissions) return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
+  if (permissions.role !== 1) return <div className="warning notEnoughPermissions">{translate("warnings.not_enough_permissions")}</div>;
 
   return (
     <Edit title={<ExchangeTitle />}>

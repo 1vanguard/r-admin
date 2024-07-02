@@ -17,6 +17,7 @@ import {
   useGetList,
   usePermissions,
   useRecordContext,
+  useTranslate,
 } from "react-admin";
 
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
@@ -26,7 +27,8 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
 const Editform = () => {
-  const record = useRecordContext();
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
   const {
     data: states,
@@ -34,14 +36,14 @@ const Editform = () => {
     error: errorStates,
   } = useGetList("states");
 
-  isLoadingStates && <Loading />;
-  errorStates && <div>Loading states error</div>;
+  if (isLoadingStates) return <Loading />;
+  if (errorStates) return <div className="error loadStates">{translate("errors.loadDataError")}</div>;
 
   return (
     <TabbedForm toolbar={<PrymaryEditToolbar />} id="editOfficeForm">
-      <TabbedForm.Tab label="Office">
+      <TabbedForm.Tab label="common.office_edit_tab_01">
         <Container maxWidth="md" sx={{ ml: 0 }}>
-          <h2>Office main settings</h2>
+          <h2>{translate("common.office_edit_tab_01_main_heading")}</h2>
         </Container>
         <Container maxWidth="md" sx={{ ml: 0 }}>
           <Grid container spacing={1}>
@@ -99,14 +101,14 @@ const Editform = () => {
           </Grid>
         </Container>
       </TabbedForm.Tab>
-      <TabbedForm.Tab label="Statistics">
+      <TabbedForm.Tab label="common.office_edit_tab_02">
         <Container maxWidth="xl" sx={{ ml: 0 }}>
-          <h2>Office statistics</h2>
+          <h2>{translate("common.office_edit_tab_02_main_heading")}</h2>
         </Container>
       </TabbedForm.Tab>
-      <TabbedForm.Tab label="Users">
+      <TabbedForm.Tab label="common.office_edit_tab_03">
         <Container maxWidth="xl" sx={{ ml: 0 }}>
-          <h2>Office users</h2>
+          <h2>{translate("common.office_edit_tab_03_main_heading")}</h2>
         </Container>
         <Container maxWidth="xl" sx={{ ml: 0 }}>
           <ReferenceManyField
@@ -148,10 +150,10 @@ const Editform = () => {
                   second: "2-digit",
                 }}
               />
-              <ReferenceField label="Role" source="role" reference="roles">
+              <ReferenceField source="role" reference="roles">
                 <FunctionField render={(record: any) => record.name} />
               </ReferenceField>
-              <ReferenceField label="State" source="state" reference="states">
+              <ReferenceField source="state" reference="states">
                 <FunctionField render={(record: any) => record.name} />
               </ReferenceField>
               <EditButton />
@@ -164,9 +166,10 @@ const Editform = () => {
 };
 
 const OfficeTitle = () => {
-  const record = useRecordContext();
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
-  return <>Office {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
+  return <>{translate("common.office")} {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
 };
 
 export const OfficeEdit = () => {
@@ -176,10 +179,10 @@ export const OfficeEdit = () => {
     permissions,
   } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
+  if (isLoadingPermissions) return <Loading />;
+  if (errorPermissions) return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
   permissions.role !== 1 && permissions.role !== 2 && (
-    <div>Not enough permissions</div>
+    <div className="warning notEnoughPermissions">{translate("warnings.not_enough_permissions")}</div>
   );
 
   return (

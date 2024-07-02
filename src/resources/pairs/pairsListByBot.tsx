@@ -9,6 +9,7 @@ import {
   TextField,
   TextInput,
   useGetOne,
+  useTranslate,
   WithListContext,
 } from "react-admin";
 
@@ -25,11 +26,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
 const NoPairs = (props: any) => {
-  const pairState = props.state;
-  let noText = "No Pairs";
+  const pairState = props.state,
+    translate = useTranslate();
+  let noText = translate("common.no_pairs");
 
   if (pairState === 0) {
-    noText = "Bot has no inactive pairs";
+    noText = translate("common.bot_has_no_inactive_pairs");
   }
   return (
     <Box>
@@ -39,27 +41,38 @@ const NoPairs = (props: any) => {
 };
 
 const pairsFilters = [
-  <TextInput label="Symbol" source="symbol_like" alwaysOn />,
-  <TextInput label="Id" source="id_like" alwaysOn />,
+  <TextInput
+    label="resources.pairs.fields.symbol"
+    source="symbol_like"
+    alwaysOn
+  />,
+  <TextInput label="resources.pairs.fields.id" source="id_like" alwaysOn />,
 ];
 
 const inactivePairsFilters = [
-  <TextInput label="Symbol" source="symbol_like" alwaysOn />,
-  <TextInput label="Id" source="id_like" alwaysOn />,
+  <TextInput
+    label="resources.pairs.fields.symbol"
+    source="symbol_like"
+    alwaysOn
+  />,
+  <TextInput label="resources.pairs.fields.id" source="id_like" alwaysOn />,
 ];
 
 const PairsListByBot = () => {
-  const { id: botId } = useParams();
-  const {
-    data: botData,
-    isLoading: isLoadingBotData,
-    error: errorBotData,
-  } = useGetOne<Bot>("bots", { id: botId });
+  const { id: botId } = useParams(),
+    translate = useTranslate(),
+    [checked, setChecked] = useState(false),
+    {
+      data: botData,
+      isLoading: isLoadingBotData,
+      error: errorBotData,
+    } = useGetOne<Bot>("bots", { id: botId });
 
-  isLoadingBotData && <Loading />;
-  errorBotData && <div>Error bot data</div>;
-
-  const [checked, setChecked] = useState(false);
+  if (isLoadingBotData) return <Loading />;
+  if (errorBotData)
+    return (
+      <div className="error loadData">{translate("errors.loadDataError")}</div>
+    );
 
   const handleChange = () => {
     setChecked((prev) => !prev);
@@ -68,7 +81,11 @@ const PairsListByBot = () => {
   return (
     <Box className="pairsListByBot">
       <h2>
-        Bot <small>(id:{botId})</small> {botData?.title} pairs
+        {translate("common.pairs")}{" "}
+        <small>
+          ({translate("common.bot")} {translate("common.id")}:{botId}{" "}
+          {botData?.title})
+        </small>
       </h2>
       <List
         disableSyncWithLocation
@@ -78,6 +95,15 @@ const PairsListByBot = () => {
         perPage={1000000}
         resource="pairs"
         sx={{ marginBottom: 3 }}
+        title={
+          <>
+            {translate("common.pairs")}{" "}
+            <small>
+              ({translate("common.bot")} {translate("common.id")}:{botId}{" "}
+              {botData?.title})
+            </small>
+          </>
+        }
       >
         <Datagrid
           bulkActionButtons={false}
@@ -91,14 +117,13 @@ const PairsListByBot = () => {
         >
           <TextField source="id" />
           <FunctionField
-            label="State"
             render={(record: Bot) => <StateIcon record={record} />}
             sortable={true}
             sortBy="state"
             source="state"
           />
           <FunctionField
-            label="Pair"
+            label="common.pair"
             render={(record: BotPair) => (
               <ItemStateControlBar record={record} />
             )}
@@ -107,7 +132,6 @@ const PairsListByBot = () => {
             source="symbol"
           />
           <ReferenceField
-            label="Exchange"
             link={(record: any, reference: any) =>
               `/${reference}s/${record.id}`
             }
@@ -118,19 +142,19 @@ const PairsListByBot = () => {
             <FunctionField render={(record: Exchange) => record.title} />
           </ReferenceField>
           <FunctionField
-            label="RSI_S"
+            label="common.rsi_s"
             render={(record: BotPair) => {
               return <IdxMaster idxName="RSI_S" pairId={record.id}></IdxMaster>;
             }}
           />
           <FunctionField
-            label="RSI_L"
+            label="common.rsi_l"
             render={(record: BotPair) => {
               return <IdxMaster idxName="RSI_L" pairId={record.id}></IdxMaster>;
             }}
           />
           <FunctionField
-            label="RSI_SELL"
+            label="common.rsi_sell"
             render={(record: BotPair) => {
               return (
                 <IdxMaster idxName="RSI_SELL" pairId={record.id}></IdxMaster>
@@ -138,14 +162,19 @@ const PairsListByBot = () => {
             }}
           />
           <FunctionField
-            label="Price"
+            label="common.price"
             style={{ textAlign: "center" }}
             render={(record: BotPair) => {
               return <IdxMaster idxName="Price" pairId={record.id}></IdxMaster>;
             }}
           />
           <FunctionField
-            label="In orders (USDT)"
+            label={
+              translate("common.in_orders") +
+              " (" +
+              translate("common.usdt") +
+              ")"
+            }
             render={(record: BotPair) => {
               return (
                 <GridData type="pair" id={record.id} parameter="in_orders" />
@@ -153,7 +182,7 @@ const PairsListByBot = () => {
             }}
           />
           <FunctionField
-            label="Purchases"
+            label="common.purchases"
             render={(record: BotPair) => {
               return (
                 <GridData type="pair" id={record.id} parameter="purchases" />
@@ -161,14 +190,14 @@ const PairsListByBot = () => {
             }}
           />
           <FunctionField
-            label="Sales"
+            label="common.sales"
             render={(record: BotPair) => {
               return <GridData type="pair" id={record.id} parameter="sales" />;
             }}
           />
         </Datagrid>
       </List>
-      <h2 style={{ marginBottom: 0 }}>Inactive pairs</h2>
+      <h2 style={{ marginBottom: 0 }}>{translate("common.inactive_pairs")}</h2>
       <List
         disableSyncWithLocation
         empty={<NoPairs state={0} />}
@@ -177,6 +206,7 @@ const PairsListByBot = () => {
         pagination={false}
         perPage={1000000}
         resource="pairs"
+        title={<></>}
       >
         <WithListContext
           render={({
@@ -192,7 +222,7 @@ const PairsListByBot = () => {
                       control={
                         <Switch checked={checked} onChange={handleChange} />
                       }
-                      label="Show inactive bot's pairs"
+                      label={translate("common.show_inactive_bots_pairs")}
                     />
                   </Box>
                   <Collapse in={checked}>
@@ -210,13 +240,12 @@ const PairsListByBot = () => {
                     >
                       <TextField source="id" />
                       <FunctionField
-                        label="State"
                         render={(record: Bot) => <StateIcon record={record} />}
                         sortable={false}
                         source="state"
                       />
                       <FunctionField
-                        label="Pair"
+                        label="common.pair"
                         render={(record: BotPair) => (
                           <ItemStateControlBar record={record} />
                         )}

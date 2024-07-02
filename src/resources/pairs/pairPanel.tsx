@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useRecordContext } from "react-admin";
+import { useRecordContext, useTranslate } from "react-admin";
 
 import LogMaster from "../../layouts/logMaster";
 import PairOrders from "../../layouts/pairOrders";
@@ -7,9 +7,11 @@ import PairOrders from "../../layouts/pairOrders";
 import Grid from "@mui/material/Grid";
 
 export const PairPanel = () => {
-  const record = useRecordContext();
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
-  const pairId = parseInt(record?.id);
+
+  const pairId = record?.id;
 
   return (
     <div className="pairPanel">
@@ -24,7 +26,7 @@ export const PairPanel = () => {
                 textTransform: "uppercase",
               }}
             >
-              Logs
+              {translate("common.logs")}
             </h4>
             <LogMaster entityType="pair" entityId={pairId} />
           </div>

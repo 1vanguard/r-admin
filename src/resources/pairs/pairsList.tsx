@@ -37,7 +37,7 @@ const pairsFilters = [
     source="state"
     sort={{ field: "name", order: "ASC" }}
   >
-    <SelectInput optionText="name" source="state" />
+    <SelectInput optionText="name" source="state" translateChoice={true} />
   </ReferenceInput>,
   <ReferenceInput
     source="bot_id"
@@ -74,7 +74,7 @@ export const PairsList = () => {
   } = usePermissions();
 
   if (isLoadingPermissions) return <Loading />;
-  if (errorPermissions) return <div className="error loadPermissions">{translate("error.loadPermissionsError")}</div>;
+  if (errorPermissions) return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
   permissions.role !== 1 && permissions.role !== 2 && (
     <div className="warning notEnoughPermissions">{translate("warnings.not_enough_permissions")}</div>
   );

@@ -40,7 +40,7 @@ const botsFilter = [
     source="state"
     sort={{ field: "name", order: "ASC" }}
   >
-    <SelectInput optionText="name" source="name" />
+    <SelectInput optionText="name" source="name" translateChoice={true} />
   </ReferenceInput>,
   <ReferenceInput
     allowEmpty
@@ -68,7 +68,7 @@ export const BotsList = () => {
   } = usePermissions();
 
   if (isLoadingPermissions) return <Loading />;
-  if (errorPermissions) return <div className="error loadPermissions">{translate("error.loadPermissionsError")}</div>;
+  if (errorPermissions) return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
   permissions.role !== 1 && permissions.role !== 2 && (
     <div className="warning notEnoughPermissions">{translate("warnings.not_enough_permissions")}</div>
   );

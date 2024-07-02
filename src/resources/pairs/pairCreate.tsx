@@ -1,15 +1,15 @@
 import {
-  Loading,
-  Create,
-  SimpleForm,
   AutocompleteInput,
-  TextInput,
-  ReferenceInput,
-  SelectInput,
-  required,
-  useGetList,
-  usePermissions,
+  Create,
+  Loading,
   NumberInput,
+  ReferenceInput,
+  required,
+  SelectInput,
+  SimpleForm,
+  TextInput,
+  usePermissions,
+  useTranslate,
 } from "react-admin";
 
 import Container from "@mui/material/Container";
@@ -20,12 +20,13 @@ const botFilterToQuery = (searchText: any) => ({
 });
 
 const CreateForm = () => {
-  const baseMin = 0;
+  const translate = useTranslate(),
+    baseMin = 0;
 
   return (
     <SimpleForm>
       <Container maxWidth="md" sx={{ ml: 0 }}>
-        <h2>Create new pair</h2>
+        <h2>{translate("common.pair_create_heading")}</h2>
       </Container>
       <Container maxWidth="md" sx={{ ml: 0 }}>
         <Grid container spacing={1}>
@@ -42,6 +43,7 @@ const CreateForm = () => {
                 defaultValue={1}
                 optionText="name"
                 source="state"
+                translateChoice={true}
                 validate={required()}
                 variant="standard"
               />
@@ -73,7 +75,6 @@ const CreateForm = () => {
             </Grid> */}
           <Grid item xs={12} sm={4}>
             <NumberInput
-              label="Start Orders"
               min={baseMin}
               source="start_orders"
               validate={required()}
@@ -82,7 +83,6 @@ const CreateForm = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <NumberInput
-              label="Pair limit"
               min={baseMin}
               source="pair_limit"
               validate={required()}
@@ -91,7 +91,6 @@ const CreateForm = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <NumberInput
-              label="Step"
               min={baseMin}
               source="step"
               validate={required()}
@@ -100,7 +99,6 @@ const CreateForm = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <NumberInput
-              label="Profit in %"
               min={baseMin}
               source="profit"
               validate={required()}
@@ -122,14 +120,20 @@ const CreateForm = () => {
 };
 
 export const PairCreate = () => {
-  const {
-    permissions,
-    isLoading: isLoadingPermissions,
-    error: errorPermissions,
-  } = usePermissions();
+  const translate = useTranslate(),
+    {
+      permissions,
+      isLoading: isLoadingPermissions,
+      error: errorPermissions,
+    } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
+  if (isLoadingPermissions) return <Loading />;
+  if (errorPermissions)
+    return (
+      <div className="error loadPermissions">
+        {translate("errors.loadPermissionsError")}
+      </div>
+    );
 
   return (
     <Create
@@ -139,7 +143,9 @@ export const PairCreate = () => {
       {permissions.role === 1 || permissions.role === 2 ? (
         <CreateForm />
       ) : (
-        <div>Only admins and managers can create pairs</div>
+        <div className="warning createPair">
+          {translate("warnings.create_pair_warning_01")}
+        </div>
       )}
     </Create>
   );

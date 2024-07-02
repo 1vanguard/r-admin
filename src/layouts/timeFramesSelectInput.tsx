@@ -76,7 +76,7 @@ export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (
   });
 
   if (isPendingChoices) return <Loading />;
-  if (errorChoices) return <div сlassName="error loadingTimeFrames">{translate("error.loadTimeFramesError")}</div>;
+  if (errorChoices) return <div сlassName="error loadingTimeFrames">{translate("errors.loadTimeFramesError")}</div>;
 
   const frameChoices = props.frameChoices;
   const timeFrameChoices = calculateChoices(choices, frameChoices);

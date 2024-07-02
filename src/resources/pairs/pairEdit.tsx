@@ -61,7 +61,7 @@ const Editform = () => {
   });
 
   if (isLoadingBoatData) return <Loading />;
-  if (errorBotData) return <div className="error loadData">{translate("error.loadDataError")}</div>;
+  if (errorBotData) return <div className="error loadData">{translate("errors.loadDataError")}</div>;
 
   return (
     <div>

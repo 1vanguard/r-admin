@@ -83,7 +83,7 @@ const Editform = () => {
   } = useGetList("whitelist");
 
   if (isLoadingPairs || isLoadingWhitelist) return <Loading />;
-  if (errorPairs || errorWhitelist) return <div className="error loadData">{translate("error.loadDataError")}</div>;
+  if (errorPairs || errorWhitelist) return <div className="error loadData">{translate("errors.loadDataError")}</div>;
 
   const botLimit = record?.botlimit;
   const botProfit = record?.auto_profit;

@@ -7,16 +7,18 @@ import {
   SimpleForm,
   TextInput,
   usePermissions,
+  useTranslate,
 } from "react-admin";
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
 const CreateForm = () => {
+  const translate = useTranslate();
   return (
     <SimpleForm>
       <Container maxWidth="md" sx={{ ml: 0 }}>
-        <h2>Create new office</h2>
+        <h2>{translate("common.office_create_heading")}</h2>
       </Container>
       <Container maxWidth="md" sx={{ ml: 0 }}>
         <Grid container spacing={1}>
@@ -28,11 +30,12 @@ const CreateForm = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <ReferenceInput label="State" source="state" reference="states">
+            <ReferenceInput source="state" reference="states">
               <SelectInput
                 defaultValue={1}
                 optionText="name"
                 source="state"
+                translateChoice={true}
                 validate={required()}
                 variant="standard"
               />
@@ -58,14 +61,16 @@ const CreateForm = () => {
 };
 
 export const OfficeCreate = () => {
-  const {
-    permissions,
-    isLoading: isLoadingPermissions,
-    error: errorPermissions,
-  } = usePermissions();
+  const translate = useTranslate(),
+    {
+      permissions,
+      isLoading: isLoadingPermissions,
+      error: errorPermissions,
+    } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
+  if (isLoadingPermissions) return <Loading />;
+  if (errorPermissions)
+    return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
 
   return (
     <Create
@@ -75,7 +80,7 @@ export const OfficeCreate = () => {
       {permissions.role === 1 ? (
         <CreateForm />
       ) : (
-        <div>Only admins can create offices</div>
+        <div className="warning createOffice">{translate("warnings.create_office_warning_01")}</div>
       )}
     </Create>
   );

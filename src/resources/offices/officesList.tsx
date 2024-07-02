@@ -1,27 +1,29 @@
 import {
-  Loading,
-  List,
   Datagrid,
-  TextField,
   EditButton,
-  usePermissions,
   FunctionField,
+  List,
+  Loading,
+  TextField,
+  usePermissions,
+  useTranslate,
 } from "react-admin";
 
 import { Office } from "../../types";
 import StateIcon from "../../layouts/stateIcon";
 
 export const OfficesList = () => {
-  const {
-    error: errorPermissions,
-    isLoading: isLoadingPermissions,
-    permissions,
-  } = usePermissions();
+  const translate = useTranslate(),
+    {
+      error: errorPermissions,
+      isLoading: isLoadingPermissions,
+      permissions,
+    } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
+  if (isLoadingPermissions) return <Loading />;
+  if (errorPermissions) return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
   permissions.role !== 1 && permissions.role !== 2 && (
-    <div>Not enough permissions</div>
+    <div className="warning notEnoughPermissions">{translate("warnings.not_enough_permissions")}</div>
   );
 
   return (
@@ -29,7 +31,6 @@ export const OfficesList = () => {
       <Datagrid bulkActionButtons={false} rowClick={false}>
         <TextField source="id" />
         <FunctionField
-          label="State"
           render={(record: Office) => <StateIcon record={record} />}
           sortable={true}
           sortBy="state"

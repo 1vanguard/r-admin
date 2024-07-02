@@ -13,12 +13,14 @@ import {
   TextInput,
   useGetOne,
   usePermissions,
+  useTranslate,
 } from "react-admin";
 
 import { Office, Role, User, usersPermanentFilter } from "../../types";
 import StateIcon from "../../layouts/stateIcon";
 
 export const UsersList = () => {
+  const translate = useTranslate();
   const userId = localStorage.getItem("uid"),
     {
       data: user,
@@ -33,24 +35,28 @@ export const UsersList = () => {
   } = usePermissions();
 
   if (isLoadingPermissions || isLoadingUser) return <Loading />;
-  if (errorPermissions || errorUser) return <div>Error loading permissions</div>;
+  if (errorPermissions || errorUser)
+    return (
+      <div className="error loadData">{translate("errors.loadDataError")}</div>
+    );
   permissions.role !== 1 && permissions.role !== 2 && (
-    <div>Not enough permissions</div>
+    <div className="warning notEnoughPermissions">
+      {translate("warnings.not_enough_permissions")}
+    </div>
   );
 
   const userOfficeId = user?.officeId,
     usersPermanentFilter: usersPermanentFilter = {},
     usersFilter = [
-      <TextInput label="Username" source="username_like" alwaysOn />,
+      <TextInput label="common.username" source="username_like" alwaysOn />,
       <ReferenceInput
         allowEmpty
         alwaysOn
-        label="State"
         reference="states"
         sort={{ field: "name", order: "ASC" }}
         source="state"
       >
-        <SelectInput optionText="name" source="name" />
+        <SelectInput optionText="name" source="name" translateChoice={true} />
       </ReferenceInput>,
     ];
 
@@ -60,12 +66,14 @@ export const UsersList = () => {
         allowEmpty
         alwaysOn
         filter={{ state: 1 }}
-        label="Office"
         reference="offices"
         sort={{ field: "title", order: "ASC" }}
         source="office_id"
       >
-        <SelectInput optionText="title" source="office_id" />
+        <SelectInput
+          optionText="title"
+          source="office_id"
+        />
       </ReferenceInput>
     );
   }
@@ -79,12 +87,10 @@ export const UsersList = () => {
       filter={usersPermanentFilter}
       filters={usersFilter}
       sort={{ field: "id", order: "DESC" }}
-      title="Users"
     >
       <Datagrid bulkActionButtons={false} rowClick={false}>
         <TextField source="id" />
         <FunctionField
-          label="State"
           render={(record: User) => <StateIcon record={record} />}
           sortable={true}
           sortBy="state"
@@ -119,10 +125,10 @@ export const UsersList = () => {
           showTime
           source="lastVisit"
         />
-        <ReferenceField label="Role" source="role" reference="roles">
+        <ReferenceField source="role" reference="roles">
           <FunctionField render={(record: Role) => record.name} />
         </ReferenceField>
-        <ReferenceField label="Office" source="officeId" reference="office">
+        <ReferenceField source="officeId" reference="office">
           <FunctionField render={(record: Office) => record.title} />
         </ReferenceField>
         <EditButton />

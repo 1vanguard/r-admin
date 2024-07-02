@@ -43,6 +43,7 @@ const CreateForm = () => {
                 defaultValue={1}
                 optionText="name"
                 source="state"
+                translateChoice={true}
                 validate={required()}
                 variant="standard"
               />
@@ -93,7 +94,7 @@ export const BotCreate = () => {
   } = usePermissions();
 
   if (isLoadingPermissions) return <Loading />;
-  if (errorPermissions) return <div className="error loadPermissions">{translate("error.loadPermissionsError")}</div>;
+  if (errorPermissions) return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
 
   return (
     <Create
@@ -103,7 +104,7 @@ export const BotCreate = () => {
       {permissions.role === 1 || permissions.role === 2 ? (
         <CreateForm />
       ) : (
-        <div className="warning createBotWarning">{translate("warnings.create_bot_warning_01")}</div>
+        <div className="warning createBot">{translate("warnings.create_bot_warning_01")}</div>
       )}
     </Create>
   );

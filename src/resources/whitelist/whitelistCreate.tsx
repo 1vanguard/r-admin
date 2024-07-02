@@ -1,20 +1,22 @@
 import {
-  Loading,
   Create,
+  Loading,
+  required,
   SimpleForm,
   TextInput,
-  required,
   usePermissions,
+  useTranslate,
 } from "react-admin";
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
 const CreateForm = () => {
+  const translate = useTranslate();
   return (
     <SimpleForm>
       <Container maxWidth="md" sx={{ ml: 0 }}>
-        <h2>Whitelist item create</h2>
+        <h2>{translate("common.whitelist_create_heading")}</h2>
       </Container>
       <Container maxWidth="md" sx={{ ml: 0 }}>
         <Grid container spacing={1}>
@@ -32,17 +34,26 @@ const CreateForm = () => {
 };
 
 export const WhitelistCreate = () => {
-  const {
-    error: errorPermissions,
-    isLoading: isLoadingPermissions,
-    permissions,
-  } = usePermissions();
+  const translate = useTranslate(),
+    {
+      error: errorPermissions,
+      isLoading: isLoadingPermissions,
+      permissions,
+    } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
-  permissions.role !== 1 && permissions.role !== 2 && (
-    <div>Not enough permissions</div>
-  );
+  if (isLoadingPermissions) return <Loading />;
+  if (errorPermissions)
+    return (
+      <div className="error loadPermissions">
+        {translate("errors.loadPermissionsError")}
+      </div>
+    );
+  if (permissions.role !== 1 && permissions.role !== 2)
+    return (
+      <div className="warning notEnoughPermissions">
+        {translate("warnings.not_enough_permissions")}
+      </div>
+    );
 
   return (
     <Create
@@ -52,7 +63,9 @@ export const WhitelistCreate = () => {
       {permissions.role === 1 ? (
         <CreateForm />
       ) : (
-        <div>Only admins can create whitelists</div>
+        <div className="warning createWhitelist">
+          {translate("warnings.create_whitelist_warning_01")}
+        </div>
       )}
     </Create>
   );

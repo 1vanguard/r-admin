@@ -17,6 +17,7 @@ import {
   useGetOne,
   usePermissions,
   useRecordContext,
+  useTranslate,
   WithListContext,
 } from "react-admin";
 
@@ -38,7 +39,8 @@ const officeFilterToQuery = (searchText: any) => ({
 });
 
 const Editform = () => {
-  const record = useRecordContext();
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
   const userId = localStorage.getItem("uid");
 
@@ -72,7 +74,9 @@ const Editform = () => {
     return <Loading />;
 
   if (errorStates || errorRoles || errorUser)
-    return <div>Error loading data</div>;
+    return (
+      <div className="error loadData">{translate("errors.loadDataError")}</div>
+    );
 
   const userOfficeId = user?.officeId;
 
@@ -82,9 +86,9 @@ const Editform = () => {
       id="editUserForm"
       syncWithLocation={false}
     >
-      <TabbedForm.Tab label="Main settings">
+      <TabbedForm.Tab label="common.user_edit_tab_01">
         <Container maxWidth="md" sx={{ ml: 0 }}>
-          <h2>User main settings</h2>
+          <h2>{translate("common.user_edit_tab_01_main_heading")}</h2>
         </Container>
         <Container maxWidth="md" sx={{ ml: 0 }}>
           <Grid container spacing={2}>
@@ -129,11 +133,12 @@ const Editform = () => {
               />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <ReferenceInput label="Role" source="role" reference="roles">
+              <ReferenceInput source="role" reference="roles">
                 <SelectInput
                   choices={roles}
                   defaultValue={"2"}
                   source="role"
+                  translateChoice={true}
                   validate={required()}
                   variant="standard"
                 />
@@ -204,7 +209,7 @@ const Editform = () => {
           </Grid>
         </Container>
       </TabbedForm.Tab>
-      <TabbedForm.Tab label="Bots">
+      <TabbedForm.Tab label="common.user_edit_tab_02">
         <ReferenceManyField
           reference="bots"
           filter={{ user_id: record.id }}
@@ -219,29 +224,23 @@ const Editform = () => {
           >
             <TextField source="id" />
             <FunctionField
-              label="State"
               render={(record: Bot) => <StateIcon record={record} />}
               sortable={true}
               sortBy="state"
               source="state"
             />
             <FunctionField
-              label="Bot"
               render={(record: Bot) => <ItemStateControlBar record={record} />}
               source="title"
             />
-            <ReferenceField
-              label="Exchange"
-              source="exchange_id"
-              reference="exchanges"
-            >
+            <ReferenceField source="exchange_id" reference="exchanges">
               <FunctionField render={(record: Exchange) => record.title} />
             </ReferenceField>
             <ReferenceManyField
+              label={translate("resources.bots.fields.pairs")}
+              perPage={1000000}
               reference="pairs"
               target="bot_id"
-              label="Pairs count"
-              perPage={1000000}
             >
               <WithListContext
                 render={({ isLoading: isLoadingPairs, data: dataPairs }) => {
@@ -256,11 +255,11 @@ const Editform = () => {
                 }}
               />
             </ReferenceManyField>
-            <TextField label="Order" source="auto_start_sum" />
-            <TextField label="Profit %" source="auto_profit" />
-            <TextField label="Limit" source="botlimit" />
+            <TextField source="auto_start_sum" />
+            <TextField source="auto_profit" />
+            <TextField source="botlimit" />
             <FunctionField
-              label="In trades"
+              label={translate("resources.bots.fields.in_trades")}
               render={(record: Bot) => {
                 return (
                   <GridData type="bot" id={record.id} parameter="in_trades" />
@@ -268,7 +267,7 @@ const Editform = () => {
               }}
             />
             <FunctionField
-              label="Profit"
+              label={translate("resources.bots.fields.profit")}
               render={(record: Bot) => {
                 return (
                   <GridData type="bot" id={record.id} parameter="profit" />
@@ -283,9 +282,10 @@ const Editform = () => {
 };
 
 const UserTitle = () => {
-  const record = useRecordContext();
+  const record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
-  return <>User {record ? `"${record.name}" (id: ${record.id})` : ""}</>;
+  return <>{translate("common.user")} {record ? `"${record.name}" (id: ${record.id})` : ""}</>;
 };
 
 export const UserEdit = () => {

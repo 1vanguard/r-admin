@@ -1,33 +1,35 @@
 import {
-  Loading,
-  List,
   Datagrid,
-  TextField,
-  FunctionField,
-  usePermissions,
   EditButton,
+  FunctionField,
+  List,
+  Loading,
+  TextField,
+  usePermissions,
+  useTranslate,
 } from "react-admin";
 import { Exchange } from "../../types";
 
 import StateIcon from "../../layouts/stateIcon";
 
 export const ExchangesList = () => {
-  const {
-    error: errorPermissions,
-    isLoading: isLoadingPermissions,
-    permissions,
-  } = usePermissions();
+  const translate = useTranslate(),
+    {
+      error: errorPermissions,
+      isLoading: isLoadingPermissions,
+      permissions,
+    } = usePermissions();
 
-  isLoadingPermissions && <Loading />;
-  errorPermissions && <div>Error loading permissions</div>;
-  permissions.role !== 1 && <div>Not enough permissions</div>;
+  if (isLoadingPermissions) return <Loading />;
+  if (errorPermissions) return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
+
+  if (permissions.role !== 1) return <div>{translate("warnings.not_enough_permissions")}</div>;
 
   return (
     <List>
       <Datagrid bulkActionButtons={false} rowClick={false}>
         <TextField source="id" />
         <FunctionField
-          label="State"
           render={(record: Exchange) => <StateIcon record={record} />}
           sortable={true}
           sortBy="state"

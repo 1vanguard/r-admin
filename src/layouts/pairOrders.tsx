@@ -1,6 +1,11 @@
 import * as React from "react";
 import { useState } from "react";
-import { Loading, useGetManyReference, useRecordContext } from "react-admin";
+import {
+  Loading,
+  useGetManyReference,
+  useRecordContext,
+  useTranslate,
+} from "react-admin";
 import { BotPair, PairOrder, TabPanelProps } from "../types";
 
 import {
@@ -41,7 +46,8 @@ function a11yProps(index: number, pairId: number) {
 }
 
 const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
-  const pair = useRecordContext<BotPair>();
+  const pair = useRecordContext<BotPair>(),
+    translate = useTranslate();
   if (!pair) return null;
 
   const [tabValue, setValue] = useState(0);
@@ -103,21 +109,21 @@ const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
           aria-label="basic tabs example"
           variant="fullWidth"
         >
-          <Tab label="Opened orders" {...a11yProps(0, pair.id)} wrapped />
-          <Tab label="Last orders" {...a11yProps(1, pair.id)} wrapped />
+          <Tab label={translate("common.pair_orders_tab_01_label")} {...a11yProps(0, pair.id)} wrapped />
+          <Tab label={translate("common.pair_orders_tab_02_label")} {...a11yProps(1, pair.id)} wrapped />
         </Tabs>
       </Box>
       <CustomTabPanel tabValue={tabValue} index={0} parentId={pair.id}>
         <div className="tableWrap">
-          <Table aria-labelledby="Sell done orders" size="small" stickyHeader>
+          <Table aria-labelledby={translate("common.sell_done_orders")} size="small" stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell>Price</TableCell>
-                <TableCell>Qty</TableCell>
-                <TableCell>Start order</TableCell>
-                <TableCell>Sell price</TableCell>
-                <TableCell>Sell Qty</TableCell>
-                <TableCell>Profit</TableCell>
+                <TableCell>{translate("common.price")}</TableCell>
+                <TableCell>{translate("common.qty")}</TableCell>
+                <TableCell>{translate("common.start_order")}</TableCell>
+                <TableCell>{translate("common.sell_price")}</TableCell>
+                <TableCell>{translate("common.sell_qty")}</TableCell>
+                <TableCell>{translate("common.profit")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -130,7 +136,7 @@ const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
               ) : errorOrdersSellDone ? (
                 <TableRow>
                   <TableCell colSpan={6} style={{ textAlign: "center" }}>
-                    Data error
+                    {translate("errors.dataError")}
                   </TableCell>
                 </TableRow>
               ) : ordersSellDone && ordersSellDone.length > 0 ? (
@@ -168,7 +174,7 @@ const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
               ) : (
                 <TableRow>
                   <TableCell colSpan={6} style={{ textAlign: "center" }}>
-                    No orders
+                    {translate("common.no_orders")}
                   </TableCell>
                 </TableRow>
               )}
@@ -181,13 +187,13 @@ const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
           <Table aria-labelledby="Last orders" size="small" stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell>Price</TableCell>
-                <TableCell>Qty</TableCell>
-                <TableCell>Start order</TableCell>
-                <TableCell>Sell price</TableCell>
-                <TableCell>Sell Qty</TableCell>
-                <TableCell>Profit</TableCell>
-                <TableCell>Sell order</TableCell>
+                <TableCell>{translate("common.price")}</TableCell>
+                <TableCell>{translate("common.qty")}</TableCell>
+                <TableCell>{translate("common.start_order")}</TableCell>
+                <TableCell>{translate("common.sell_price")}</TableCell>
+                <TableCell>{translate("common.sell_qty")}</TableCell>
+                <TableCell>{translate("common.profit")}</TableCell>
+                <TableCell>{translate("common.sell_order")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -200,7 +206,7 @@ const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
               ) : errorOrdersLatest ? (
                 <TableRow>
                   <TableCell colSpan={6} style={{ textAlign: "center" }}>
-                    Data error
+                    {translate("errors.dataError")}
                   </TableCell>
                 </TableRow>
               ) : ordersLatest && ordersLatest.length > 0 ? (
@@ -252,7 +258,7 @@ const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
               ) : (
                 <TableRow>
                   <TableCell colSpan={7} style={{ textAlign: "center" }}>
-                    No orders
+                    {translate("common.no_orders")}
                   </TableCell>
                 </TableRow>
               )}
