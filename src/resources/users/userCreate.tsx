@@ -1,17 +1,18 @@
 import {
-  Loading,
+  AutocompleteInput,
   Create,
-  SimpleForm,
-  TextInput,
-  SelectInput,
+  Loading,
   ReferenceInput,
   required,
+  SelectInput,
+  SimpleForm,
+  TextInput,
   useGetList,
-  usePermissions,
   useGetOne,
   useNotify,
+  usePermissions,
   useRedirect,
-  AutocompleteInput,
+  useTranslate,
 } from "react-admin";
 
 import Container from "@mui/material/Container";
@@ -22,7 +23,8 @@ const officeFilterToQuery = (searchText: any) => ({
 });
 
 const CreateForm = () => {
-  const userId = localStorage.getItem("uid"),
+  const translate = useTranslate(),
+    userId = localStorage.getItem("uid"),
     {
       data: user,
       isLoading: isLoadingUser,
@@ -31,14 +33,14 @@ const CreateForm = () => {
     { permissions, isLoading: isLoadingPermissions } = usePermissions();
 
   if (isLoadingPermissions || isLoadingUser) return <Loading />;
-  errorUser && <div>Error loading user</div>;
+  if (errorUser) return <div className="error dataError">{translate("errors.loadDataError")}</div>;
 
   const userOfficeId = user?.officeId;
 
   return (
     <SimpleForm>
       <Container maxWidth="md" sx={{ ml: 0 }}>
-        <h2>Create new user</h2>
+        <h2>{translate("common.user_create_heading")}</h2>
       </Container>
       <Container maxWidth="md" sx={{ ml: 0 }}>
         <Grid container spacing={1}>
@@ -152,7 +154,8 @@ const CreateForm = () => {
 };
 
 export const UserCreate = () => {
-  const { permissions, isLoading: isLoadingPermissions } = usePermissions(),
+  const translate = useTranslate(),
+    { permissions, isLoading: isLoadingPermissions } = usePermissions(),
     {
       data: exchanges,
       isLoading: isLoadingExchanges,
@@ -169,14 +172,18 @@ export const UserCreate = () => {
   if (isLoadingPermissions || isLoadingExchanges || isLoadingOffices)
     return <Loading />;
   if (errorExchanges || errorOffices)
-    return <div>Error loading permissions or offices</div>;
+    return (
+      <div className="error loadPermissions">
+        {translate("errors.loadPermissionsError")}
+      </div>
+    );
 
   if (offices.length === 0) {
-    notify(`Offices are not created. Please, create offices first`);
+    notify(translate("warnings.create_user_warning_02"));
     redirect("offices");
   }
   if (exchanges.length === 0) {
-    notify(`Exchanges are not created. Please, create exchanges first`);
+    notify(translate("warnings.create_user_warning_03"));
     redirect("exchanges");
   }
 
@@ -188,7 +195,9 @@ export const UserCreate = () => {
       {permissions.role === 1 || permissions.role === 2 ? (
         <CreateForm />
       ) : (
-        <div>Only admins and managers can create users</div>
+        <div className="warning createUser">
+          {translate("warnings.create_user_warning_01")}
+        </div>
       )}
     </Create>
   );

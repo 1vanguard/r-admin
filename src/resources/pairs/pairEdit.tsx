@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import {
   AutocompleteInput,
   BooleanInput,
@@ -14,6 +15,7 @@ import {
   required,
   TabbedForm,
   TextInput,
+  useCreatePath,
   useGetOne,
   useRecordContext,
   useTranslate,
@@ -48,8 +50,9 @@ const botFilterToQuery = (searchText: any) => ({
 
 const Editform = () => {
   const record = useRecordContext(),
+    createPath = useCreatePath(),
     translate = useTranslate();
-  if (!record) return null
+  if (!record) return null;
 
   const botId = record?.bot_id;
   const {
@@ -61,13 +64,25 @@ const Editform = () => {
   });
 
   if (isLoadingBoatData) return <Loading />;
-  if (errorBotData) return <div className="error loadData">{translate("errors.loadDataError")}</div>;
+  if (errorBotData)
+    return (
+      <div className="error loadData">{translate("errors.loadDataError")}</div>
+    );
 
   return (
     <div>
       <Box sx={{ padding: 2 }}>
         <h2 style={{ margin: 0 }}>
-          {record.symbol} <small>({translate("common.bot")}: {botData?.title})</small>
+          {record.symbol}{" "}
+          <small>
+            ({translate("common.bot")}:{" "}
+            <Link
+              to={createPath({ resource: "bots", type: "edit", id: botId })}
+            >
+              {botData?.title}
+            </Link>
+            )
+          </small>
         </h2>
       </Box>
       <TabbedForm toolbar={<PrymaryEditToolbar />} id="editPairForm">
@@ -110,36 +125,23 @@ const Editform = () => {
                   />
                 </ReferenceInput>
               </Grid>
-              {/* <Grid item xs={12} sm={4}>
-                <SelectInput
-                  source="strategy"
-                  choices={strategies}
-                  validate={required()}
-                  defaultValue={record.state}
-                />
-              </Grid> */}
               <Grid item xs={12} sm={4}>
-                <TextInput
-                  source="base_cur"
-                  variant="standard"
-                />
+                <TextInput source="base_cur" variant="standard" />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <TextInput
-                  source="alt_cur"
-                  variant="standard"
-                />
+                <TextInput source="alt_cur" variant="standard" />
               </Grid>
-              {/* <Grid item xs={12} sm={4}>
+              <Grid item xs={12}>
+                <hr/>
+              </Grid>
+              <Grid item xs={12} sm={4}>
                 <NumberInput
-                  label="Interval, ms"
-                  source="interval"
                   min={baseMin}
+                  source="pair_limit"
+                  validate={required()}
+                  variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <BooleanInput label="Reinvest" source="reinvest" />
-              </Grid> */}
               <Grid item xs={12} sm={4}>
                 <NumberInput
                   min={baseMin}
@@ -156,6 +158,32 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid>
+              <Grid item xs={12} sm={4}>
+                <NumberInput
+                  min={baseMin}
+                  source="step"
+                  validate={required()}
+                  variant="standard"
+                />
+              </Grid>
+              {/* <Grid item xs={12} sm={4}>
+                <SelectInput
+                  source="strategy"
+                  choices={strategies}
+                  validate={required()}
+                  defaultValue={record.state}
+                />
+              </Grid> */}
+              {/* <Grid item xs={12} sm={4}>
+                <NumberInput
+                  label="Interval, ms"
+                  source="interval"
+                  min={baseMin}
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <BooleanInput label="Reinvest" source="reinvest" />
+              </Grid> */}
               {/* <Grid item xs={12} sm={4}>
                 <NumberInput
                   label="Start offset"
@@ -163,14 +191,6 @@ const Editform = () => {
                   min={baseMin}
                 />
               </Grid> */}
-              <Grid item xs={12} sm={4}>
-                <NumberInput
-                  min={baseMin}
-                  source="pair_limit"
-                  validate={required()}
-                  variant="standard"
-                />
-              </Grid>
               {/* <Grid item xs={12} sm={4}>
                 <NumberInput
                   label="Martingale"
@@ -185,18 +205,18 @@ const Editform = () => {
                   min={baseMin}
                 />
               </Grid> */}
-              <Grid item xs={12} sm={4}>
-                <NumberInput
-                  min={baseMin}
-                  source="step"
-                  validate={required()}
-                  variant="standard"
-                />
-              </Grid>
               {/* <Grid item xs={12} sm={4}>
                 <NumberInput
                   label="Additional Step"
                   source="add_step"
+                  min={baseMin}
+                />
+              </Grid> */}
+              {/* <Grid item xs={12} sm={4}>
+                <NumberInput
+                  label="Trailing stop"
+                  source="stop_offset"
+                  validate={required()}
                   min={baseMin}
                 />
               </Grid> */}
@@ -209,20 +229,25 @@ const Editform = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
+                <NumberInput min={baseMin} source="squiz" variant="standard" />
+              </Grid>
+              <Grid item xs={12} sm={4}>
                 <NumberInput
                   min={baseMin}
-                  source="squiz"
+                  source="start_timeout"
                   variant="standard"
                 />
               </Grid>
-              {/* <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={4}>
                 <NumberInput
-                  label="Trailing stop"
-                  source="stop_offset"
-                  validate={required()}
                   min={baseMin}
+                  source="next_buy_timeout"
+                  variant="standard"
                 />
-              </Grid> */}
+              </Grid>
+              <Grid item xs={12}>
+                <hr/>
+              </Grid>
               <Grid item xs={12} sm={4}>
                 <NumberInput
                   format={(value) => {
@@ -236,17 +261,17 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <NumberInput
-                  min={baseMin}
-                  source="start_timeout"
+              <Grid item xs={12} sm={6}>
+                <DateTimeInput
+                  readOnly={true}
+                  source="last_buy"
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6}>
                 <NumberInput
-                  min={baseMin}
-                  source="next_buy_timeout"
+                  readOnly={true}
+                  source="price"
                   variant="standard"
                 />
               </Grid>
@@ -265,13 +290,17 @@ const Editform = () => {
                     arrow
                     leaveDelay={200}
                     placement="right-start"
-                    title={translate("common.pair_indicators_group_01_tooltip_title")}
+                    title={translate(
+                      "common.pair_indicators_group_01_tooltip_title"
+                    )}
                   >
                     <InfoOutlinedIcon
                       sx={{ mr: "0.3em", verticalAlign: "top" }}
                     />
                   </Tooltip>
-                  <span>{translate("common.pair_indicators_group_01_heading")}</span>
+                  <span>
+                    {translate("common.pair_indicators_group_01_heading")}
+                  </span>
                 </h3>
                 <Grid
                   container
@@ -295,7 +324,7 @@ const Editform = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
-                      label="common.rsi_period_label"
+                      label="resources.pairs.fields.rsi_period"
                       periodChoices={rsiPeriodOptionsToFilter}
                       required={true}
                       sourceName="rsi_period"
@@ -340,17 +369,19 @@ const Editform = () => {
                     arrow
                     leaveDelay={200}
                     placement="right-start"
-                    title={translate("common.pair_indicators_group_02_tooltip_title")}
+                    title={translate(
+                      "common.pair_indicators_group_02_tooltip_title"
+                    )}
                   >
                     <InfoOutlinedIcon
                       sx={{ mr: "0.3em", verticalAlign: "top" }}
                     />
                   </Tooltip>
-                  <span>{translate("common.pair_indicators_group_02_heading")}</span>
+                  <span>
+                    {translate("common.pair_indicators_group_02_heading")}
+                  </span>
                 </h3>
-                <BooleanInput
-                  source="use_ltf"
-                />
+                <BooleanInput source="use_ltf" />
                 <Grid
                   container
                   sx={{
@@ -409,34 +440,30 @@ const Editform = () => {
                     arrow
                     leaveDelay={200}
                     placement="right-start"
-                    title={translate("common.pair_indicators_group_03_tooltip_title")}
+                    title={translate(
+                      "common.pair_indicators_group_03_tooltip_title"
+                    )}
                   >
                     <InfoOutlinedIcon
                       sx={{ mr: "0.3em", verticalAlign: "top" }}
                     />
                   </Tooltip>
-                  <span>{translate("common.pair_indicators_group_03_heading")}</span>
+                  <span>
+                    {translate("common.pair_indicators_group_03_heading")}
+                  </span>
                 </h3>
                 {/* <BooleanInput label="Auto" source="is_auto" /> */}
-                <BooleanInput
-                  source="rsi_sell"
+                <BooleanInput source="rsi_sell" />
+                <NumberInput
+                  min={baseMin}
+                  source="rsi_diff"
+                  variant="standard"
                 />
-                <Grid container spacing={1}>
-                  <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="rsi_diff"
-                      variant="standard"
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="rsi_sell_diff"
-                      variant="standard"
-                    />
-                  </Grid>
-                </Grid>
+                <NumberInput
+                  min={baseMin}
+                  source="rsi_sell_diff"
+                  variant="standard"
+                />
               </Grid>
               <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
                 <h3 style={{ marginTop: 0 }}>
@@ -444,13 +471,17 @@ const Editform = () => {
                     arrow
                     leaveDelay={200}
                     placement="right-start"
-                    title={translate("common.pair_indicators_group_04_tooltip_title")}
+                    title={translate(
+                      "common.pair_indicators_group_04_tooltip_title"
+                    )}
                   >
                     <InfoOutlinedIcon
                       sx={{ mr: "0.3em", verticalAlign: "top" }}
                     />
                   </Tooltip>
-                  <span>{translate("common.pair_indicators_group_04_heading")}</span>
+                  <span>
+                    {translate("common.pair_indicators_group_04_heading")}
+                  </span>
                 </h3>
                 <Grid
                   container
@@ -531,13 +562,17 @@ const Editform = () => {
                     arrow
                     leaveDelay={200}
                     placement="right-start"
-                    title={translate("common.pair_indicators_group_05_tooltip_title")}
+                    title={translate(
+                      "common.pair_indicators_group_05_tooltip_title"
+                    )}
                   >
                     <InfoOutlinedIcon
                       sx={{ mr: "0.3em", verticalAlign: "top" }}
                     />
                   </Tooltip>
-                  <span>{translate("common.pair_indicators_group_05_heading")}</span>
+                  <span>
+                    {translate("common.pair_indicators_group_05_heading")}
+                  </span>
                 </h3>
                 <Grid container spacing={1}>
                   <Grid item xs={12} md={6}>
@@ -557,6 +592,7 @@ const Editform = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <DateTimeInput
+                    readOnly={true}
                     source="pause_until"
                     variant="standard"
                   />
@@ -568,13 +604,17 @@ const Editform = () => {
                     arrow
                     leaveDelay={200}
                     placement="right-start"
-                    title={translate("common.pair_indicators_group_06_tooltip_title")}
+                    title={translate(
+                      "common.pair_indicators_group_06_tooltip_title"
+                    )}
                   >
                     <InfoOutlinedIcon
                       sx={{ mr: "0.3em", verticalAlign: "top" }}
                     />
                   </Tooltip>
-                  <span>{translate("common.pair_indicators_group_06_heading")}</span>
+                  <span>
+                    {translate("common.pair_indicators_group_06_heading")}
+                  </span>
                 </h3>
                 <NumberInput
                   min={baseMin}
@@ -595,16 +635,9 @@ const Editform = () => {
             <h2>{translate("common.pair_edit_tab_03_main_heading")}</h2>
           </Container>
           <Container maxWidth="md" sx={{ ml: 0 }}>
-            <ReferenceManyField
-              reference="bot_pause"
-              target="pair_id"
-            >
+            <ReferenceManyField reference="bot_pause" target="pair_id">
               <Datagrid bulkActionButtons={false}>
-                <DateField
-                  source="pause_start"
-                  showTime
-                  sortable={false}
-                />
+                <DateField source="pause_start" showTime sortable={false} />
                 <FunctionField
                   source="pause_end"
                   sortable={false}
@@ -618,7 +651,11 @@ const Editform = () => {
                         />
                       );
                     } else {
-                      return <p style={{ color: "red" }}>{translate("common.pause_end_not_set")}</p>;
+                      return (
+                        <p style={{ color: "red" }}>
+                          {translate("common.pause_end_not_set")}
+                        </p>
+                      );
                     }
                   }}
                 />
@@ -635,12 +672,23 @@ const PairTitle = () => {
   const record = useRecordContext(),
     translate = useTranslate();
   if (!record) return null;
-  return <>{translate("common.pair")} {record ? `"${record.symbol}" (id: ${record.id})` : ""}</>;
+  return (
+    <>
+      {translate("common.pair")}{" "}
+      {record ? `"${record.symbol}" (id: ${record.id})` : ""}
+    </>
+  );
 };
 
 export const PairEdit = () => {
+  const userId = localStorage.getItem("uid"),
+    parsedUserId = userId ? parseInt(userId) : null,
+    transform = (data) => ({
+      ...data,
+      modified_by: parsedUserId,
+    });
   return (
-    <Edit redirect={false} title={<PairTitle />}>
+    <Edit redirect={false} title={<PairTitle />} transform={transform}>
       <Editform />
     </Edit>
   );

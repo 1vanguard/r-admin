@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   Datagrid,
   FunctionField,
@@ -8,6 +8,7 @@ import {
   ReferenceField,
   TextField,
   TextInput,
+  useCreatePath,
   useGetOne,
   useTranslate,
   WithListContext,
@@ -60,6 +61,7 @@ const inactivePairsFilters = [
 
 const PairsListByBot = () => {
   const { id: botId } = useParams(),
+    createPath = useCreatePath(),
     translate = useTranslate(),
     [checked, setChecked] = useState(false),
     {
@@ -84,7 +86,7 @@ const PairsListByBot = () => {
         {translate("common.pairs")}{" "}
         <small>
           ({translate("common.bot")} {translate("common.id")}:{botId}{" "}
-          {botData?.title})
+          <Link to={createPath({ resource: 'bots', type: 'edit', id: botId })}>{botData?.title})</Link>
         </small>
       </h2>
       <List

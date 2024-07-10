@@ -94,17 +94,32 @@ export const BotCreate = () => {
   } = usePermissions();
 
   if (isLoadingPermissions) return <Loading />;
-  if (errorPermissions) return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
+  if (errorPermissions)
+    return (
+      <div className="error loadPermissions">
+        {translate("errors.loadPermissionsError")}
+      </div>
+    );
+
+  const userId = localStorage.getItem("uid"),
+    parsedUserId = userId ? parseInt(userId) : null,
+    transform = (data) => ({
+      ...data,
+      created_by: parsedUserId,
+    });
 
   return (
     <Create
       mutationOptions={{ meta: { creator_role: permissions.role } }}
       redirect="list"
+      transform={transform}
     >
       {permissions.role === 1 || permissions.role === 2 ? (
         <CreateForm />
       ) : (
-        <div className="warning createBot">{translate("warnings.create_bot_warning_01")}</div>
+        <div className="warning createBot">
+          {translate("warnings.create_bot_warning_01")}
+        </div>
       )}
     </Create>
   );

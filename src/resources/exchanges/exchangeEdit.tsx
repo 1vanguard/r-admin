@@ -1,6 +1,7 @@
 import {
   Edit,
   Loading,
+  NumberInput,
   required,
   SelectInput,
   SimpleForm,
@@ -71,6 +72,34 @@ const Editform = () => {
               variant="standard"
             />
           </Grid>
+          <Grid item xs={6}>
+            <NumberInput
+              source="min_order_usdt"
+              // validate={required()}
+              variant="standard"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <NumberInput
+              source="market_type"
+              // validate={required()}
+              variant="standard"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <NumberInput
+              source="comission_sell"
+              // validate={required()}
+              variant="standard"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <NumberInput
+              source="comission_buy"
+              // validate={required()}
+              variant="standard"
+            />
+          </Grid>
         </Grid>
       </Container>
     </SimpleForm>
@@ -98,11 +127,28 @@ export const ExchangeEdit = () => {
     } = usePermissions();
 
   if (isLoadingPermissions) return <Loading />;
-  if (errorPermissions) return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
-  if (permissions.role !== 1) return <div className="warning notEnoughPermissions">{translate("warnings.not_enough_permissions")}</div>;
+  if (errorPermissions)
+    return (
+      <div className="error loadPermissions">
+        {translate("errors.loadPermissionsError")}
+      </div>
+    );
+  if (permissions.role !== 1)
+    return (
+      <div className="warning notEnoughPermissions">
+        {translate("warnings.not_enough_permissions")}
+      </div>
+    );
+
+  const userId = localStorage.getItem("uid"),
+    parsedUserId = userId ? parseInt(userId) : null,
+    transform = (data) => ({
+      ...data,
+      modified_by: parsedUserId,
+    });
 
   return (
-    <Edit title={<ExchangeTitle />}>
+    <Edit title={<ExchangeTitle />} transform={transform}>
       <Editform />
     </Edit>
   );

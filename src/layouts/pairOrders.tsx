@@ -106,7 +106,7 @@ const PairOrders: React.FC<PairOrdersProps> = (autoUpdate) => {
         <Tabs
           value={tabValue}
           onChange={handleTabsChange}
-          aria-label="basic tabs example"
+          aria-label="Pair orders tabs"
           variant="fullWidth"
         >
           <Tab label={translate("common.pair_orders_tab_01_label")} {...a11yProps(0, pair.id)} wrapped />

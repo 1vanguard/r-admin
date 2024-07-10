@@ -62,7 +62,7 @@ export const authProvider: AuthProvider = {
           userId: uid,
           username: username,
         }),
-        headers: new Headers({ authorization: token }),
+        headers: new Headers({ "Content-Type": "application/json", authorization: token }),
       });
     return fetch(request)
       .then((response) => {

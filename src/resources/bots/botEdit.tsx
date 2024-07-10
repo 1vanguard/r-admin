@@ -5,6 +5,7 @@ import {
   BooleanInput,
   Datagrid,
   DateField,
+  DateTimeInput,
   Edit,
   FunctionField,
   Loading,
@@ -30,6 +31,7 @@ import IdMark from "../../layouts/idMark";
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import {
   Table,
   TableBody,
@@ -37,6 +39,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 
 const autoPairTfToFilter = [0, 5, 15, 30, 60, 240, 1440, 10080, 43200],
   autoShortTfToFilter = [5, 15, 30, 60, 240],
@@ -83,7 +86,11 @@ const Editform = () => {
   } = useGetList("whitelist");
 
   if (isLoadingPairs || isLoadingWhitelist) return <Loading />;
-  if (errorPairs || errorWhitelist) return <div className="error loadData">{translate("errors.loadDataError")}</div>;
+  if (errorPairs || errorWhitelist) {
+    return (
+      <div className="error loadData">{translate("errors.loadDataError")}</div>
+    );
+  }
 
   const botLimit = record?.botlimit;
   const botProfit = record?.auto_profit;
@@ -284,6 +291,15 @@ const Editform = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
+                <NumberInput
+                  defaultValue={baseMin}
+                  margin="none"
+                  min={baseMin}
+                  source="auto_pair_count"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
                 <BooleanInput
                   label="common.auto_sell_limit_label"
                   source="auto_sell_limit"
@@ -312,6 +328,13 @@ const Editform = () => {
                   <TextInput margin="none" source="apipassword" />
                 </Grid>
               )}
+              <Grid item xs={12}>
+                <DateTimeInput
+                  readOnly={true}
+                  source="created"
+                  variant="standard"
+                />
+              </Grid>
             </Grid>
           </Container>
         </TabbedForm.Tab>
@@ -324,17 +347,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="common.auto_pair_count_label"
-                  margin="none"
-                  min={baseMin}
-                  source="auto_pair_count"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12} md={6} lg={4} xl={3}>
-                <NumberInput
-                  defaultValue={baseMin}
-                  label="common.auto_limit_pair_label"
                   margin="none"
                   min={baseMin}
                   source="auto_limit_pair"
@@ -344,7 +356,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="common.auto_order_count_label"
                   margin="none"
                   min={baseMin}
                   source="auto_order_count"
@@ -354,17 +365,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="common.auto_offset_label"
-                  margin="none"
-                  min={baseMin}
-                  source="auto_offset"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12} md={6} lg={4} xl={3}>
-                <NumberInput
-                  defaultValue={baseMin}
-                  label="common.auto_start_sum_label"
                   margin="none"
                   min={baseMin}
                   source="auto_start_sum"
@@ -374,10 +374,27 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="common.auto_step_label"
                   margin="none"
                   min={baseMin}
                   source="auto_step"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4} xl={3}>
+                <NumberInput
+                  defaultValue={baseMin}
+                  margin="none"
+                  min={baseMin}
+                  source="auto_profit"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4} xl={3}>
+                <NumberInput
+                  defaultValue={baseMin}
+                  margin="none"
+                  min={baseMin}
+                  source="auto_squiz"
                   variant="standard"
                 />
               </Grid>
@@ -391,26 +408,6 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid> */}
-              <Grid item xs={12} md={6} lg={4} xl={3}>
-                <NumberInput
-                  defaultValue={baseMin}
-                  label="common.auto_profit_label"
-                  margin="none"
-                  min={baseMin}
-                  source="auto_profit"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12} md={6} lg={4} xl={3}>
-                <NumberInput
-                  defaultValue={baseMin}
-                  label="common.auto_squiz_label"
-                  margin="none"
-                  min={baseMin}
-                  source="auto_squiz"
-                  variant="standard"
-                />
-              </Grid>
               {/* <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   label="Min. daily trading volume"
@@ -444,7 +441,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="common.timeout_label"
                   margin="none"
                   min={baseMin}
                   source="timeout"
@@ -454,75 +450,50 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="common.next_buy_timeout_label"
                   margin="none"
                   min={baseMin}
                   source="next_buy_timeout"
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} md={6} lg={4} xl={3}>
-                <TimeFramesSelectInput
-                  frameChoices={autoPairTfToFilter}
-                  label="common.auto_pair_tf_label"
-                  required={true}
-                  sourceName="auto_pair_tf"
-                />
-              </Grid>
-              <Grid item xs={12} md={6} lg={4} xl={3}>
-                <NumberInput
-                  defaultValue={baseMin}
-                  label="common.auto_rsi_min_big_label"
-                  margin="none"
-                  min={baseMin}
-                  source="auto_rsi_min_big"
+              <Grid item xs={12}>
+                <AutocompleteArrayInput
+                  choices={whitelistData}
+                  format={(value) => {
+                    if (value === null) {
+                      return "";
+                    } else {
+                      if (typeof value === "string") {
+                        return value.split(";").map((pair) => pair.trim());
+                      } else {
+                        return value;
+                      }
+                    }
+                  }}
+                  optionText="symbol"
+                  optionValue="symbol"
+                  parse={(value) => {
+                    if (Array.isArray(value)) {
+                      value = value.join(";");
+                    }
+                    return value;
+                  }}
+                  source="whitelist"
                   variant="standard"
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="common.auto_rsi_max_big_label"
                   margin="none"
                   min={baseMin}
-                  source="auto_rsi_max_big"
+                  source="auto_offset"
                   variant="standard"
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="common.auto_pd_up_label"
-                  margin="none"
-                  min={baseMin}
-                  source="auto_pd_up"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12} md={6} lg={4} xl={3}>
-                <NumberInput
-                  defaultValue={baseMin}
-                  label="common.auto_pd_down_label"
-                  margin="none"
-                  min={baseMin}
-                  source="auto_pd_down"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12} md={6} lg={4} xl={3}>
-                <NumberInput
-                  defaultValue={baseMin}
-                  label="common.auto_pd_pause_label"
-                  margin="none"
-                  min={baseMin}
-                  source="auto_pd_pause"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12} md={6} lg={4} xl={3}>
-                <NumberInput
-                  defaultValue={baseMin}
-                  label="common.pd_up_label"
                   margin="none"
                   min={baseMin}
                   source="pd_up"
@@ -532,7 +503,6 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="common.pd_down_label"
                   margin="none"
                   min={baseMin}
                   source="pd_down"
@@ -542,31 +512,18 @@ const Editform = () => {
               <Grid item xs={12} md={6} lg={4} xl={3}>
                 <NumberInput
                   defaultValue={baseMin}
-                  label="common.pd_pause_label"
                   margin="none"
                   min={baseMin}
-                  source="pd_pause"
+                  source="auto_pd_pause"
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <AutocompleteArrayInput
-                  choices={whitelistData}
-                  label={"common.whitelist_label"}
-                  optionText="symbol"
-                  optionValue="symbol"
-                  format={(value) =>
-                    typeof value === "string"
-                      ? value.split(";").map((pair) => pair.trim())
-                      : value
-                  }
-                  parse={(value) => {
-                    if (Array.isArray(value)) {
-                      value = value.join(";");
-                    }
-                    return value;
-                  }}
-                  source="whitelist"
+              <Grid item xs={12} md={6} lg={4} xl={3}>
+                <NumberInput
+                  defaultValue={baseMin}
+                  margin="none"
+                  min={baseMin}
+                  source="pd_pause"
                   variant="standard"
                 />
               </Grid>
@@ -583,7 +540,24 @@ const Editform = () => {
                 <BooleanInput label="Sell by RSI" source="rsi_sell" />
               </Grid> */}
               <Grid item xs={12} lg={6} xl={5}>
-                <h3>{translate("common.rsi_heading_01")}</h3>
+                <h3 style={{ marginTop: 0 }}>
+                  <Tooltip
+                    arrow
+                    leaveDelay={200}
+                    placement="right-start"
+                    title={translate(
+                      "common.bot_indicators_group_01_tooltip_title"
+                    )}
+                  >
+                    <InfoOutlinedIcon
+                      sx={{ mr: "0.3em", verticalAlign: "top" }}
+                    />
+                  </Tooltip>
+                  <span>
+                    {translate("common.bot_indicators_group_01_heading")}
+                  </span>
+                </h3>
+                {/* <h3>{translate("common.rsi_heading_01")}</h3> */}
                 <Grid
                   container
                   sx={{
@@ -606,8 +580,8 @@ const Editform = () => {
                   <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
                       label="common.auto_rsi_period_label"
-                      sourceName="auto_rsi_period"
                       periodChoices={autoRsiPeriodOptionsToFilter}
+                      sourceName="auto_rsi_period"
                     />
                   </Grid>
                 </Grid>
@@ -641,10 +615,24 @@ const Editform = () => {
                 </Grid>
               </Grid>
               <Grid item xs={12} lg={6} xl={5}>
-                <BooleanInput
-                  label="common.auto_use_ltf_label"
-                  source="auto_use_ltf"
-                />
+                <h3 style={{ marginTop: 0 }}>
+                  <Tooltip
+                    arrow
+                    leaveDelay={200}
+                    placement="right-start"
+                    title={translate(
+                      "common.bot_indicators_group_02_tooltip_title"
+                    )}
+                  >
+                    <InfoOutlinedIcon
+                      sx={{ mr: "0.3em", verticalAlign: "top" }}
+                    />
+                  </Tooltip>
+                  <span>
+                    {translate("common.bot_indicators_group_02_heading")}
+                  </span>
+                </h3>
+                <BooleanInput source="auto_use_ltf" />
                 <Grid item xs={12}>
                   <Grid
                     container
@@ -667,7 +655,7 @@ const Editform = () => {
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <PeriodsSelectInput
-                        label="common.auto_rsi_period_1h_label"
+                        label="resources.bots.fields.auto_rsi_period_1h"
                         periodChoices={autoRsiPeriod1hOptionsToFilter}
                         sourceName="auto_rsi_period_1h"
                       />
@@ -694,7 +682,6 @@ const Editform = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <NumberInput
-                      label="common.auto_rsi_max_1h_label"
                       margin="none"
                       min={baseMin}
                       source="auto_rsi_max_1h"
@@ -703,12 +690,55 @@ const Editform = () => {
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid container justifyContent={"space-between"} spacing={1}>
-              <Grid item xs={12}>
-                <h2>{translate("common.rsi_heading_02")}</h2>
+              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
+                <h3 style={{ marginTop: 0 }}>
+                  <Tooltip
+                    arrow
+                    leaveDelay={200}
+                    placement="right-start"
+                    title={translate(
+                      "common.bot_indicators_group_03_tooltip_title"
+                    )}
+                  >
+                    <InfoOutlinedIcon
+                      sx={{ mr: "0.3em", verticalAlign: "top" }}
+                    />
+                  </Tooltip>
+                  <span>
+                    {translate("common.bot_indicators_group_03_heading")}
+                  </span>
+                </h3>
+                <NumberInput
+                  margin="none"
+                  min={baseMin}
+                  source="auto_rsi_diff"
+                  variant="standard"
+                />
+                <NumberInput
+                  margin="none"
+                  min={baseMin}
+                  source="rsi_sell_diff"
+                  variant="standard"
+                />
               </Grid>
-              <Grid item xs={12} lg={6} xl={5}>
+              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
+                <h3 style={{ marginTop: 0 }}>
+                  <Tooltip
+                    arrow
+                    leaveDelay={200}
+                    placement="right-start"
+                    title={translate(
+                      "common.bot_indicators_group_04_tooltip_title"
+                    )}
+                  >
+                    <InfoOutlinedIcon
+                      sx={{ mr: "0.3em", verticalAlign: "top" }}
+                    />
+                  </Tooltip>
+                  <span>
+                    {translate("common.bot_indicators_group_04_heading")}
+                  </span>
+                </h3>
                 <Grid
                   container
                   sx={{
@@ -723,9 +753,10 @@ const Editform = () => {
                 >
                   <Grid item xs={12} md={6}>
                     <TimeFramesSelectInput
-                      frameChoices={autoSellTfToFilter}
-                      label="common.auto_sell_tf_label"
-                      sourceName="auto_sell_tf"
+                      frameChoices={autoPairTfToFilter}
+                      label="common.auto_pair_tf_label"
+                      required={true}
+                      sourceName="auto_pair_tf"
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -740,10 +771,38 @@ const Editform = () => {
                   container
                   spacing={1}
                   sx={{
+                    marginBottom: 3,
                     paddingRight: 3,
                     paddingLeft: 3,
                   }}
                 >
+                  <Grid item xs={12} md={6}>
+                    <NumberInput
+                      defaultValue={baseMin}
+                      label="common.auto_rsi_min_big_label"
+                      margin="none"
+                      min={baseMin}
+                      source="auto_rsi_min_big"
+                      variant="standard"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <NumberInput
+                      defaultValue={baseMin}
+                      label="common.auto_rsi_max_big_label"
+                      margin="none"
+                      min={baseMin}
+                      source="auto_rsi_max_big"
+                      variant="standard"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TimeFramesSelectInput
+                      frameChoices={autoSellTfToFilter}
+                      label="common.auto_sell_tf_label"
+                      sourceName="auto_sell_tf"
+                    />
+                  </Grid>
                   <Grid item xs={12} md={6}>
                     <NumberInput
                       label="common.auto_rsi_min_sell_label"
@@ -764,33 +823,78 @@ const Editform = () => {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={12} md={6} xl={5}>
+              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
+                <h3 style={{ marginTop: 0 }}>
+                  <Tooltip
+                    arrow
+                    leaveDelay={200}
+                    placement="right-start"
+                    title={translate(
+                      "common.bot_indicators_group_05_tooltip_title"
+                    )}
+                  >
+                    <InfoOutlinedIcon
+                      sx={{ mr: "0.3em", verticalAlign: "top" }}
+                    />
+                  </Tooltip>
+                  <span>
+                    {translate("common.bot_indicators_group_05_heading")}
+                  </span>
+                </h3>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} md={6}>
+                    <NumberInput
+                      defaultValue={baseMin}
+                      label="common.auto_pd_up_label"
+                      min={baseMin}
+                      source="auto_pd_up"
+                      variant="standard"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <NumberInput
+                      defaultValue={baseMin}
+                      label="common.auto_pd_down_label"
+                      min={baseMin}
+                      source="auto_pd_down"
+                      variant="standard"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <DateTimeInput
+                      readOnly={true}
+                      source="pause_until"
+                      variant="standard"
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
+                <h3 style={{ marginTop: 0 }}>
+                  <Tooltip
+                    arrow
+                    leaveDelay={200}
+                    placement="right-start"
+                    title={translate(
+                      "common.bot_indicators_group_06_tooltip_title"
+                    )}
+                  >
+                    <InfoOutlinedIcon
+                      sx={{ mr: "0.3em", verticalAlign: "top" }}
+                    />
+                  </Tooltip>
+                  <span>
+                    {translate("common.bot_indicators_group_06_heading")}
+                  </span>
+                </h3>
                 <NumberInput
-                  label="common.auto_rsi_diff_label"
-                  margin="none"
-                  min={baseMin}
-                  source="auto_rsi_diff"
-                  variant="standard"
-                />
-                <NumberInput
-                  label="common.rsi_sell_diff_label"
-                  margin="none"
-                  min={baseMin}
-                  source="rsi_sell_diff"
-                  variant="standard"
-                />
-                <NumberInput
-                  label="common.long_dump_label"
-                  margin="none"
-                  min={baseMin}
-                  source="long_dump"
-                  variant="standard"
-                />
-                <NumberInput
-                  label="common.long_pump_label"
-                  margin="none"
                   min={baseMin}
                   source="long_pump"
+                  variant="standard"
+                />
+                <NumberInput
+                  min={baseMin}
+                  source="long_dump"
                   variant="standard"
                 />
               </Grid>
@@ -808,11 +912,7 @@ const Editform = () => {
               label="Bot pauses"
             >
               <Datagrid bulkActionButtons={false} rowClick={false}>
-                <DateField
-                  showTime
-                  sortable={false}
-                  source="pause_start"
-                />
+                <DateField showTime sortable={false} source="pause_start" />
                 <FunctionField
                   sortable={false}
                   source="pause_end"
@@ -826,7 +926,11 @@ const Editform = () => {
                         />
                       );
                     } else {
-                      return <p style={{ color: "red" }}>{translate("common.pause_end_not_set")}</p>;
+                      return (
+                        <p style={{ color: "red" }}>
+                          {translate("common.pause_end_not_set")}
+                        </p>
+                      );
                     }
                   }}
                 />
@@ -847,12 +951,23 @@ const BotTitle = () => {
   const record = useRecordContext(),
     translate = useTranslate();
   if (!record) return null;
-  return <>{translate("common.bot")} {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
+  return (
+    <>
+      {translate("common.bot")}{" "}
+      {record ? `"${record.title}" (id: ${record.id})` : ""}
+    </>
+  );
 };
 
 export const BotEdit = () => {
+  const userId = localStorage.getItem("uid"),
+    parsedUserId = userId ? parseInt(userId) : null,
+    transform = (data) => ({
+      ...data,
+      modified_by: parsedUserId,
+    });
   return (
-    <Edit redirect={false} title={<BotTitle />}>
+    <Edit redirect={false} title={<BotTitle />} transform={transform}>
       <Editform />
     </Edit>
   );

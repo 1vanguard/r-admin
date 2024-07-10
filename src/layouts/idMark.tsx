@@ -1,11 +1,13 @@
 import React from "react";
+import { useTranslate } from "react-admin";
 
 type IdMarkProps = {
   id: number;
 };
 
 const IdMark: React.FC<IdMarkProps> = (props) => {
-  const { id } = props;
+  const { id } = props,
+    translate = useTranslate();
   return (
     <div
       style={{ alignItems: "center", display: "flex", flexDirection: "column" }}
@@ -17,7 +19,7 @@ const IdMark: React.FC<IdMarkProps> = (props) => {
           verticalAlign: "top",
         }}
       >
-        ID
+        {translate("common.id")}
       </div>
       <div
         style={{

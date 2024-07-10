@@ -111,7 +111,7 @@ export const UsersList = () => {
             second: "2-digit",
           }}
           showTime
-          source="registrationDate"
+          source="registerDate"
         />
         <DateField
           options={{
@@ -123,7 +123,7 @@ export const UsersList = () => {
             second: "2-digit",
           }}
           showTime
-          source="lastVisit"
+          source="lastvisitDate"
         />
         <ReferenceField source="role" reference="roles">
           <FunctionField render={(record: Role) => record.name} />

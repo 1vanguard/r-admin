@@ -1,8 +1,9 @@
 import {
-  useRefresh,
-  useUpdate,
   useRecordContext,
+  useRefresh,
   useResourceContext,
+  useTranslate,
+  useUpdate,
 } from "react-admin";
 
 import Button from "@mui/material/Button";
@@ -23,9 +24,10 @@ const BtnsStateControl: React.FC<BtnsStateControlProps> = ({
   style = {},
   iconSize = "1em",
 }) => {
-  const refresh = useRefresh();
-  const resource = useResourceContext();
-  const record = useRecordContext();
+  const refresh = useRefresh(),
+    resource = useResourceContext(),
+    record = useRecordContext(),
+    translate = useTranslate();
   if (!record) return null;
 
   let playPauseBtnColor = "default",
@@ -103,11 +105,11 @@ const BtnsStateControl: React.FC<BtnsStateControlProps> = ({
 
   const [
     updateStartStop,
-    { isLoading: isLoadingStartStop, error: errorStartStop },
+    { isPending: isPendingStartStop, error: errorStartStop },
   ] = useUpdate();
   const [
     updatePlayPause,
-    { isLoading: isLoadingPlayPause, error: errorPlayPause },
+    { isPending: isPendingPlayPause, error: errorPlayPause },
   ] = useUpdate();
 
   const handleClick = (action: string) => {
@@ -141,7 +143,7 @@ const BtnsStateControl: React.FC<BtnsStateControlProps> = ({
     );
   };
 
-  if (isLoadingStartStop || isLoadingPlayPause) {
+  if (isPendingStartStop || isPendingPlayPause) {
     return (
       <span style={style} className="btns_state_control isLoading">
         <LinearProgress />
@@ -149,7 +151,7 @@ const BtnsStateControl: React.FC<BtnsStateControlProps> = ({
     );
   }
   if (errorStartStop || errorPlayPause) {
-    return <p>ERROR</p>;
+    return <div className="error loadData">{translate("errors.loadData")}</div>;
   }
 
   return (

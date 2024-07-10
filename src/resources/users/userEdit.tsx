@@ -1,6 +1,7 @@
 import {
   AutocompleteInput,
   Datagrid,
+  DateTimeInput,
   Edit,
   FunctionField,
   Loading,
@@ -105,8 +106,8 @@ const Editform = () => {
             <Grid item xs={12} sm={8} md={10} lg={11}>
               <TextInput
                 defaultValue={record.username}
-                disabled
                 margin="none"
+                readOnly={true}
                 source="username"
                 validate={required()}
                 variant="standard"
@@ -118,7 +119,6 @@ const Editform = () => {
                   margin="none"
                   source="password"
                   type="password"
-                  validate={required()}
                   variant="standard"
                 />
               </Grid>
@@ -206,8 +206,28 @@ const Editform = () => {
                 variant="standard"
               />
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <DateTimeInput
+                readOnly={true}
+                source="registrationDate"
+                variant="standard"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DateTimeInput
+                readOnly={true}
+                source="lastvisitDate"
+                variant="standard"
+              />
+            </Grid>
           </Grid>
         </Container>
+        <DateTimeInput
+          readOnly={true}
+          source="lastResetTime"
+          style={{ display: "none" }}
+          variant="standard"
+        />
       </TabbedForm.Tab>
       <TabbedForm.Tab label="common.user_edit_tab_02">
         <ReferenceManyField
@@ -285,7 +305,12 @@ const UserTitle = () => {
   const record = useRecordContext(),
     translate = useTranslate();
   if (!record) return null;
-  return <>{translate("common.user")} {record ? `"${record.name}" (id: ${record.id})` : ""}</>;
+  return (
+    <>
+      {translate("common.user")}{" "}
+      {record ? `"${record.name}" (id: ${record.id})` : ""}
+    </>
+  );
 };
 
 export const UserEdit = () => {

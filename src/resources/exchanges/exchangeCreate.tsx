@@ -70,10 +70,18 @@ export const ExchangeCreate = () => {
       </div>
     );
 
+    const userId = localStorage.getItem("uid"),
+    parsedUserId = userId ? parseInt(userId) : null,
+    transform = (data) => ({
+      ...data,
+      created_by: parsedUserId,
+    });
+
   return (
     <Create
       mutationOptions={{ meta: { creator_role: permissions.role } }}
       redirect="list"
+      transform={transform}
     >
       {permissions.role === 1 ? (
         <CreateForm />

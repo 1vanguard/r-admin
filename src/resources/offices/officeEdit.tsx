@@ -37,7 +37,12 @@ const Editform = () => {
   } = useGetList("states");
 
   if (isLoadingStates) return <Loading />;
-  if (errorStates) return <div className="error loadStates">{translate("errors.loadDataError")}</div>;
+  if (errorStates)
+    return (
+      <div className="error loadStates">
+        {translate("errors.loadDataError")}
+      </div>
+    );
 
   return (
     <TabbedForm toolbar={<PrymaryEditToolbar />} id="editOfficeForm">
@@ -169,20 +174,33 @@ const OfficeTitle = () => {
   const record = useRecordContext(),
     translate = useTranslate();
   if (!record) return null;
-  return <>{translate("common.office")} {record ? `"${record.title}" (id: ${record.id})` : ""}</>;
+  return (
+    <>
+      {translate("common.office")}{" "}
+      {record ? `"${record.title}" (id: ${record.id})` : ""}
+    </>
+  );
 };
 
 export const OfficeEdit = () => {
-  const {
-    error: errorPermissions,
-    isLoading: isLoadingPermissions,
-    permissions,
-  } = usePermissions();
+  const translate = useTranslate(),
+    {
+      error: errorPermissions,
+      isLoading: isLoadingPermissions,
+      permissions,
+    } = usePermissions();
 
   if (isLoadingPermissions) return <Loading />;
-  if (errorPermissions) return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
+  if (errorPermissions)
+    return (
+      <div className="error loadPermissions">
+        {translate("errors.loadPermissionsError")}
+      </div>
+    );
   permissions.role !== 1 && permissions.role !== 2 && (
-    <div className="warning notEnoughPermissions">{translate("warnings.not_enough_permissions")}</div>
+    <div className="warning notEnoughPermissions">
+      {translate("warnings.not_enough_permissions")}
+    </div>
   );
 
   return (
