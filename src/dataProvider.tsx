@@ -7,7 +7,14 @@ import { error } from "console";
 const apiUrl = import.meta.env.VITE_JSON_SERVER_URL;
 const httpClient = fetchUtils.fetchJson;
 
-export const dataProvider: DataProvider = {
+export interface DataProviderWithCustomMethods extends DataProvider {
+  getCctx: (
+    // resource: string,
+    query: any
+  ) => Promise<any>;
+}
+
+export const dataProvider: DataProviderWithCustomMethods = {
   getList: async (resource, params) => {
     console.log("Работает dataProvider getList");
     const { page, perPage } = params.pagination,
@@ -34,9 +41,9 @@ export const dataProvider: DataProvider = {
 
     // console.log(response);
 
-    const resHeaders = response.headers
+    const resHeaders = response.headers;
     // const resData = await response.json()
-    const resData = JSON.parse(response.body)
+    const resData = JSON.parse(response.body);
 
     console.log(resData);
     return {
@@ -56,8 +63,8 @@ export const dataProvider: DataProvider = {
     return await httpClient(`${apiUrl}/${resource}/${params.id}`, {
       headers,
     }).then(({ json }) => {
-      console.log('json  dataProvider getOne', json);
-      return{ data: json }
+      console.log("json dataProvider getOne", json);
+      return { data: json };
     });
   },
 
@@ -99,7 +106,7 @@ export const dataProvider: DataProvider = {
       headers = new Headers();
 
     headers.set("authorization", token);
-    
+
     console.log(resource);
     console.log(params);
 
@@ -163,10 +170,16 @@ export const dataProvider: DataProvider = {
     if (resource === "exchanges" && params.meta.creator_role === 1) {
       endPoint = "create-exchange";
     }
-    if (resource === "bots" && (params.meta.creator_role === 1 || params.meta.creator_role === 2)) {
+    if (
+      resource === "bots" &&
+      (params.meta.creator_role === 1 || params.meta.creator_role === 2)
+    ) {
       endPoint = "create-bot";
     }
-    if (resource === "pairs" && (params.meta.creator_role === 1 || params.meta.creator_role === 2)) {
+    if (
+      resource === "pairs" &&
+      (params.meta.creator_role === 1 || params.meta.creator_role === 2)
+    ) {
       endPoint = "create-pair";
     }
     if (resource === "whitelist" && params.meta.creator_role === 1) {
@@ -205,6 +218,20 @@ export const dataProvider: DataProvider = {
     };
     return httpClient(`${apiUrl}/${resource}?${stringify(query)}`, {
       method: "DELETE",
+    }).then(({ json }) => ({ data: json }));
+  },
+
+  getCctx: async (query) => {
+    console.log("Работает dataProvider getCctx");
+    const queryString = JSON.stringify(query),
+      { token } = await authProvider.getIdentity(),
+      url = `${apiUrl}/cctx/${queryString}`,
+      headers = new Headers();
+
+    headers.set("authorization", token);
+
+    return await httpClient(url, {
+      headers,
     }).then(({ json }) => ({ data: json }));
   },
 };

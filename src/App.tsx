@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Route } from "react-router-dom";
-import { Admin, CustomRoutes, Resource } from "react-admin";
+import { Admin, Resource } from "react-admin";
 
 // Providers
 import { authProvider } from "./authProvider";
@@ -36,6 +36,7 @@ import { WhitelistList } from "./resources/whitelist/whitelistList";
 import { WhitelistEdit } from "./resources/whitelist/whitelistEdit";
 import { WhitelistCreate } from "./resources/whitelist/whitelistCreate";
 import PairsListByBot from "./resources/pairs/pairsListByBot";
+import PairOrdersPage from "./resources/pairs/pairOrdersPage";
 
 export const App = () => {
   return (
@@ -93,10 +94,9 @@ export const App = () => {
         list={PairsList}
         edit={PairEdit}
         create={PairCreate}
-      />
-      {/* <CustomRoutes noLayout>
-        <Route path="/registration" element={<CabRegistration />} />
-      </CustomRoutes> */}
+      >
+        <Route path=":id/orders" element={<PairOrdersPage />} />
+      </Resource>
     </Admin>
   );
 };

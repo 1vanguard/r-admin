@@ -141,6 +141,7 @@ export type PairOrder = {
   sell_qty: number;
   sellOrder: string;
   startOrder: string;
+  symbol: string;
 }
 
 export interface BotIdx {

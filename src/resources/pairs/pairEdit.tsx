@@ -26,6 +26,7 @@ import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
 import IdMark from "../../layouts/idMark";
+import LightweightChart from "../../layouts/lightWeightChart";
 
 import { Box } from "@mui/material";
 import Container from "@mui/material/Container";
@@ -132,7 +133,7 @@ const Editform = () => {
                 <TextInput source="alt_cur" variant="standard" />
               </Grid>
               <Grid item xs={12}>
-                <hr/>
+                <hr />
               </Grid>
               <Grid item xs={12} sm={4}>
                 <NumberInput
@@ -246,7 +247,7 @@ const Editform = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <hr/>
+                <hr />
               </Grid>
               <Grid item xs={12} sm={4}>
                 <NumberInput
@@ -663,6 +664,10 @@ const Editform = () => {
             </ReferenceManyField>
           </Container>
         </TabbedForm.Tab>
+        <TabbedForm.Tab
+          label="common.pair_edit_tab_04"
+          path={`/pairs/${record.id}/orders`}
+        ></TabbedForm.Tab>
       </TabbedForm>
     </div>
   );
@@ -683,7 +688,7 @@ const PairTitle = () => {
 export const PairEdit = () => {
   const userId = localStorage.getItem("uid"),
     parsedUserId = userId ? parseInt(userId) : null,
-    transform = (data) => ({
+    transform = (data: any) => ({
       ...data,
       modified_by: parsedUserId,
     });

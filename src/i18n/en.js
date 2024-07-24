@@ -117,6 +117,7 @@ const en = {
         office_edit_tab_03: 'Users',
         office: 'Office',
         opened_orders: 'Opened orders',
+        orders: 'Orders',
         pair_create_heading: 'Create newpair',
         pair_edit_tab_01_main_heading: 'Pair main settings',
         pair_edit_tab_01: 'Main settings',
@@ -124,6 +125,9 @@ const en = {
         pair_edit_tab_02: 'Indicators',
         pair_edit_tab_03_main_heading: 'The history of pair pauses',
         pair_edit_tab_03: 'Pauses',
+        pair_edit_tab_04_main_heading: 'Pair orders',
+        pair_edit_tab_04: 'Orders',
+        pair_has_no_inactive_orders: "Pair has no inactive orders",
         pair_indicators_group_01_heading: 'Indicators group 1',
         pair_indicators_group_01_tooltip_title: 'Some text for indicators group 1. Lorerm ipsum dolar sit amet.',
         pair_indicators_group_02_heading: 'Indicators group 2',
@@ -188,6 +192,12 @@ const en = {
         whitelist_label: 'Whitelist',
         whitelist_main_heading: 'Whitelist settings',
         whitelist: 'Whitelist',
+
+        time: 'Time',
+        sell_by_market: 'Sell by market',
+        state: 'State',
+        bought: 'Bought',
+        sold: 'Sold',
     },
     resources: {
         bots: {

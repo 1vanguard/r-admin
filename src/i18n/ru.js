@@ -117,6 +117,7 @@ const ru = {
         office_edit_tab_03: 'Пользователи',
         office: 'Офис',
         opened_orders: 'Открытые ордера',
+        orders: 'Ордера',
         pair_create_heading: 'Создание новой пары',
         pair_edit_tab_01_main_heading: 'Основные настройки пары',
         pair_edit_tab_01: 'Основные настройки',
@@ -124,6 +125,9 @@ const ru = {
         pair_edit_tab_02: 'Индикаторы',
         pair_edit_tab_03_main_heading: 'История пауз пары',
         pair_edit_tab_03: 'Паузы',
+        pair_edit_tab_04_main_heading: 'Ордера пары',
+        pair_edit_tab_04: 'Ордера',
+        pair_has_no_inactive_orders: "Пара не имеет неактивных ордеров",
         pair_indicators_group_01_heading: 'Группа индикаторов 1',
         pair_indicators_group_01_tooltip_title: 'Какой-то текст для группа индикаторов 1.',
         pair_indicators_group_02_heading: 'Группа индикаторов 2',
@@ -188,6 +192,12 @@ const ru = {
         whitelist_label: 'Белый список',
         whitelist_main_heading: 'Основные настройки белого списка',
         whitelist: 'Белый список',
+
+        time: 'Время',
+        sell_by_market: 'Продать по рынку',
+        state: 'Состояние',
+        bought: 'Куплено',
+        sold: 'Продано',
     },
     resources: {
         bots: {
