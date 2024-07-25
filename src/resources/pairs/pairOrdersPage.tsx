@@ -1,17 +1,14 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import LightweightChart from "../../layouts/lightWeightChart";
 import {
   Loading,
   useCreatePath,
-  useDataProvider,
   useGetManyReference,
   useGetOne,
   useSidebarState,
   useTranslate,
 } from "react-admin";
-import { DataProviderWithCustomMethods } from "../../dataProvider";
 import { BotPair, PairOrder } from "../../types";
 
 import { Box, Typography } from "@mui/material";
@@ -253,11 +250,6 @@ const PairOrdersPage = () => {
       error: errorPairData,
     } = useGetOne<BotPair>("pairs", { id: parsedPairId });
 
-  const dataProvider = useDataProvider<DataProviderWithCustomMethods>();
-  const [chartData, setChartData] = useState();
-  const [isLoadingChartData, setIsLoadingChartData] = useState(true);
-  const [errorChartData, setErrorChartData] = useState();
-
   const {
     data: ordersData,
     isPending: isPendingOrders,
@@ -269,55 +261,11 @@ const PairOrdersPage = () => {
     sort: { field: "startOrder", order: "DESC" },
   });
 
-  useEffect(() => {
-    if (isLoadingPairData == false && chartData == undefined && pairData) {
-      dataProvider
-        .getCctx({
-          exchangeId: pairData.exchange_id,
-          queryDataType: "candles",
-          botId: pairData.bot_id,
-          pairAltCur: pairData.alt_cur,
-          pairBaseCur: pairData.base_cur,
-          timeframe: "5m",
-          limit: 100,
-        })
-        .then((data) => {
-          setChartData(data);
-          setIsLoadingChartData(false);
-        })
-        .catch((error) => {
-          setErrorChartData(error);
-          setIsLoadingChartData(false);
-        });
-    }
-  }, [isLoadingPairData, chartData, pairData]);
-
-  if (isLoadingChartData || isLoadingPairData || isPendingOrders)
-    return <Loading />;
-  if (errorChartData || errorPairData || errorOrdersData)
+  if (isLoadingPairData || isPendingOrders) return <Loading />;
+  if (errorPairData || errorOrdersData)
     return (
       <div className="error loadData">{translate("errors.loadDataError")}</div>
     );
-
-  const initialChartData: Array = [];
-
-  if (chartData) {
-    chartData.data.candles.forEach((candle) => {
-      const timestamp = candle[0];
-      const open = candle[1];
-      const high = candle[2];
-      const low = candle[3];
-      const close = candle[4];
-
-      initialChartData.push({
-        time: timestamp / 1000,
-        open: open,
-        high: high,
-        low: low,
-        close: close,
-      });
-    });
-  }
 
   const ordersByYearMonthDay = ordersData.reduce(
     (acc: { [key: string]: PairOrder[] }, order) => {
@@ -348,7 +296,11 @@ const PairOrdersPage = () => {
             </Link>
           </small>
         </h2>
-        <LightweightChart data={initialChartData}></LightweightChart>
+        <LightweightChart
+          chartType="candles"
+          parentId={parsedPairId}
+          parentType="pair"
+        ></LightweightChart>
         <PairOrdersAccordion ordersByKey={ordersByYearMonthDay} />
       </Container>
     </Box>
