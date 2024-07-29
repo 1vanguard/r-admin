@@ -1,21 +1,24 @@
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
+  Form,
   Loading,
+  required,
   SelectInput,
   useDataProvider,
-  useTranslate,
   useGetList,
   useGetOne,
+  useTranslate,
 } from "react-admin";
 import { DataProviderWithCustomMethods } from "../dataProvider";
+import { BotPair } from "../types";
 
 import { ISeriesApi, createChart, ColorType } from "lightweight-charts";
 
 import { Box } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import { green, red } from "@mui/material/colors";
-import { BotPair } from "../types";
+import { Stack } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 interface LightweightChartProps {
   [key: string]: any;
@@ -33,8 +36,8 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
   const translate = useTranslate(),
     {
       data: timeframesData,
-      isPending: timeframesIsPending,
-      error: timeframesError,
+      isPending: isPendingTimeFrames,
+      error: errorTimeFrames,
     } = parentType === "pair"
       ? useGetList("timeframes")
       : { data: [], isPending: false, error: null };
@@ -65,16 +68,69 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
       textColor: theme_textPrimaryColor,
     };
 
-  const chartContainerRef = useRef<HTMLDivElement | null>(null);
+  const chartContainerRef = useRef<HTMLDivElement>();
   const chartRef = useRef(null);
-  const chartSeriesDataRef = useRef<ISeriesApi<any> | null>(null);
 
-  useEffect(() => {
-    //if (timeframesIsPending) return;
+  const getChartData = async (pairData, timeFrame, limit) => {
+    try {
+      return await dataProvider.getCctx({
+        exchangeId: pairData.exchange_id,
+        queryDataType: "candles",
+        botId: pairData.bot_id,
+        pairAltCur: pairData.alt_cur,
+        pairBaseCur: pairData.base_cur,
+        timeframe: timeFrame,
+        limit: limit,
+      });
+    } catch (error) {
+      console.log("error: ", error);
+      throw error;
+    }
+  };
+
+  const chartDataUpdate = async (data: any, chartType: string) => {
+    console.log("Работает chartDataUpdate");
+    const timeFrame = `${data.timeFrame}m`;
+    const limit = parseInt(data.limit) / parseInt(data.timeFrame);
+    console.log("data: ", data);
+    console.log("timeFrame: ", timeFrame);
+    console.log("limit: ", limit);
+    console.log("pairData: ", pairData);
+    try {
+      const newChartData = await getChartData(pairData, timeFrame, limit);
+      console.log("newChartData: ", newChartData);
+
+      const initialChartData: Array<Object> = [];
+      if (chartType === "candles") {
+        const candlesData = newChartData.data.candles.forEach((candle) => {
+          const timestamp = candle[0];
+          const open = candle[1];
+          const high = candle[2];
+          const low = candle[3];
+          const close = candle[4];
+
+          initialChartData.push({
+            time: timestamp / 1000,
+            open: open,
+            high: high,
+            low: low,
+            close: close,
+          });
+        });
+        console.log("initialChartData: ", initialChartData);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const onSubmitChartSettings = (data: any) => {
+    chartDataUpdate(data, chartType);
+  };
+
+  useLayoutEffect(() => {
+    if (isPendingTimeFrames) return;
     if (!chartContainerRef.current) return;
-    /* console.log("isLoadingPairData: ", isLoadingPairData);
-    console.log("chartData: ", chartData);
-    console.log("pairData: ", pairData); */
     console.log("Лооось!");
     const chart = createChart(chartContainerRef.current, {
       layout: {
@@ -90,7 +146,8 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
       height: 300,
     });
 
-    chart ? (chartRef.current = chart) : null;
+    chartRef.current = chart
+    //chart ? (chartRef.current = chart) : null;
 
     const handleResize = () => {
       chart.applyOptions({
@@ -106,7 +163,8 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
       chart.remove();
     };
   }, [
-    chartContainerRef.current,
+    isPendingTimeFrames,
+    //    chartContainerRef,
     // isLoadingPairData,
     // pairData
   ]);
@@ -122,57 +180,57 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
     console.log("isLoadingChartData useEffect 2: ", isLoadingChartData);
 
     dataProvider
-        .getCctx({
-          exchangeId: pairData.exchange_id,
-          queryDataType: "candles",
-          botId: pairData.bot_id,
-          pairAltCur: pairData.alt_cur,
-          pairBaseCur: pairData.base_cur,
-          timeframe: "5m",
-          limit: 100,
-        })
-        .then((data) => {
-          // setIsLoadingChartData(false);
-          console.log("isLoadingChartData then: ", isLoadingChartData);
+      .getCctx({
+        exchangeId: pairData.exchange_id,
+        queryDataType: "candles",
+        botId: pairData.bot_id,
+        pairAltCur: pairData.alt_cur,
+        pairBaseCur: pairData.base_cur,
+        timeframe: "5m",
+        limit: 100,
+      })
+      .then((data) => {
+        // setIsLoadingChartData(false);
+        console.log("isLoadingChartData then: ", isLoadingChartData);
 
-          const initialChartData: Array<Object> = [];
-          const candlesData = data.data.candles.forEach((candle) => {
-            const timestamp = candle[0];
-            const open = candle[1];
-            const high = candle[2];
-            const low = candle[3];
-            const close = candle[4];
+        const initialChartData: Array<Object> = [];
+        const candlesData = data.data.candles.forEach((candle) => {
+          const timestamp = candle[0];
+          const open = candle[1];
+          const high = candle[2];
+          const low = candle[3];
+          const close = candle[4];
 
-            initialChartData.push({
-              time: timestamp / 1000,
-              open: open,
-              high: high,
-              low: low,
-              close: close,
-            });
+          initialChartData.push({
+            time: timestamp / 1000,
+            open: open,
+            high: high,
+            low: low,
+            close: close,
           });
+        });
 
-          setChartData(initialChartData);
+        setChartData(initialChartData);
 
-          const candlestickSeries = chartRef.current.addCandlestickSeries({
-            upColor: greenColor,
-            downColor: redColor,
-            borderVisible: false,
-            wickUpColor: greenColor,
-            wickDownColor: redColor,
-          });
+        const candlestickSeries = chartRef.current.addCandlestickSeries({
+          upColor: greenColor,
+          downColor: redColor,
+          borderVisible: false,
+          wickUpColor: greenColor,
+          wickDownColor: redColor,
+        });
 
-          candlestickSeries.setData(initialChartData);
-          chartRef.current.timeScale().fitContent();
+        candlestickSeries.setData(initialChartData);
+        chartRef.current.timeScale().fitContent();
 
-          /* return (
+        /* return (
             setIsLoadingChartData(false)
           ) */
-        })
-        .catch((error) => {
-          setIsLoadingChartData(false);
-          setErrorChartData(error);
-        });
+      })
+      .catch((error) => {
+        setIsLoadingChartData(false);
+        setErrorChartData(error);
+      });
   }, [
     isLoadingChartData,
     needUpdateChartData,
@@ -181,25 +239,54 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
     chartRef,
     pairData,,
     colors,
-    timeframesIsPending, */
+    isPendingTimeFrames, */
   ]);
 
-  if (/* isLoadingChartData || */ timeframesIsPending || isLoadingPairData)
+  if (isPendingTimeFrames || isLoadingPairData)
     return <Loading />;
-  if (timeframesError || errorPairData)
+  if (errorTimeFrames || errorPairData)
     return (
       <div className="error loadError">{translate("errors.loadDataError")}</div>
     );
+
+  const limits = [
+    { id: 1, value: 60, name: "1h" },
+    { id: 2, value: 240, name: "4h" },
+    { id: 3, value: 1440, name: "1d" },
+    { id: 4, value: 4320, name: "3d" },
+    { id: 5, value: 10080, name: "1w" },
+    { id: 6, value: 20160, name: "2w" },
+    { id: 7, value: 40300, name: "1M" },
+  ];
   return (
     <Box className="chartWrapper">
-      {/* <SelectInput
-        choices={timeframesData}
-        isPending={timeframesIsPending}
-        //optionValue="minutes"
-        source="timeframe"
-        //onChange={}
-      /> */}
-      <div className="lightweight-charts_wrap" ref={chartContainerRef} />
+      <Form onSubmit={onSubmitChartSettings}>
+        <Stack
+          alignItems={"start"}
+          direction={"row"}
+          justifyContent={"start"}
+          spacing={2}
+        >
+          <SelectInput
+            choices={timeframesData}
+            defaultValue={"5"}
+            optionValue="minutes"
+            source="timeFrame"
+            validate={required()}
+          />
+          <SelectInput
+            choices={limits}
+            defaultValue={60}
+            label="Chart period"
+            optionText="name"
+            optionValue="value"
+            source="limit"
+            validate={required()}
+          />
+          <button type="submit">Submit</button>
+        </Stack>
+      </Form>
+      <div className="chartContainer" ref={chartContainerRef} />
     </Box>
   );
 };
