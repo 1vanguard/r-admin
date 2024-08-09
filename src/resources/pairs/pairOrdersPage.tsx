@@ -95,6 +95,8 @@ const PairOrdersAccordion: React.FC<PairOrdersAccordionProps> = ({
       error: errorPairData,
     } = useGetOne<BotPair>("pairs", { id: pairId });
 
+  const [expanded, setExpanded] = React.useState<string | false>("panel1");
+
   if (isLoadingPairData) return <Loading />;
   if (errorPairData)
     return (
@@ -108,7 +110,6 @@ const PairOrdersAccordion: React.FC<PairOrdersAccordionProps> = ({
     (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? panel : false);
     };
-  const [expanded, setExpanded] = React.useState<string | false>("panel1");
 
   const ordersAccordion = Object.entries(ordersByKey).map(
     ([orderKey, orders]) => {
@@ -251,6 +252,12 @@ const PairOrdersPage = () => {
     } = useGetOne<BotPair>("pairs", { id: parsedPairId });
 
   const {
+    data: exchangeData,
+    isLoading: isLoadingExchangeData,
+    error: errorExchangeData,
+  } = useGetOne("exchanges", { id: pairData?.exchange_id });
+
+  const {
     data: ordersData,
     isPending: isPendingOrders,
     error: errorOrdersData,
@@ -261,8 +268,9 @@ const PairOrdersPage = () => {
     sort: { field: "startOrder", order: "DESC" },
   });
 
-  if (isLoadingPairData || isPendingOrders) return <Loading />;
-  if (errorPairData || errorOrdersData)
+  if (isLoadingPairData || isLoadingExchangeData || isPendingOrders)
+    return <Loading />;
+  if (errorPairData || errorExchangeData || errorOrdersData)
     return (
       <div className="error loadData">{translate("errors.loadDataError")}</div>
     );
@@ -292,8 +300,20 @@ const PairOrdersPage = () => {
             <Link
               to={createPath({ resource: "pairs", type: "edit", id: pairId })}
             >
-              {pairData?.symbol})
+              {pairData?.symbol}
             </Link>
+            {" "}
+            {translate("common.exchange")}{": "}
+            <Link
+              to={createPath({
+                resource: "exchanges",
+                type: "edit",
+                id: exchangeData?.id,
+              })}
+            >
+              {exchangeData?.title}
+            </Link>
+            )
           </small>
         </h2>
         <LightweightChart

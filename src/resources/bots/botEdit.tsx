@@ -13,6 +13,7 @@ import {
   ReferenceInput,
   ReferenceManyField,
   required,
+  SelectInput,
   TabbedForm,
   TextInput,
   useGetList,
@@ -85,12 +86,24 @@ const Editform = () => {
     error: errorWhitelist,
   } = useGetList("whitelist");
 
-  if (isLoadingPairs || isLoadingWhitelist) return <Loading />;
-  if (errorPairs || errorWhitelist) {
+  const {
+    data: strategiesData,
+    isLoading: isLoadingStrategies,
+    error: errorStrategies,
+  } = useGetList('bots', {
+    pagination: { page: 1, perPage: 1000000 },
+    sort: { field: "id", order: "ASC" },
+    filter: { is_strategy: 1 },
+  })
+
+  if (isLoadingPairs || isLoadingWhitelist || isLoadingStrategies) return <Loading />;
+  if (errorPairs || errorWhitelist || errorStrategies) {
     return (
       <div className="error loadData">{translate("errors.loadDataError")}</div>
     );
   }
+
+  console.log('strategiesData: ', strategiesData);
 
   const botLimit = record?.botlimit;
   const botProfit = record?.auto_profit;
@@ -233,6 +246,22 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid> */}
+              <Grid item xs={12} md={6}>
+                <BooleanInput
+                  source="is_strategy"
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <SelectInput
+                  choices={strategiesData}
+                  disabled={record.is_strategy ? true : false}
+                  margin="none"
+                  optionText="title"
+                  optionValue="id"
+                  source="strategy"
+                  variant="standard"
+                />
+              </Grid>
               <Grid item xs={12} md={6}>
                 <ReferenceInput reference="users" source="user_id">
                   <AutocompleteInput

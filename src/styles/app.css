@@ -1,77 +1,97 @@
+/* Animations */
+@keyframes spin360 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate__spin360 {
+  animation: spin360 2s linear infinite;
+}
+/* --- Animations end --- */
+
 main {
-    max-width: 100vw;
+  max-width: 100vw;
 }
 main > #main-content {
-    max-width: 100%;
+  max-width: 100%;
 }
 @media (min-width: 600px) {
-    main > #main-content {
-        max-width: calc(100% - 240px);
-    }
+  main > #main-content {
+    max-width: calc(100% - 240px);
+  }
 }
 
 table caption.captionTop {
-    caption-side: top;
+  caption-side: top;
 }
 
 .botPanel .content {
-    max-height: 50vh;
-    overflow: auto;
+  max-height: 50vh;
+  overflow: auto;
 }
 
 .btn_iconOnly .MuiButton-icon,
 .btn_iconOnly .MuiButton-startIcon {
-    margin-right: 0;
-    margin-left: 0;
+  margin-right: 0;
+  margin-left: 0;
 }
 
 .btns_state_control {
-    align-items: center;
-    display: inline-flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;
+  align-items: center;
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
 }
 
 .btns_state_control.isLoading {
-    display: block;
-    min-width: 6rem;
+  display: block;
+  min-width: 6rem;
 }
 
 .btns_state_control button:first-child {
-    margin-left: 0;
+  margin-left: 0;
 }
 
 .btns_state_control button {
-    margin-left: 0.3em;
-    min-width: 0;
+  margin-left: 0.3em;
+  min-width: 0;
+}
+
+.chartWrapper {
+    background-color: rgba(0, 0, 0, 0.03);
+    padding: 10px;
 }
 
 .MuiTableCell-body.column-id {
-    text-align: end;
+  text-align: end;
 }
 
 .MuiTableCell-body.column-id,
 .MuiTableCell-body.column-state {
-    width: 1%;
+  width: 1%;
 }
 
 .MuiTableCell-body.column-state {
-    text-align: center;
+  text-align: center;
 }
 
 .pairPanel .content {
-    height: 100%;
-    min-height: 300px;
-    max-height: 40vh;
-    overflow: auto;
+  height: 100%;
+  min-height: 300px;
+  max-height: 40vh;
+  overflow: auto;
 }
 
 .pairOrders .price,
 .pairOrders .sell_qty,
 .pairOrders .qty_usdt {
-    color: green;
+  color: green;
 }
 .pairOrders .price.sell_done-0 {
-    color: red;
+  color: red;
 }

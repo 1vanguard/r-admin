@@ -24,6 +24,7 @@ export interface WebSocketContextType {
 }
 
 export interface timeFrame {
+  [key: string]: any;
   id: number;
   minutes: number;
 }
