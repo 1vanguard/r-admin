@@ -7,6 +7,7 @@ import BtnsStateControl from "../layouts/btnsStateControl";
 
 import KeyIcon from "@mui/icons-material/Key";
 import KeyOffIcon from "@mui/icons-material/KeyOff";
+import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -28,11 +29,15 @@ const ItemApiIcon: React.FC<ItemApiIconProps> = ({ isBot, apiReady }) => {
         leaveDelay={200}
         placement="top"
         title={
-          isBot
-            ? apiReady !== 1
-              ? <>{translate("state.spec_states.api_not_ready")}</>
-              : <>{translate("state.spec_states.api_ready")}</>
-            : <>{translate("state.spec_states.no_api_data")}</>
+          isBot ? (
+            apiReady !== 1 ? (
+              <>{translate("state.spec_states.api_not_ready")}</>
+            ) : (
+              <>{translate("state.spec_states.api_ready")}</>
+            )
+          ) : (
+            <>{translate("state.spec_states.no_api_data")}</>
+          )
         }
         style={{ textAlign: "center" }}
       >
@@ -56,6 +61,23 @@ const ItemApiIcon: React.FC<ItemApiIconProps> = ({ isBot, apiReady }) => {
   }
 };
 
+const ItemStrategyIcon = () => {
+  const translate = useTranslate();
+  return (
+    <Tooltip
+      arrow
+      leaveDelay={200}
+      placement="top"
+      title={<>{translate("common.strategy")}</>}
+      style={{ textAlign: "center" }}
+    >
+      <SettingsApplicationsIcon
+        style={{ fontSize: "1.5em", marginRight: "5px" }}
+      />
+    </Tooltip>
+  );
+};
+
 const PauseUntil = (pauseUntil: string) => {
   const translate = useTranslate();
   return (
@@ -72,10 +94,11 @@ const ItemStateControlBar = ({ record }: ItemStateControlBarProps) => {
   const translate = useTranslate();
   const itemBot = "api_ready" in record ? true : false,
     botApiIcon = <ItemApiIcon isBot={itemBot} apiReady={record.api_ready} />,
-    itemPair = "bot_id" in record ? false : true;
+    botStrategyIcon = <ItemStrategyIcon />
 
   return (
     <span style={{ display: "flex", alignItems: "center" }}>
+      {record.is_strategy ? botStrategyIcon : null}
       {itemBot && botApiIcon}
       <span style={{ marginRight: "0.7em" }}>
         {itemBot ? record.title : record.symbol}
@@ -99,10 +122,14 @@ const ItemStateControlBar = ({ record }: ItemStateControlBarProps) => {
             }}
           >
             {record.api_ready !== 1 && (
-              <span style={{ display: "inline-block" }}>{translate("state.spec_states.api_not_ready")}</span>
+              <span style={{ display: "inline-block" }}>
+                {translate("state.spec_states.api_not_ready")}
+              </span>
             )}
             {record.exchange_id === 0 && (
-              <span style={{ display: "inline-block" }}>{translate("state.spec_states.exchange_not_set")}</span>
+              <span style={{ display: "inline-block" }}>
+                {translate("state.spec_states.exchange_not_set")}
+              </span>
             )}
           </span>
         ) : (

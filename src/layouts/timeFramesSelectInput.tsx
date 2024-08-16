@@ -10,6 +10,7 @@ import {
 import { timeFrame } from "../types";
 
 interface TimeFramesSelectInputProps {
+  className?: string;
   frameChoices: number[];
   label: string;
   required?: boolean;
@@ -89,6 +90,7 @@ export const TimeFramesSelectInput: React.FC<TimeFramesSelectInputProps> = (
   return (
     <SelectInput
       {...(props.required ? { validate: required() } : {})}
+      {...(props.className ? { className: props.className } : {})}
       // emptyValue={minChoiceId}
       choices={timeFrameChoices}
       disabled={isPendingChoices}

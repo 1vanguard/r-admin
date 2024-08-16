@@ -26,7 +26,6 @@ import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
 import IdMark from "../../layouts/idMark";
-import LightweightChart from "../../layouts/lightWeightChart";
 
 import { Box } from "@mui/material";
 import Container from "@mui/material/Container";

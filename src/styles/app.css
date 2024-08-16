@@ -95,3 +95,14 @@ table caption.captionTop {
 .pairOrders .price.sell_done-0 {
   color: red;
 }
+
+.useStrategy {
+  border-color: transparent;
+  border-style: dotted!important;
+  border-radius: 10px;
+}
+.useStrategy.active {
+  border-color: #69af00;
+  border-width: 2px;
+  margin-bottom: 2px;
+}
