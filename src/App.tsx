@@ -17,26 +17,34 @@ import CabLogin from "./resources/cabinet/CabLoginPage";
 import { Dashboard } from "./resources/cabinet/Dashboard";
 
 // Resources
-import { UsersList } from "./resources/users/usersList";
-import { UserEdit } from "./resources/users/userEdit";
-import { UserCreate } from "./resources/users/userCreate";
-import { OfficesList } from "./resources/offices/officesList";
-import { OfficeCreate } from "./resources/offices/officeCreate";
-import { OfficeEdit } from "./resources/offices/officeEdit";
-import { ExchangesList } from "./resources/exchanges/exchangesList";
+import { BotCreate } from "./resources/bots/botCreate";
+import { BotEdit } from "./resources/bots/botEdit";
+import { BotsList } from "./resources/bots/botsList";
 import { ExchangeCreate } from "./resources/exchanges/exchangeCreate";
 import { ExchangeEdit } from "./resources/exchanges/exchangeEdit";
-import { BotsList } from "./resources/bots/botsList";
-import { BotEdit } from "./resources/bots/botEdit";
-import { BotCreate } from "./resources/bots/botCreate";
-import { PairsList } from "./resources/pairs/pairsList";
-import { PairEdit } from "./resources/pairs/pairEdit";
+import { ExchangesList } from "./resources/exchanges/exchangesList";
+import { FBotCreate } from "./resources/fbots/fbotCreate";
+import { FBotEdit } from "./resources/fbots/fbotEdit";
+import { FBotsList } from "./resources/fbots/fbotsList";
+import { FPairCreate } from "./resources/fpairs/fpairCreate";
+import { FPairEdit } from "./resources/fpairs/fpairEdit";
+import { FPairsList } from "./resources/fpairs/fpairsList";
+import { OfficeCreate } from "./resources/offices/officeCreate";
+import { OfficeEdit } from "./resources/offices/officeEdit";
+import { OfficesList } from "./resources/offices/officesList";
 import { PairCreate } from "./resources/pairs/pairCreate";
-import { WhitelistList } from "./resources/whitelist/whitelistList";
-import { WhitelistEdit } from "./resources/whitelist/whitelistEdit";
+import { PairEdit } from "./resources/pairs/pairEdit";
+import { PairsList } from "./resources/pairs/pairsList";
+import { UserCreate } from "./resources/users/userCreate";
+import { UserEdit } from "./resources/users/userEdit";
+import { UsersList } from "./resources/users/usersList";
 import { WhitelistCreate } from "./resources/whitelist/whitelistCreate";
-import PairsListByBot from "./resources/pairs/pairsListByBot";
+import { WhitelistEdit } from "./resources/whitelist/whitelistEdit";
+import { WhitelistList } from "./resources/whitelist/whitelistList";
+import FPairOrdersPage from "./resources/pairs/pairOrdersPage";
+import FPairsListByBot from "./resources/fpairs/fpairsListByBot";
 import PairOrdersPage from "./resources/pairs/pairOrdersPage";
+import PairsListByBot from "./resources/pairs/pairsListByBot";
 
 export const App = () => {
   return (
@@ -96,6 +104,17 @@ export const App = () => {
         create={PairCreate}
       >
         <Route path=":id/orders" element={<PairOrdersPage />} />
+      </Resource>
+      <Resource name="fbots" list={FBotsList} edit={FBotEdit} create={FBotCreate}>
+        <Route path=":id/fpairs" element={<FPairsListByBot />} />
+      </Resource>
+      <Resource
+        name="fpairs"
+        list={FPairsList}
+        edit={FPairEdit}
+        create={FPairCreate}
+      >
+        <Route path=":id/forders" element={<FPairOrdersPage />} />
       </Resource>
     </Admin>
   );

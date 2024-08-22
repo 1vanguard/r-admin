@@ -82,7 +82,30 @@ export type Bot = {
   [key: string]: any;
 };
 
+export type FBot = {
+  id: number;
+  api_ready: number;
+  state: number;
+  title: string;
+  exchange_id: number;
+  user_id: number;
+} & {
+  [key: string]: any;
+};
+
 export type BotGrid = {
+  id: number;
+  symbol: string;
+  bot_id: number;
+  pair_id: number;
+  qty_usd: number;
+  order_done: number;
+  sell_done: number;
+  in_trades: number;
+  profit: number;
+}
+
+export type FBotGrid = {
   id: number;
   symbol: string;
   bot_id: number;
@@ -101,7 +124,21 @@ export type BotPause = {
   pause_end?: string;
 }
 
+export type FBotPause = {
+  id: number;
+  bot_id: number;
+  pause_start: string;
+  pause_end?: string;
+}
+
 export type PairPause = {
+  id: number;
+  pair_id: number;
+  pause_start: string;
+  pause_end?: string;
+}
+
+export type FPairPause = {
   id: number;
   pair_id: number;
   pause_start: string;
@@ -121,15 +158,38 @@ export type PairGrid = {
   symbol: string;
   bot_id: number;
   pair_id: number;
-  /* qty_usd: number;
-  order_done: number;
-  sell_done: number; */
+  in_orders: number;
+  purchases: number;
+  sales: number;
+}
+
+export type FPairGrid = {
+  id: number;
+  symbol: string;
+  bot_id: number;
+  pair_id: number;
   in_orders: number;
   purchases: number;
   sales: number;
 }
 
 export type PairOrder = {
+  id: number;
+  order_done: number;
+  order_id: number;
+  pair_id: number;
+  price: number;
+  profit: number;
+  qty: number;
+  sell_done: number;
+  sell_price: number;
+  sell_qty: number;
+  sellOrder: string;
+  startOrder: string;
+  symbol: string;
+}
+
+export type FPairOrder = {
   id: number;
   order_done: number;
   order_id: number;
@@ -158,6 +218,15 @@ export interface BotIdx {
 }
 
 export type BotPair = {
+  id: number;
+  state: number;
+  symbol: string;
+  bot_id: number;
+} & {
+  [key: string]: any;
+};
+
+export type FBotPair = {
   id: number;
   state: number;
   symbol: string;

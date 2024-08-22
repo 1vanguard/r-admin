@@ -68,11 +68,10 @@ export const UsersList = () => {
         filter={{ state: 1 }}
         reference="offices"
         sort={{ field: "title", order: "ASC" }}
-        source="office_id"
+        source="officeId"
       >
         <SelectInput
           optionText="title"
-          source="office_id"
         />
       </ReferenceInput>
     );
@@ -128,7 +127,7 @@ export const UsersList = () => {
         <ReferenceField source="role" reference="roles">
           <FunctionField render={(record: Role) => record.name} />
         </ReferenceField>
-        <ReferenceField source="officeId" reference="office">
+        <ReferenceField source="officeId" reference="offices">
           <FunctionField render={(record: Office) => record.title} />
         </ReferenceField>
         <EditButton />

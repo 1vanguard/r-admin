@@ -6,18 +6,20 @@ import {
   useCreatePath,
   useGetManyReference,
   useGetOne,
-  // useSidebarState,
+  useSidebarState,
   useTranslate,
 } from "react-admin";
-import { FBotPair, FPairOrder } from "../../types";
+import { BotPair, PairOrder } from "../../types";
 
 import { Box, Typography } from "@mui/material";
+import Container from "@mui/material/Container";
 import { styled } from "@mui/material/styles";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
-import Container from "@mui/material/Container";
 import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";
+import MuiAccordionSummary, {
+  AccordionSummaryProps,
+} from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import MuiAccordionSummary, {AccordionSummaryProps} from "@mui/material/AccordionSummary";
 
 import {
   Table,
@@ -91,7 +93,7 @@ const PairOrdersAccordion: React.FC<PairOrdersAccordionProps> = ({
       data: pairData,
       isLoading: isLoadingPairData,
       error: errorPairData,
-    } = useGetOne<FBotPair>("pairs", { id: pairId });
+    } = useGetOne<BotPair>("pairs", { id: pairId });
 
   const [expanded, setExpanded] = React.useState<string | false>("panel1");
 
@@ -143,7 +145,7 @@ const PairOrdersAccordion: React.FC<PairOrdersAccordionProps> = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orders.map((order: FPairOrder) => {
+                {orders.map((order: PairOrder) => {
                   const qtyUsdt =
                     order.sell_done == 1
                       ? (
@@ -235,7 +237,7 @@ const PairOrdersAccordion: React.FC<PairOrdersAccordionProps> = ({
   return ordersAccordion;
 };
 
-const FPairOrdersPage = () => {
+const PairOrdersPage = () => {
   // const [open, setOpen] = useSidebarState();
   const { id: pairId } = useParams();
   if (!pairId) return <Loading />;
@@ -247,7 +249,7 @@ const FPairOrdersPage = () => {
       data: pairData,
       isLoading: isLoadingPairData,
       error: errorPairData,
-    } = useGetOne<FBotPair>("pairs", { id: parsedPairId });
+    } = useGetOne<BotPair>("pairs", { id: parsedPairId });
 
   const {
     data: exchangeData,
@@ -259,7 +261,7 @@ const FPairOrdersPage = () => {
     data: ordersData,
     isPending: isPendingOrders,
     error: errorOrdersData,
-  } = useGetManyReference<FPairOrder>("orders", {
+  } = useGetManyReference<PairOrder>("orders", {
     target: "pair_id",
     id: pairId,
     pagination: { page: 1, perPage: 10 },
@@ -274,7 +276,7 @@ const FPairOrdersPage = () => {
     );
 
   const ordersByYearMonthDay = ordersData.reduce(
-    (acc: { [key: string]: FPairOrder[] }, order) => {
+    (acc: { [key: string]: PairOrder[] }, order) => {
       const startDate = new Date(order.startOrder);
       const year = startDate.getFullYear();
       const month = (startDate.getMonth() + 1).toString().padStart(2, "0");
@@ -296,7 +298,7 @@ const FPairOrdersPage = () => {
           <small>
             ({translate("common.pair")} {translate("common.id")}:{pairId}{" "}
             <Link
-              to={createPath({ resource: "fpairs", type: "edit", id: pairId })}
+              to={createPath({ resource: "pairs", type: "edit", id: pairId })}
             >
               {pairData?.symbol}
             </Link>
@@ -325,4 +327,4 @@ const FPairOrdersPage = () => {
   );
 };
 
-export default FPairOrdersPage;
+export default PairOrdersPage;

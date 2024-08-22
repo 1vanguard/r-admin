@@ -21,7 +21,7 @@ import {
   useTranslate,
 } from "react-admin";
 
-import { PairPause } from "../../types";
+import { FPairPause } from "../../types";
 import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
@@ -44,7 +44,7 @@ const botFilterToQuery = (searchText: any) => ({
   rsiPeriodOptionsToFilter = [6, 8, 10, 12, 14],
   rsiPeriodLongOptionsToFilter = [6, 8, 10, 12, 14],
   rsiTimeframeOptionsToFilter = [1, 5, 15, 30, 60, 240, 1440, 10080, 43200],
-  autoSellRsiTfToFilter = [5, 15, 30, 60, 240, 1440],
+  aiutoSellRsiTfToFilter = [5, 15, 30, 60, 240, 1440],
   autoRsiSellPeriodOptionsToFilter = [6, 8, 10, 12, 14],
   baseMin = 0;
 
@@ -59,7 +59,7 @@ const Editform = () => {
     data: botData,
     isLoading: isLoadingBoatData,
     error: errorBotData,
-  } = useGetOne("bots", {
+  } = useGetOne("fbots", {
     id: botId,
   });
 
@@ -77,7 +77,7 @@ const Editform = () => {
           <small>
             ({translate("common.bot")}:{" "}
             <Link
-              to={createPath({ resource: "bots", type: "edit", id: botId })}
+              to={createPath({ resource: "fbots", type: "edit", id: botId })}
             >
               {botData?.title}
             </Link>
@@ -114,7 +114,7 @@ const Editform = () => {
               <Grid item xs={12} sm={4}>
                 <ReferenceInput
                   filter={{ state: [1, 2] }}
-                  reference="bots"
+                  reference="fbots"
                   source="bot_id"
                 >
                   <AutocompleteInput
@@ -535,7 +535,7 @@ const Editform = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <TimeFramesSelectInput
-                      frameChoices={autoSellRsiTfToFilter}
+                      frameChoices={aiutoSellRsiTfToFilter}
                       label="common.auto_sell_tf_label"
                       sourceName="auto_sell_tf"
                     />
@@ -641,7 +641,7 @@ const Editform = () => {
                 <FunctionField
                   source="pause_end"
                   sortable={false}
-                  render={(record: PairPause) => {
+                  render={(record: FPairPause) => {
                     if (record.pause_end) {
                       return (
                         <DateField
@@ -665,7 +665,7 @@ const Editform = () => {
         </TabbedForm.Tab>
         <TabbedForm.Tab
           label="common.pair_edit_tab_04"
-          path={`/pairs/${record.id}/orders`}
+          path={`/fpairs/${record.id}/orders`}
         ></TabbedForm.Tab>
       </TabbedForm>
     </div>
@@ -684,7 +684,7 @@ const PairTitle = () => {
   );
 };
 
-export const PairEdit = () => {
+export const FPairEdit = () => {
   const userId = localStorage.getItem("uid"),
     parsedUserId = userId ? parseInt(userId) : null,
     transform = (data: any) => ({
