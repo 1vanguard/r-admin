@@ -100,7 +100,7 @@ const Editform = () => {
     data: botPairs,
     isLoading: isLoadingPairs,
     error: errorPairs,
-  } = useGetManyReference("pairs", {
+  } = useGetManyReference("fpairs", {
     target: "bot_id",
     id: record?.id,
     pagination: { page: 1, perPage: 1000000 },
@@ -116,7 +116,7 @@ const Editform = () => {
     data: strategiesData,
     isLoading: isLoadingStrategies,
     error: errorStrategies,
-  } = useGetList("bots", {
+  } = useGetList("fbots", {
     pagination: { page: 1, perPage: 1000000 },
     sort: { field: "id", order: "ASC" },
     filter: { is_strategy: 1 },
@@ -1114,7 +1114,7 @@ const Editform = () => {
           </Container>
           <Container maxWidth="md" sx={{ ml: 0 }}>
             <ReferenceManyField
-              reference="bot_pause"
+              reference="bot_fpause"
               target="bot_id"
               label="Bot pauses"
             >
@@ -1147,7 +1147,7 @@ const Editform = () => {
         </TabbedForm.Tab>
         <TabbedForm.Tab
           label="common.bot_edit_tab_05"
-          path={`/bots/${botId}/pairs`}
+          path={`/fbots/${botId}/fpairs`}
           value={record}
         ></TabbedForm.Tab>
       </TabbedForm>

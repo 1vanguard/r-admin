@@ -147,7 +147,7 @@ export const FPairsList = () => {
           label={translate("common.in_orders") + " (" + translate("common.usdt") + ")"}
           render={(record: FBotPair) => {
             return (
-              <GridData type="pair" id={record.id} parameter="in_orders" />
+              <GridData type="fpair" id={record.id} parameter="in_orders" />
             );
           }}
         />
@@ -155,14 +155,14 @@ export const FPairsList = () => {
           label="common.purchases"
           render={(record: FBotPair) => {
             return (
-              <GridData type="pair" id={record.id} parameter="purchases" />
+              <GridData type="fpair" id={record.id} parameter="purchases" />
             );
           }}
         />
         <FunctionField
           label="common.sales"
           render={(record: FBotPair) => {
-            return <GridData type="pair" id={record.id} parameter="sales" />;
+            return <GridData type="fpair" id={record.id} parameter="sales" />;
           }}
         />
       </Datagrid>

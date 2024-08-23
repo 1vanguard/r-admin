@@ -94,7 +94,7 @@ export const FBotsList = () => {
         />
         <FunctionField
           label={translate("common.bot")}
-          render={(record: FBot) => <ItemStateControlBar record={record} />}
+          render={(record: FBot) => <ItemStateControlBar record={record} type="fbot" />}
           source="title"
         />
         <ReferenceField reference="exchanges" source="exchange_id">
@@ -125,13 +125,13 @@ export const FBotsList = () => {
         <FunctionField
           label={translate("resources.bots.fields.in_trades")}
           render={(record: FBot) => {
-            return <GridData type="bot" id={record.id} parameter="in_trades" />;
+            return <GridData type="fbot" id={record.id} parameter="in_trades" />;
           }}
         />
         <FunctionField
           label={translate("resources.bots.fields.profit")}
           render={(record: FBot) => {
-            return <GridData type="bot" id={record.id} parameter="profit" />;
+            return <GridData type="fbot" id={record.id} parameter="profit" />;
           }}
         />
       </Datagrid>

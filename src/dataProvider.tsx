@@ -9,7 +9,6 @@ const httpClient = fetchUtils.fetchJson;
 
 export interface DataProviderWithCustomMethods extends DataProvider {
   getCctx: (
-    // resource: string,
     query: any
   ) => Promise<any>;
 }
@@ -184,6 +183,18 @@ export const dataProvider: DataProviderWithCustomMethods = {
     }
     if (resource === "whitelist" && params.meta.creator_role === 1) {
       endPoint = "create-whitelist";
+    }
+    if (
+      resource === "fbots" &&
+      (params.meta.creator_role === 1 || params.meta.creator_role === 2)
+    ) {
+      endPoint = "create-fbot";
+    }
+    if (
+      resource === "fpairs" &&
+      (params.meta.creator_role === 1 || params.meta.creator_role === 2)
+    ) {
+      endPoint = "create-fpair";
     }
 
     const { json } = await httpClient(`${apiUrl}/${endPoint}`, {

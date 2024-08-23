@@ -59,7 +59,7 @@ const CreateForm = () => {
                 filterToQuery={usernameFilterToQuery}
                 label="common.client"
                 optionText="username"
-                validate={required()}
+                //validate={required()}
                 variant="standard"
               />
             </ReferenceInput>

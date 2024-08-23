@@ -94,7 +94,7 @@ export const BotsList = () => {
         />
         <FunctionField
           label={translate("common.bot")}
-          render={(record: Bot) => <ItemStateControlBar record={record} />}
+          render={(record: Bot) => <ItemStateControlBar record={record} type="bot" />}
           source="title"
         />
         <ReferenceField reference="exchanges" source="exchange_id">

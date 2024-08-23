@@ -1,7 +1,7 @@
 import React from "react";
 import { EditButton, useTranslate } from "react-admin";
 
-import { Bot, BotPair } from "../types";
+import { Bot, BotPair, FBot, FBotPair } from "../types";
 import BtnPairsList from "../layouts/btnPairList";
 import BtnsStateControl from "../layouts/btnsStateControl";
 
@@ -12,7 +12,8 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import Tooltip from "@mui/material/Tooltip";
 
 type ItemStateControlBarProps = {
-  record: Bot | BotPair;
+  record: Bot | BotPair | FBot | FBotPair;
+  type?: "bot" | "botpair" | "fbot" | "fbotpair";
 };
 
 interface ItemApiIconProps {
@@ -90,7 +91,8 @@ const PauseUntil = (pauseUntil: string) => {
   );
 };
 
-const ItemStateControlBar = ({ record }: ItemStateControlBarProps) => {
+const ItemStateControlBar = ({ record, type }: ItemStateControlBarProps) => {
+  console.log('type in ItemStateControlBar: ', type)
   const translate = useTranslate();
   const itemBot = "api_ready" in record ? true : false,
     botApiIcon = <ItemApiIcon isBot={itemBot} apiReady={record.api_ready} />,
@@ -136,7 +138,7 @@ const ItemStateControlBar = ({ record }: ItemStateControlBarProps) => {
           <BtnsStateControl style={{ marginRight: "0.7rem" }} />
         )}
         {itemBot && (
-          <BtnPairsList style={{ marginRight: "0.3rem" }} botId={record.id} />
+          <BtnPairsList style={{ marginRight: "0.3rem" }} botId={record.id} type={type} />
         )}
         <EditButton
           label=""
