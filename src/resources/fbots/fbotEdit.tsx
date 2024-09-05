@@ -630,6 +630,27 @@ const Editform = () => {
                     />
                   </Grid>
                 </Grid>
+                <hr/>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <NumberInput
+                      defaultValue={baseMin}
+                      margin="none"
+                      min={baseMin}
+                      source="leverage"
+                      variant="standard"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <NumberInput
+                      defaultValue={baseMin}
+                      margin="none"
+                      min={baseMin}
+                      source="futures"
+                      variant="standard"
+                    />
+                  </Grid>
+                </Grid>
               </Container>
             )}
           </FormDataConsumer>

@@ -38,15 +38,15 @@ const botFilterToQuery = (searchText: any) => ({
   }),
   color01 = "#2196f3",
   color02 = "rgba(33, 150, 243, 0.2)",
-  entryShortRsiTfToFilter = [5, 15, 30, 60, 240],
+  baseMin = 0;
+  /* entryShortRsiTfToFilter = [5, 15, 30, 60, 240],
   entryLongRsiTfToFilter = [5, 30, 60, 240],
   autoPairRsiTfToFilter = [30, 60, 240, 1440],
   rsiPeriodOptionsToFilter = [6, 8, 10, 12, 14],
   rsiPeriodLongOptionsToFilter = [6, 8, 10, 12, 14],
   rsiTimeframeOptionsToFilter = [1, 5, 15, 30, 60, 240, 1440, 10080, 43200],
   aiutoSellRsiTfToFilter = [5, 15, 30, 60, 240, 1440],
-  autoRsiSellPeriodOptionsToFilter = [6, 8, 10, 12, 14],
-  baseMin = 0;
+  autoRsiSellPeriodOptionsToFilter = [6, 8, 10, 12, 14], */
 
 const Editform = () => {
   const record = useRecordContext(),
@@ -624,6 +624,23 @@ const Editform = () => {
                 <NumberInput
                   min={baseMin}
                   source="long_dump"
+                  variant="standard"
+                />
+              </Grid>
+            </Grid>
+            <hr/>
+            <Grid container spacing={1}>
+              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
+                <NumberInput
+                  min={baseMin}
+                  source="auto_add_step"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
+                <NumberInput
+                  min={baseMin}
+                  source="stoploss"
                   variant="standard"
                 />
               </Grid>
