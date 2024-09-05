@@ -24,9 +24,9 @@ import {
 } from "react-admin";
 
 import { FBotPause } from "../../types";
-import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
+// import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
-import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
+// import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
 import BotPairsCounter from "../../layouts/botPairsCounter";
 import GridData from "../../helpers/GridData";
 import IdMark from "../../layouts/idMark";
@@ -43,7 +43,7 @@ import {
 } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 
-const autoPairTfToFilter = [0, 5, 15, 30, 60, 240, 1440, 10080, 43200],
+/* const autoPairTfToFilter = [0, 5, 15, 30, 60, 240, 1440, 10080, 43200],
   autoShortTfToFilter = [5, 15, 30, 60, 240],
   autoLongTfToFilter = [30, 60, 240],
   autoSellTfToFilter = [0, 5, 15, 30, 60, 240, 1440];
@@ -53,7 +53,7 @@ const autoRsiPeriodOptionsToFilter = [6, 8, 10, 14],
   autoSellPeriodOptionsToFilter = [6, 8, 10, 12, 14];
 
 const timeframeToFilter = [1, 5, 15, 30, 60, 240, 1440, 10080, 43200];
-const periodToFilter = [6, 8, 10, 12, 14];
+const periodToFilter = [6, 8, 10, 12, 14]; */
 
 const baseMin = 0,
   color01 = "#2196f3",
@@ -64,6 +64,7 @@ const baseMin = 0,
   usernameFilterToQuery = (searchText: any) => ({
     username_like: `${searchText}`,
   });
+
 /* 
 const StrategyInput = (props: any) => {
   const [strategyId, setStrategyId] = useState(null);
@@ -353,7 +354,7 @@ const Editform = () => {
                       variant="standard"
                     />
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <TimeFramesSelectInput
                       className={
                         formData.use_strategy
@@ -365,15 +366,15 @@ const Editform = () => {
                       sourceName="timeframe"
                       required={true}
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Grid> */}
+                  {/* <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
                       periodChoices={periodToFilter}
                       label="common.period"
                       sourceName="period"
                       required={true}
                     />
-                  </Grid>
+                  </Grid> */}
                   <Grid item xs={12} md={6}>
                     <NumberInput
                       defaultValue={baseMin}
@@ -671,7 +672,7 @@ const Editform = () => {
                         paddingLeft: 3,
                       }}
                     >
-                      <Grid item xs={12} md={6}>
+                      {/* <Grid item xs={12} md={6}>
                         <TimeFramesSelectInput
                           className={
                             formData.use_strategy
@@ -682,8 +683,8 @@ const Editform = () => {
                           label="common.auto_short_tf_label"
                           sourceName="auto_short_tf"
                         />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
+                      </Grid> */}
+                      {/* <Grid item xs={12} md={6}>
                         <PeriodsSelectInput
                           className={
                             formData.use_strategy
@@ -694,7 +695,7 @@ const Editform = () => {
                           periodChoices={autoRsiPeriodOptionsToFilter}
                           sourceName="auto_rsi_period"
                         />
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                     <Grid
                       container
@@ -705,7 +706,7 @@ const Editform = () => {
                         paddingLeft: 3,
                       }}
                     >
-                      <Grid item xs={12} md={6}>
+                      {/* <Grid item xs={12} md={6}>
                         <NumberInput
                           className={
                             formData.use_strategy
@@ -732,7 +733,7 @@ const Editform = () => {
                           source="auto_rsi_max"
                           variant="standard"
                         />
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                   </Grid>
                   <Grid item xs={12} lg={6} xl={5}>
@@ -753,14 +754,14 @@ const Editform = () => {
                         {translate("common.bot_indicators_group_02_heading")}
                       </span>
                     </h3>
-                    <BooleanInput
+                    {/* <BooleanInput
                       className={
                         formData.use_strategy
                           ? "active useStrategy"
                           : "useStrategy"
                       }
                       source="auto_use_ltf"
-                    />
+                    /> */}
                     <Grid item xs={12}>
                       <Grid
                         container
@@ -774,7 +775,7 @@ const Editform = () => {
                           paddingLeft: 3,
                         }}
                       >
-                        <Grid item xs={12} md={6}>
+                        {/* <Grid item xs={12} md={6}>
                           <TimeFramesSelectInput
                             className={
                               formData.use_strategy
@@ -785,8 +786,8 @@ const Editform = () => {
                             label="common.auto_long_tf_label"
                             sourceName="auto_long_tf"
                           />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
+                        </Grid> */}
+                        {/* <Grid item xs={12} md={6}>
                           <PeriodsSelectInput
                             className={
                               formData.use_strategy
@@ -797,7 +798,7 @@ const Editform = () => {
                             periodChoices={autoRsiPeriod1hOptionsToFilter}
                             sourceName="auto_rsi_period_1h"
                           />
-                        </Grid>
+                        </Grid> */}
                       </Grid>
                     </Grid>
                     <Grid
@@ -809,7 +810,7 @@ const Editform = () => {
                         paddingLeft: 3,
                       }}
                     >
-                      <Grid item xs={12} md={6}>
+                      {/* <Grid item xs={12} md={6}>
                         <NumberInput
                           className={
                             formData.use_strategy
@@ -822,8 +823,8 @@ const Editform = () => {
                           source="auto_rsi_min_1h"
                           variant="standard"
                         />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
+                      </Grid> */}
+                      {/* <Grid item xs={12} md={6}>
                         <NumberInput
                           className={
                             formData.use_strategy
@@ -835,7 +836,7 @@ const Editform = () => {
                           source="auto_rsi_max_1h"
                           variant="standard"
                         />
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                   </Grid>
                   <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
@@ -856,7 +857,7 @@ const Editform = () => {
                         {translate("common.bot_indicators_group_03_heading")}
                       </span>
                     </h3>
-                    <NumberInput
+                    {/* <NumberInput
                       className={
                         formData.use_strategy
                           ? "active useStrategy"
@@ -866,8 +867,8 @@ const Editform = () => {
                       min={baseMin}
                       source="auto_rsi_diff"
                       variant="standard"
-                    />
-                    <NumberInput
+                    /> */}
+                    {/* <NumberInput
                       className={
                         formData.use_strategy
                           ? "active useStrategy"
@@ -877,7 +878,7 @@ const Editform = () => {
                       min={baseMin}
                       source="rsi_sell_diff"
                       variant="standard"
-                    />
+                    /> */}
                   </Grid>
                   <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
                     <h3 style={{ marginTop: 0 }}>
@@ -909,7 +910,7 @@ const Editform = () => {
                         paddingLeft: 3,
                       }}
                     >
-                      <Grid item xs={12} md={6}>
+                      {/* <Grid item xs={12} md={6}>
                         <TimeFramesSelectInput
                           className={
                             formData.use_strategy
@@ -921,9 +922,9 @@ const Editform = () => {
                           required={true}
                           sourceName="auto_pair_tf"
                         />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
-                        <PeriodsSelectInput
+                      </Grid> */}
+                      {/* <<Grid item xs={12} md={6}>
+                        PeriodsSelectInput
                           className={
                             formData.use_strategy
                               ? "active useStrategy"
@@ -933,7 +934,7 @@ const Editform = () => {
                           periodChoices={autoSellPeriodOptionsToFilter}
                           sourceName="auto_sell_period"
                         />
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                     <Grid
                       container
@@ -944,7 +945,7 @@ const Editform = () => {
                         paddingLeft: 3,
                       }}
                     >
-                      <Grid item xs={12} md={6}>
+                      {/* <Grid item xs={12} md={6}>
                         <NumberInput
                           className={
                             formData.use_strategy
@@ -958,8 +959,8 @@ const Editform = () => {
                           source="auto_rsi_min_big"
                           variant="standard"
                         />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
+                      </Grid> */}
+                      {/* <Grid item xs={12} md={6}>
                         <NumberInput
                           className={
                             formData.use_strategy
@@ -973,8 +974,8 @@ const Editform = () => {
                           source="auto_rsi_max_big"
                           variant="standard"
                         />
-                      </Grid>
-                      <Grid item xs={12}>
+                      </Grid> */}
+                      {/* <Grid item xs={12}>
                         <TimeFramesSelectInput
                           className={
                             formData.use_strategy
@@ -985,8 +986,8 @@ const Editform = () => {
                           label="common.auto_sell_tf_label"
                           sourceName="auto_sell_tf"
                         />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
+                      </Grid> */}
+                      {/* <Grid item xs={12} md={6}>
                         <NumberInput
                           className={
                             formData.use_strategy
@@ -999,8 +1000,8 @@ const Editform = () => {
                           source="auto_rsi_min_sell"
                           variant="standard"
                         />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
+                      </Grid> */}
+                      {/* <Grid item xs={12} md={6}>
                         <NumberInput
                           className={
                             formData.use_strategy
@@ -1013,7 +1014,7 @@ const Editform = () => {
                           source="auto_rsi_max_sell"
                           variant="standard"
                         />
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                   </Grid>
                   <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>

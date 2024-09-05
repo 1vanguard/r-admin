@@ -107,6 +107,7 @@ const en = {
         long_dump_label: 'Percentage price drop for blocking for a month',
         long_pump_label: 'Percentage price increase for blocking for a month',
         next_buy_timeout_label: 'Timeout until the next purchase (seconds)',
+        no_data: 'No data',
         no_orders: 'No orders',
         no_pairs: "No pairs",
         number_of_pairs: 'Number of pairs',

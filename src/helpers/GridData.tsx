@@ -1,4 +1,4 @@
-import { useGetOne } from "react-admin";
+import { useGetOne, useTranslate } from "react-admin";
 import { BotGrid, FBotGrid, FPairGrid, PairGrid } from "../types";
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -12,45 +12,37 @@ interface GridDataProps {
 }
 
 const GridData: React.FC<GridDataProps> = ({ type, id, parameter }) => {
-  const {
-    data: GridDataLoaded,
-    isLoading,
-    error,
-  } = useGetOne<BotGrid | PairGrid | FBotGrid | FPairGrid>(`botgrid-by-${type}`, {
-    id: id,
-  });
+  const translate = useTranslate(),
+    {
+      data: GridDataLoaded,
+      isLoading,
+      error,
+    } = useGetOne<BotGrid | PairGrid | FBotGrid | FPairGrid>(
+      `botgrid-by-${type}`,
+      {
+        id: id,
+      }
+    );
   if (isLoading) {
     return <LinearProgress />;
   }
-  if (error) return <div className="error">ERROR</div>;
-console.log('GridDataLoaded: ', GridDataLoaded)
+  if (error)
+    return (
+      <div className="error loadData">{translate("errors.loadDataError")}</div>
+    );
+
   let displayData: any = "";
-  if (type === "bot") {
-    const botGridData = GridDataLoaded as BotGrid;
-    const in_tradesData = botGridData?.in_trades,
-      inTrades = in_tradesData ? Math.round(in_tradesData) : "-",
-      profitData = botGridData?.profit,
-      profit = profitData ? Math.round(profitData) : "-";
+
+  if (type === "bot" || type === "fbot") {
+    const botGridData = GridDataLoaded as BotGrid | FBotGrid,
+      inTrades = botGridData?.in_trades
+        ? Math.round(botGridData.in_trades)
+        : "-",
+      profit = botGridData?.profit ? Math.round(botGridData.profit) : "-";
 
     if (parameter === "in_trades") {
       displayData = inTrades;
-    }
-    if (parameter === "profit") {
-      displayData = profit;
-    }
-  }
-
-  if (type === "fbot") {
-    const botGridData = GridDataLoaded as FBotGrid;
-    const in_tradesData = botGridData?.in_trades,
-      inTrades = in_tradesData ? Math.round(in_tradesData) : "-",
-      profitData = botGridData?.profit,
-      profit = profitData ? Math.round(profitData) : "-";
-
-    if (parameter === "in_trades") {
-      displayData = inTrades;
-    }
-    if (parameter === "profit") {
+    } else if (parameter === "profit") {
       displayData = profit;
     }
   }
@@ -75,22 +67,21 @@ console.log('GridDataLoaded: ', GridDataLoaded)
     }
   }
 
-  if (type === "fpair") {
-    const pairGridData = GridDataLoaded as FPairGrid;
-    const in_ordersData = pairGridData?.in_orders,
-      inOrders = in_ordersData ? Math.round(in_ordersData) : "-",
-      purchasesData = pairGridData?.purchases,
-      purchases = purchasesData ? Math.round(purchasesData) : "-",
-      salesData = pairGridData?.sales,
-      sales = salesData ? Math.round(salesData) : "-";
+  if (type === "pair" || type === "fpair") {
+    const pairGridData = GridDataLoaded as PairGrid | FPairGrid,
+      inOrders = pairGridData?.in_orders
+        ? Math.round(pairGridData.in_orders)
+        : "-",
+      purchases = pairGridData?.purchases
+        ? Math.round(pairGridData.purchases)
+        : "-",
+      sales = pairGridData?.sales ? Math.round(pairGridData.sales) : "-";
 
     if (parameter === "in_orders") {
       displayData = inOrders;
-    }
-    if (parameter === "purchases") {
+    } else if (parameter === "purchases") {
       displayData = purchases;
-    }
-    if (parameter === "sales") {
+    } else if (parameter === "sales") {
       displayData = sales;
     }
   }

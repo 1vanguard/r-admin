@@ -11,6 +11,7 @@ import { period } from "../types";
 
 interface PeriodsSelectInputProps {
   className?: string;
+  defaultValue?: number;
   label: string;
   periodChoices: number[];
   required?: boolean;
@@ -43,6 +44,7 @@ export const PeriodsSelectInput: React.FC<PeriodsSelectInputProps> = (
     <SelectInput
       {...(props.required ? { validate: required() } : {})}
       {...(props.className ? { className: props.className } : {})}
+      {...(props.defaultValue ? { defaultValue: props.defaultValue } : {})}
       choices={periodChoices}
       disabled={isPendingChoices}
       emptyText={translate("common.do_not_use")}

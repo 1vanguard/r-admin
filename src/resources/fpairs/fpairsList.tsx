@@ -105,7 +105,7 @@ export const FPairsList = () => {
           sortBy="symbol"
           source="symbol"
         />
-        <ReferenceField source="bot_id" reference="bots">
+        <ReferenceField source="bot_id" reference="fbots">
           <FunctionField render={(record: FBot) => record.title} />
         </ReferenceField>
         <ReferenceField
@@ -116,7 +116,7 @@ export const FPairsList = () => {
         >
           <FunctionField render={(record: Exchange) => record.title} />
         </ReferenceField>
-        <FunctionField
+        {/* <FunctionField
           label="common.rsi_s"
           render={(record: FBotPair) => {
             return <IdxMaster idxName="RSI_S" pairId={record.id}></IdxMaster>;
@@ -135,7 +135,7 @@ export const FPairsList = () => {
               <IdxMaster idxName="RSI_SELL" pairId={record.id}></IdxMaster>
             );
           }}
-        />
+        /> */}
         <FunctionField
           label="common.price"
           style={{ textAlign: "center" }}

@@ -92,7 +92,6 @@ const PauseUntil = (pauseUntil: string) => {
 };
 
 const ItemStateControlBar = ({ record, type }: ItemStateControlBarProps) => {
-  console.log('type in ItemStateControlBar: ', type)
   const translate = useTranslate();
   const itemBot = "api_ready" in record ? true : false,
     botApiIcon = <ItemApiIcon isBot={itemBot} apiReady={record.api_ready} />,

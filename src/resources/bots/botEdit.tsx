@@ -319,7 +319,7 @@ const Editform = () => {
                         label="common.client"
                         margin="none"
                         optionText="username"
-                        validate={required()}
+                        // validate={required()}
                         variant="standard"
                       />
                     </ReferenceInput>
@@ -368,6 +368,7 @@ const Editform = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
+                      defaultValue={12}
                       periodChoices={periodToFilter}
                       label="common.period"
                       sourceName="period"

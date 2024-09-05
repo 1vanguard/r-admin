@@ -1,5 +1,5 @@
 import React from "react";
-import { Identifier } from "react-admin";
+import { Identifier, useTranslate } from "react-admin";
 import { useWebSocketDataContext } from "../helpers/WebSocketDataContext";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -10,11 +10,12 @@ interface LogMasterProps {
 }
 
 const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {
-  const { logs } = useWebSocketDataContext();
+  const translate = useTranslate(),
+    { logs } = useWebSocketDataContext();
 
   let targetEntityLogsArray: any[] = [];
 
-  if (!logs) return "No data accepted"
+  if (!logs) return translate("common.no_data");
 
   const baseLogs = Object.entries(logs);
 
@@ -29,18 +30,20 @@ const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {
     });
   });
 
-  targetEntityLogsArray.sort((a, b) => {
-    const dateA = a.date.split(/\D/).map(Number);
-    const dateB = b.date.split(/\D/).map(Number);
+  targetEntityLogsArray
+    .sort((a, b) => {
+      const dateA = a.date.split(/\D/).map(Number);
+      const dateB = b.date.split(/\D/).map(Number);
 
-    for (let i = 0; i < Math.max(dateA.length, dateB.length); i++) {
-      if (dateA[i] !== dateB[i]) {
-        return dateA[i] - dateB[i];
+      for (let i = 0; i < Math.max(dateA.length, dateB.length); i++) {
+        if (dateA[i] !== dateB[i]) {
+          return dateA[i] - dateB[i];
+        }
       }
-    }
 
-    return 0;
-  }).reverse();
+      return 0;
+    })
+    .reverse();
 
   return (
     <Box className="logMaster" sx={{ overflowY: "auto" }}>

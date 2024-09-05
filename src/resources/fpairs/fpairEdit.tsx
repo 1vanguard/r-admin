@@ -314,22 +314,22 @@ const Editform = () => {
                     paddingLeft: 3,
                   }}
                 >
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <TimeFramesSelectInput
                       frameChoices={rsiTimeframeOptionsToFilter}
                       label="common.rsi_timeframe_label"
                       required={true}
                       sourceName="rsi_timeframe"
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Grid> */}
+                  {/* <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
                       label="resources.pairs.fields.rsi_period"
                       periodChoices={rsiPeriodOptionsToFilter}
                       required={true}
                       sourceName="rsi_period"
                     />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
                 <Grid
                   container
@@ -340,27 +340,27 @@ const Editform = () => {
                     paddingLeft: 3,
                   }}
                 >
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <NumberInput
                       min={baseMin}
                       source="rsi_min"
                       variant="standard"
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Grid> */}
+                  {/* <Grid item xs={12} md={6}>
                     <NumberInput
                       min={baseMin}
                       source="rsi_max"
                       variant="standard"
                     />
-                  </Grid>
-                  <Grid item xs={12}>
+                  </Grid> */}
+                  {/* <Grid item xs={12}>
                     <TimeFramesSelectInput
                       frameChoices={entryShortRsiTfToFilter}
                       label="common.rsi_short_tf_label"
                       sourceName="rsi_short_tf"
                     />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Grid>
               <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
@@ -381,7 +381,7 @@ const Editform = () => {
                     {translate("common.pair_indicators_group_02_heading")}
                   </span>
                 </h3>
-                <BooleanInput source="use_ltf" />
+                {/* <BooleanInput source="use_ltf" /> */}
                 <Grid
                   container
                   sx={{
@@ -394,20 +394,20 @@ const Editform = () => {
                     paddingLeft: 3,
                   }}
                 >
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <TimeFramesSelectInput
                       frameChoices={entryLongRsiTfToFilter}
                       label="common.rsi_long_tf_label"
                       sourceName="rsi_long_tf"
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Grid> */}
+                  {/* <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
                       label="common.rsi_period_1h_label"
                       periodChoices={rsiPeriodLongOptionsToFilter}
                       sourceName="rsi_period_1h"
                     />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
                 <Grid
                   container
@@ -418,20 +418,20 @@ const Editform = () => {
                     paddingLeft: 3,
                   }}
                 >
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <NumberInput
                       min={baseMin}
                       source="rsi_min_1h"
                       variant="standard"
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Grid> */}
+                  {/* <Grid item xs={12} md={6}>
                     <NumberInput
                       min={baseMin}
                       source="rsi_max_1h"
                       variant="standard"
                     />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Grid>
               <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
@@ -453,17 +453,17 @@ const Editform = () => {
                   </span>
                 </h3>
                 {/* <BooleanInput label="Auto" source="is_auto" /> */}
-                <BooleanInput source="rsi_sell" />
-                <NumberInput
+                {/* <BooleanInput source="rsi_sell" /> */}
+                {/* <NumberInput
                   min={baseMin}
                   source="rsi_diff"
                   variant="standard"
-                />
-                <NumberInput
+                /> */}
+                {/* <NumberInput
                   min={baseMin}
                   source="rsi_sell_diff"
                   variant="standard"
-                />
+                /> */}
               </Grid>
               <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
                 <h3 style={{ marginTop: 0 }}>
@@ -495,20 +495,20 @@ const Editform = () => {
                     paddingLeft: 3,
                   }}
                 >
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <TimeFramesSelectInput
                       frameChoices={autoPairRsiTfToFilter}
                       label="common.auto_pair_tf_label"
                       sourceName="auto_pair_tf"
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Grid> */}
+                  {/* <Grid item xs={12} md={6}>
                     <PeriodsSelectInput
                       label="common.auto_sell_period_label"
                       periodChoices={autoRsiSellPeriodOptionsToFilter}
                       sourceName="auto_sell_period"
                     />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
                 <Grid
                   container
@@ -519,41 +519,41 @@ const Editform = () => {
                     paddingLeft: 3,
                   }}
                 >
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <NumberInput
                       min={baseMin}
                       source="auto_rsi_min_big"
                       variant="standard"
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Grid> */}
+                  {/* <Grid item xs={12} md={6}>
                     <NumberInput
                       min={baseMin}
                       source="auto_rsi_max_big"
                       variant="standard"
                     />
-                  </Grid>
-                  <Grid item xs={12}>
+                  </Grid> */}
+                  {/* <Grid item xs={12}>
                     <TimeFramesSelectInput
                       frameChoices={aiutoSellRsiTfToFilter}
                       label="common.auto_sell_tf_label"
                       sourceName="auto_sell_tf"
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Grid> */}
+                  {/* <Grid item xs={12} md={6}>
                     <NumberInput
                       min={baseMin}
                       source="auto_rsi_min_sell"
                       variant="standard"
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
+                  </Grid> */}
+                  {/* <Grid item xs={12} md={6}>
                     <NumberInput
                       min={baseMin}
                       source="auto_rsi_max_sell"
                       variant="standard"
                     />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Grid>
               <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
