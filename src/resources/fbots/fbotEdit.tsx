@@ -266,9 +266,7 @@ const Editform = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={12}>
-                    <BooleanInput
-                      source="is_strategy"
-                    />
+                    <BooleanInput source="is_strategy" />
                   </Grid>
                   {formData.is_strategy == false ? (
                     <Grid item xs={12}>
@@ -320,7 +318,7 @@ const Editform = () => {
                         label="common.client"
                         margin="none"
                         optionText="username"
-                        validate={required()}
+                        // validate={required()}
                         variant="standard"
                       />
                     </ReferenceInput>
@@ -630,7 +628,7 @@ const Editform = () => {
                     />
                   </Grid>
                 </Grid>
-                <hr/>
+                <hr />
                 <Grid container spacing={1}>
                   <Grid item xs={12} md={6} lg={4} xl={3}>
                     <NumberInput
@@ -649,6 +647,42 @@ const Editform = () => {
                       source="futures"
                       variant="standard"
                     />
+                  </Grid>
+                </Grid>
+                <hr />
+                <Grid container spacing={1}>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <BooleanInput source="json_1_default" />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <TextInput source="json_1_indicator" variant="standard" />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <NumberInput source="json_1_min" variant="standard" />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <NumberInput source="json_1_max" variant="standard" />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <NumberInput source="json_1_fields_1_default" variant="standard" />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <TextInput source="json_1_fields_1_name" variant="standard" />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <NumberInput source="json_1_fields_1_min_val" variant="standard" />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <NumberInput source="json_1_fields_1_max_val" variant="standard" />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <BooleanInput source="json_1_fields_1_required" />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <NumberInput source="json_1_fields_1_value" variant="standard" />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4} xl={3}>
+                    <TextInput source="json_1_fields_1_values_list" variant="standard" />
                   </Grid>
                 </Grid>
               </Container>
