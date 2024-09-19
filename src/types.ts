@@ -235,6 +235,28 @@ export type FBotPair = {
   [key: string]: any;
 };
 
+export type FBotIndicator = {
+  enabled: number | string;
+  id: number;
+  fbot_id: number;
+  fields: Array<FBotIndicatorField>;
+  indicator_id: number;
+  indicator_name: string;
+} & {
+  [key: string]: any;
+};
+
+export type FBotIndicatorField = {
+  attributes: Array<object>;
+  name: string;
+  required: boolean;
+  type: string;
+  value: any;
+  values_list: Array<object>;
+} & {
+  [key: string]: any;
+};
+
 export interface WebSocketDataContextType {
   logs?: Logs;
   idxs?: Idxs;

@@ -47,26 +47,6 @@ const GridData: React.FC<GridDataProps> = ({ type, id, parameter }) => {
     }
   }
 
-  if (type === "pair") {
-    const pairGridData = GridDataLoaded as PairGrid;
-    const in_ordersData = pairGridData?.in_orders,
-      inOrders = in_ordersData ? Math.round(in_ordersData) : "-",
-      purchasesData = pairGridData?.purchases,
-      purchases = purchasesData ? Math.round(purchasesData) : "-",
-      salesData = pairGridData?.sales,
-      sales = salesData ? Math.round(salesData) : "-";
-
-    if (parameter === "in_orders") {
-      displayData = inOrders;
-    }
-    if (parameter === "purchases") {
-      displayData = purchases;
-    }
-    if (parameter === "sales") {
-      displayData = sales;
-    }
-  }
-
   if (type === "pair" || type === "fpair") {
     const pairGridData = GridDataLoaded as PairGrid | FPairGrid,
       inOrders = pairGridData?.in_orders

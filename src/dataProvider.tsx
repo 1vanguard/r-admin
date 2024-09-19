@@ -126,7 +126,7 @@ export const dataProvider: DataProviderWithCustomMethods = {
         data: { data: excleudeData, ...restData },
       } = params;
     headers.set("authorization", token);
-    console.log(restData);
+    console.log('restData: ', restData);
     return await httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       headers: headers,
