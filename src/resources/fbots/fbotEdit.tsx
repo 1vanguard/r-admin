@@ -652,7 +652,7 @@ const Editform = () => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <BotIndicators botId={botId} botType="fbot" indicatorsData={botIndicators} />
+                    <BotIndicators botId={botId} botType="fbot" indicatorsData={botIndicators} useStrategy={formData.use_strategy} />
                   </Grid>
                 </Grid>
               </Container>

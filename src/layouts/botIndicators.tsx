@@ -19,22 +19,23 @@ type BotIndicatorsProps = {
   botId: number;
   botType: string;
   indicatorsData: FBotIndicator[] | any[];
+  useStrategy?: boolean;
 };
 
 const baseMin = 0,
   color01 = "#2196f3",
   color02 = "rgba(33, 150, 243, 0.2)";
 
-const IndicatorFields = ({ fieldsArr, indicatorIndex }) => {
+const IndicatorFields = ({ fieldsArr, indicatorIndex, strategy }) => {
   const isIndicatorEnabled = useWatch({
     name: `indicators[${indicatorIndex}].enabled`,
   });
 
-  console.log("fieldsArr: ", fieldsArr);
+  /* console.log("fieldsArr: ", fieldsArr);
   console.log(
     "fieldsArr filtered: ",
     fieldsArr?.filter((field) => "value" in field)
-  );
+  ); */
   /* if (fieldsArr.length === 0) {
     return <LinearProgress />;
   } */
@@ -56,6 +57,7 @@ const IndicatorFields = ({ fieldsArr, indicatorIndex }) => {
             {field.values_list?.length > 0 ? (
               <SelectInput
                 choices={field.values_list}
+                className={strategy ? "active useStrategy" : "useStrategy"}
                 defaultValue={field.default}
                 label={field.name}
                 optionValue="value"
@@ -67,6 +69,7 @@ const IndicatorFields = ({ fieldsArr, indicatorIndex }) => {
               <React.Fragment>
                 {field.type === "text" && (
                   <TextInput
+                    className={strategy ? "active useStrategy" : "useStrategy"}
                     defaultValue={field.default}
                     label={field.name}
                     source={`indicators[${indicatorIndex}].fields[${fieldIndex}].${field.name}`}
@@ -76,6 +79,7 @@ const IndicatorFields = ({ fieldsArr, indicatorIndex }) => {
                 )}
                 {field.type === "number" && (
                   <NumberInput
+                    className={strategy ? "active useStrategy" : "useStrategy"}
                     defaultValue={field.default}
                     label={field.name}
                     source={`indicators[${indicatorIndex}].fields[${fieldIndex}].${field.name}`}
@@ -85,6 +89,7 @@ const IndicatorFields = ({ fieldsArr, indicatorIndex }) => {
                 )}
                 {field.type === "boolean" && (
                   <BooleanInput
+                    className={strategy ? "active useStrategy" : "useStrategy"}
                     defaultValue={field.default}
                     label={field.name}
                     source={`indicators[${indicatorIndex}].fields[${fieldIndex}].${field.name}`}
@@ -104,6 +109,7 @@ const BotIndicators = ({
   botId,
   botType,
   indicatorsData,
+  useStrategy = false,
 }: BotIndicatorsProps) => {
   const translate = useTranslate();
   const indicators = indicatorsData;
@@ -132,6 +138,7 @@ const BotIndicators = ({
             <Grid container spacing={0}>
               <Grid item xs={12} md="auto">
                 <BooleanInput
+                  className={useStrategy ? "active useStrategy" : "useStrategy"}
                   label="common.use_indicator"
                   source={`indicators[${indIndex}].enabled`}
                   variant="standard"
@@ -161,6 +168,7 @@ const BotIndicators = ({
             <IndicatorFields
               fieldsArr={indicator.fields}
               indicatorIndex={indIndex}
+              strategy={useStrategy}
             />
           </Grid>
         </Grid>
