@@ -110,6 +110,7 @@ const en = {
         next_buy_timeout_label: 'Timeout until the next purchase (seconds)',
         no_data: 'No data',
         no_orders: 'No orders',
+        no_indicators: 'No indicators',
         no_pairs: "No pairs",
         number_of_pairs: 'Number of pairs',
         office_create_heading: 'Create new office',

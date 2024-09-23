@@ -27,6 +27,7 @@ import { FBotIndicator, FBotIndicatorField, FBotPause } from "../../types";
 // import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 // import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
+import BotIndicators from "../../layouts/botIndicators";
 import BotPairsCounter from "../../layouts/botPairsCounter";
 import GridData from "../../helpers/GridData";
 import IdMark from "../../layouts/idMark";
@@ -34,7 +35,7 @@ import IdMark from "../../layouts/idMark";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import LinearProgress from "@mui/material/LinearProgress";
+// import LinearProgress from "@mui/material/LinearProgress";
 import {
   Table,
   TableBody,
@@ -650,115 +651,10 @@ const Editform = () => {
                       variant="standard"
                     />
                   </Grid>
+                  <Grid item xs={12}>
+                    <BotIndicators botId={botId} botType="fbot" indicatorsData={botIndicators} />
+                  </Grid>
                 </Grid>
-                {record?.indicators
-                  ? record.indicators.map(
-                      (indicator: FBotIndicator, indIndex: number) => (
-                        <Grid
-                          container
-                          key={indIndex}
-                          sx={{
-                            borderStyle: "solid",
-                            borderWidth: "1px",
-                            borderColor: color01,
-                            marginBottom: 3,
-                            paddingTop: 3,
-                            paddingRight: 3,
-                            paddingLeft: 3,
-                          }}
-                          spacing={1}
-                        >
-                          <Grid item xs={12}>
-                            <Grid container spacing={0}>
-                              <Grid item xs={12} md>
-                                <TextInput
-                                  label="common.indicator"
-                                  readOnly
-                                  source={`indicators[${indIndex}].indicator_name`}
-                                  validate={required()}
-                                  variant="standard"
-                                />
-                              </Grid>
-                              <Grid item xs={12} md="auto">
-                                <NumberInput
-                                  label="common.id"
-                                  readOnly
-                                  source={`indicators[${indIndex}].indicator_id`}
-                                  validate={required()}
-                                  variant="standard"
-                                />
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                          <Grid item xs={12} md={6} lg={4} xl={3}>
-                            <BooleanInput
-                              label="common.use_indicator"
-                              source={`indicators[${indIndex}].enabled`}
-                              // source={`$[indicator.enabled]`}
-                              variant="standard"
-                            />
-                          </Grid>
-                          {indicator.fields?.map(
-                            (field: FBotIndicatorField, fieldIndex: number) => (
-                              <Grid
-                                item
-                                xs={12}
-                                md={6}
-                                lg={4}
-                                xl={3}
-                                key={fieldIndex}
-                              >
-                                {field.values_list?.length > 0 ? (
-                                  <SelectInput
-                                    choices={field.values_list}
-                                    defaultValue={field.default}
-                                    label={field.name}
-                                    optionValue="value"
-                                    source={`indicators[${indIndex}].fields[${fieldIndex}].${field.name}`}
-                                    variant="standard"
-                                    {...(field.required
-                                      ? { validate: required() }
-                                      : {})}
-                                  />
-                                ) : field.type === "boolean" ? (
-                                  <BooleanInput
-                                    defaultValue={field.default}
-                                    label={field.name}
-                                    source={`indicators[${indIndex}].fields[${fieldIndex}].${field.name}`}
-                                    variant="standard"
-                                  />
-                                ) : field.type === "number" ? (
-                                  <NumberInput
-                                    defaultValue={field.default}
-                                    label={field.name}
-                                    max={field.max}
-                                    min={field.min}
-                                    source={`indicators[${indIndex}].fields[${fieldIndex}].${field.name}`}
-                                    variant="standard"
-                                    {...(field.required
-                                      ? { validate: required() }
-                                      : {})}
-                                  />
-                                ) : field.type === "text" ? (
-                                  <TextInput
-                                    defaultValue={field.default}
-                                    label={field.name}
-                                    source={`indicators[${indIndex}].fields[${fieldIndex}].${field.name}`}
-                                    variant="standard"
-                                    {...(field.required
-                                      ? { validate: required() }
-                                      : {})}
-                                  />
-                                ) : (
-                                  <LinearProgress />
-                                )}
-                              </Grid>
-                            )
-                          )}
-                        </Grid>
-                      )
-                    )
-                  : null}
               </Container>
             )}
           </FormDataConsumer>

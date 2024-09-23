@@ -110,6 +110,7 @@ const ru = {
         long_pump_label: 'Процентное повышение цены за блокировку на месяц',
         next_buy_timeout_label: 'Тайм-аут до следующей покупки (секунды)',
         no_data: 'Нет данных',
+        no_indicators: 'Нет индикаторов',
         no_orders: 'Нет ордеров',
         no_pairs: "Нет пар",
         number_of_pairs: 'Количество пар',
