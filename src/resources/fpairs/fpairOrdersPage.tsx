@@ -9,7 +9,7 @@ import {
   useSidebarState,
   useTranslate,
 } from "react-admin";
-import { BotPair, PairOrder } from "../../types";
+import { FBotPair, FPairOrder } from "../../types";
 
 import { Box, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
@@ -80,11 +80,11 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-interface PairOrdersAccordionProps {
-  ordersByKey: { [key: string]: PairOrder[] };
+interface FPairOrdersAccordionProps {
+  ordersByKey: { [key: string]: FPairOrder[] };
 }
 
-const PairOrdersAccordion: React.FC<PairOrdersAccordionProps> = ({
+const FPairOrdersAccordion: React.FC<FPairOrdersAccordionProps> = ({
   ordersByKey,
 }) => {
   const translate = useTranslate(),
@@ -93,7 +93,7 @@ const PairOrdersAccordion: React.FC<PairOrdersAccordionProps> = ({
       data: pairData,
       isLoading: isLoadingPairData,
       error: errorPairData,
-    } = useGetOne<BotPair>("pairs", { id: pairId });
+    } = useGetOne<FBotPair>("fpairs", { id: pairId });
 
   const [expanded, setExpanded] = React.useState<string | false>("panel1");
 
@@ -145,7 +145,7 @@ const PairOrdersAccordion: React.FC<PairOrdersAccordionProps> = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orders.map((order: PairOrder) => {
+                {orders.map((order: FPairOrder) => {
                   const qtyUsdt =
                     order.sell_done == 1
                       ? (
@@ -237,7 +237,7 @@ const PairOrdersAccordion: React.FC<PairOrdersAccordionProps> = ({
   return ordersAccordion;
 };
 
-const PairOrdersPage = () => {
+const FPairOrdersPage = () => {
   // const [open, setOpen] = useSidebarState();
   const { id: pairId } = useParams();
   if (!pairId) return <Loading />;
@@ -249,7 +249,7 @@ const PairOrdersPage = () => {
       data: pairData,
       isLoading: isLoadingPairData,
       error: errorPairData,
-    } = useGetOne<BotPair>("pairs", { id: parsedPairId });
+    } = useGetOne<FBotPair>("fpairs", { id: parsedPairId });
 
   const {
     data: exchangeData,
@@ -261,22 +261,24 @@ const PairOrdersPage = () => {
     data: ordersData,
     isPending: isPendingOrders,
     error: errorOrdersData,
-  } = useGetManyReference<PairOrder>("orders", {
+  } = useGetManyReference<FPairOrder>("forders", {
     target: "pair_id",
     id: pairId,
     pagination: { page: 1, perPage: 10 },
     sort: { field: "startOrder", order: "DESC" },
   });
 
-  if (isLoadingPairData || isLoadingExchangeData || isPendingOrders)
+  if (isLoadingPairData || isLoadingExchangeData || isPendingOrders) {
     return <Loading />;
-  if (errorPairData || errorExchangeData || errorOrdersData)
+  }
+  if (errorPairData || errorExchangeData || errorOrdersData) {
     return (
       <div className="error loadData">{translate("errors.loadDataError")}</div>
     );
+  }
 
   const ordersByYearMonthDay = ordersData.reduce(
-    (acc: { [key: string]: PairOrder[] }, order) => {
+    (acc: { [key: string]: FPairOrder[] }, order) => {
       const startDate = new Date(order.startOrder);
       const year = startDate.getFullYear();
       const month = (startDate.getMonth() + 1).toString().padStart(2, "0");
@@ -290,6 +292,7 @@ const PairOrdersPage = () => {
     },
     {}
   );
+
   return (
     <Box className="pairOrders">
       <Container sx={{ ml: 0 }}>
@@ -298,7 +301,7 @@ const PairOrdersPage = () => {
           <small>
             ({translate("common.pair")} {translate("common.id")}:{pairId}{" "}
             <Link
-              to={createPath({ resource: "pairs", type: "edit", id: pairId })}
+              to={createPath({ resource: "fpairs", type: "edit", id: pairId })}
             >
               {pairData?.symbol}
             </Link>
@@ -319,12 +322,12 @@ const PairOrdersPage = () => {
         <LightweightChart
           chartType="candles"
           parentId={parsedPairId}
-          parentType="pair"
+          parentType="fpair"
         ></LightweightChart>
-        <PairOrdersAccordion ordersByKey={ordersByYearMonthDay} />
+        <FPairOrdersAccordion ordersByKey={ordersByYearMonthDay} />
       </Container>
     </Box>
   );
 };
 
-export default PairOrdersPage;
+export default FPairOrdersPage;

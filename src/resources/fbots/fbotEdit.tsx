@@ -23,7 +23,7 @@ import {
   useTranslate,
 } from "react-admin";
 
-import { FBotIndicator, FBotIndicatorField, FBotPause } from "../../types";
+import { FBotPause } from "../../types";
 // import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
 // import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
@@ -249,24 +249,21 @@ const Editform = () => {
             {({ formData, ...rest }) => (
               <Container maxWidth="md" sx={{ ml: 0 }}>
                 <Grid container spacing={1}>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={4}
-                    md={2}
-                    lg={1}
-                    sx={{ textAlign: "center" }}
-                  >
-                    <IdMark id={botId} />
-                  </Grid>
-                  <Grid item xs={12} sm={8} md={10} lg={11}>
-                    <TextInput
-                      defaultValue={record.title}
-                      margin="none"
-                      source="title"
-                      validate={required()}
-                      variant="standard"
-                    />
+                  <Grid item xs={12}>
+                    <Grid container spacing={1}>
+                      <Grid item xs={12} md="auto" sx={{ textAlign: "center" }}>
+                        <IdMark id={botId} />
+                      </Grid>
+                      <Grid item xs={12} md>
+                        <TextInput
+                          defaultValue={record.title}
+                          margin="none"
+                          source="title"
+                          validate={required()}
+                          variant="standard"
+                        />
+                      </Grid>
+                    </Grid>
                   </Grid>
                   <Grid item xs={12} md={12}>
                     <BooleanInput source="is_strategy" />
@@ -652,7 +649,12 @@ const Editform = () => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <BotIndicators botId={botId} botType="fbot" indicatorsData={botIndicators} useStrategy={formData.use_strategy} />
+                    <BotIndicators
+                      botId={botId}
+                      botType="fbot"
+                      indicatorsData={botIndicators}
+                      useStrategy={formData.use_strategy}
+                    />
                   </Grid>
                 </Grid>
               </Container>

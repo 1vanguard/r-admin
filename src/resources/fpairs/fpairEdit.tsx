@@ -22,9 +22,9 @@ import {
 } from "react-admin";
 
 import { FPairPause } from "../../types";
-import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
+// import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
-import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
+// import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
 import IdMark from "../../layouts/idMark";
 
 import { Box } from "@mui/material";
@@ -39,7 +39,7 @@ const botFilterToQuery = (searchText: any) => ({
   color01 = "#2196f3",
   color02 = "rgba(33, 150, 243, 0.2)",
   baseMin = 0;
-  /* entryShortRsiTfToFilter = [5, 15, 30, 60, 240],
+/* entryShortRsiTfToFilter = [5, 15, 30, 60, 240],
   entryLongRsiTfToFilter = [5, 30, 60, 240],
   autoPairRsiTfToFilter = [30, 60, 240, 1440],
   rsiPeriodOptionsToFilter = [6, 8, 10, 12, 14],
@@ -87,54 +87,50 @@ const Editform = () => {
       </Box>
       <TabbedForm toolbar={<PrymaryEditToolbar />} id="editPairForm">
         <TabbedForm.Tab label="common.pair_edit_tab_01">
-          <Container maxWidth="md" sx={{ ml: 0 }}>
+          <Container maxWidth="xl" sx={{ ml: 0 }}>
             <h2>{translate("common.pair_edit_tab_01_main_heading")}</h2>
-          </Container>
-          <Container maxWidth="md" sx={{ ml: 0 }}>
             <Grid container spacing={1}>
-              <Grid
-                item
-                xs={12}
-                sm={4}
-                md={2}
-                lg={1}
-                sx={{ textAlign: "center" }}
-              >
-                <IdMark id={record.id} />
+              <Grid item xs={12} xl={4}>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} md="auto" sx={{ textAlign: "center" }}>
+                    <IdMark id={record.id} />
+                  </Grid>
+                  <Grid item xs={12} md>
+                    <TextInput
+                      defaultValue={record.title}
+                      margin="none"
+                      source="symbol"
+                      validate={required()}
+                      variant="standard"
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={8} md={10} lg={11}>
-                <TextInput
-                  defaultValue={record.title}
-                  margin="none"
-                  source="symbol"
-                  validate={required()}
-                  variant="standard"
-                />
+              <Grid item xs={12} xl={8}>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} md={4}>
+                    <ReferenceInput
+                      filter={{ state: [1, 2] }}
+                      reference="fbots"
+                      source="bot_id"
+                    >
+                      <AutocompleteInput
+                        filterToQuery={botFilterToQuery}
+                        optionText="title"
+                        validate={required()}
+                        variant="standard"
+                      />
+                    </ReferenceInput>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextInput source="base_cur" variant="standard" />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextInput source="alt_cur" variant="standard" />
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <ReferenceInput
-                  filter={{ state: [1, 2] }}
-                  reference="fbots"
-                  source="bot_id"
-                >
-                  <AutocompleteInput
-                    filterToQuery={botFilterToQuery}
-                    optionText="title"
-                    validate={required()}
-                    variant="standard"
-                  />
-                </ReferenceInput>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextInput source="base_cur" variant="standard" />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextInput source="alt_cur" variant="standard" />
-              </Grid>
-              <Grid item xs={12}>
-                <hr />
-              </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} md={4} xl={3}>
                 <NumberInput
                   min={baseMin}
                   source="pair_limit"
@@ -142,7 +138,7 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} md={4} xl={3}>
                 <NumberInput
                   min={baseMin}
                   source="start_orders"
@@ -150,7 +146,7 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} md={4} xl={3}>
                 <NumberInput
                   min={baseMin}
                   source="start_sum"
@@ -158,7 +154,7 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={4} xl={3}>
                 <NumberInput
                   min={baseMin}
                   source="step"
@@ -166,61 +162,27 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid>
-              {/* <Grid item xs={12} sm={4}>
-                <SelectInput
-                  source="strategy"
-                  choices={strategies}
-                  validate={required()}
-                  defaultValue={record.state}
-                />
-              </Grid> */}
-              {/* <Grid item xs={12} sm={4}>
-                <NumberInput
-                  label="Interval, ms"
-                  source="interval"
-                  min={baseMin}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <BooleanInput label="Reinvest" source="reinvest" />
-              </Grid> */}
-              {/* <Grid item xs={12} sm={4}>
-                <NumberInput
-                  label="Start offset"
-                  source="start_offset"
-                  min={baseMin}
-                />
-              </Grid> */}
-              {/* <Grid item xs={12} sm={4}>
+
+              {/* Скорее всего актуально */}
+              <Grid item xs={12} md={4} xl={3}>
                 <NumberInput
                   label="Martingale"
-                  source="martin"
                   min={baseMin}
+                  source="martin"
+                  variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} md={4} xl={3}>
                 <NumberInput
-                  label="Additional Martingale"
-                  source="add_martin"
+                  label="Start offset"
                   min={baseMin}
+                  source="start_offset"
+                  variant="standard"
                 />
-              </Grid> */}
-              {/* <Grid item xs={12} sm={4}>
-                <NumberInput
-                  label="Additional Step"
-                  source="add_step"
-                  min={baseMin}
-                />
-              </Grid> */}
-              {/* <Grid item xs={12} sm={4}>
-                <NumberInput
-                  label="Trailing stop"
-                  source="stop_offset"
-                  validate={required()}
-                  min={baseMin}
-                />
-              </Grid> */}
-              <Grid item xs={12} sm={4}>
+              </Grid>
+              {/* --- */}
+
+              <Grid item xs={12} md={4} xl={3}>
                 <NumberInput
                   min={baseMin}
                   source="profit"
@@ -228,27 +190,38 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} md={4} xl={3}>
                 <NumberInput min={baseMin} source="squiz" variant="standard" />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} md={4} xl={3}>
                 <NumberInput
                   min={baseMin}
                   source="start_timeout"
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} md={4} xl={3}>
                 <NumberInput
                   min={baseMin}
                   source="next_buy_timeout"
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <hr />
+              <Grid item xs={12} md={4} xl={3}>
+                <NumberInput
+                  min={baseMin}
+                  source="auto_add_step"
+                  variant="standard"
+                />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} md={4} xl={3}>
+                <NumberInput
+                  min={baseMin}
+                  source="stoploss"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={12} md={4} xl={3}>
                 <NumberInput
                   format={(value) => {
                     if (value) {
@@ -261,302 +234,10 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <DateTimeInput
-                  readOnly={true}
-                  source="last_buy"
-                  variant="standard"
-                />
+              <Grid item xs={12}>
+                <hr />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <NumberInput
-                  readOnly={true}
-                  source="price"
-                  variant="standard"
-                />
-              </Grid>
-            </Grid>
-          </Container>
-        </TabbedForm.Tab>
-        <TabbedForm.Tab label="common.pair_edit_tab_02">
-          <Container maxWidth="md" sx={{ ml: 0 }}>
-            <h2>{translate("common.pair_edit_tab_02_main_heading")}</h2>
-          </Container>
-          <Container maxWidth="xl" sx={{ ml: 0, maxWidth: "1598px" }}>
-            <Grid container justifyContent={"space-between"} spacing={1}>
-              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
-                <h3 style={{ marginTop: 0 }}>
-                  <Tooltip
-                    arrow
-                    leaveDelay={200}
-                    placement="right-start"
-                    title={translate(
-                      "common.pair_indicators_group_01_tooltip_title"
-                    )}
-                  >
-                    <InfoOutlinedIcon
-                      sx={{ mr: "0.3em", verticalAlign: "top" }}
-                    />
-                  </Tooltip>
-                  <span>
-                    {translate("common.pair_indicators_group_01_heading")}
-                  </span>
-                </h3>
-                <Grid
-                  container
-                  sx={{
-                    borderStyle: "solid",
-                    borderWidth: "1px",
-                    borderColor: color01,
-                    marginBottom: 3,
-                    paddingTop: 3,
-                    paddingRight: 3,
-                    paddingLeft: 3,
-                  }}
-                >
-                  {/* <Grid item xs={12} md={6}>
-                    <TimeFramesSelectInput
-                      frameChoices={rsiTimeframeOptionsToFilter}
-                      label="common.rsi_timeframe_label"
-                      required={true}
-                      sourceName="rsi_timeframe"
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={12} md={6}>
-                    <PeriodsSelectInput
-                      label="resources.pairs.fields.rsi_period"
-                      periodChoices={rsiPeriodOptionsToFilter}
-                      required={true}
-                      sourceName="rsi_period"
-                    />
-                  </Grid> */}
-                </Grid>
-                <Grid
-                  container
-                  spacing={1}
-                  sx={{
-                    marginBottom: 3,
-                    paddingRight: 3,
-                    paddingLeft: 3,
-                  }}
-                >
-                  {/* <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="rsi_min"
-                      variant="standard"
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="rsi_max"
-                      variant="standard"
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={12}>
-                    <TimeFramesSelectInput
-                      frameChoices={entryShortRsiTfToFilter}
-                      label="common.rsi_short_tf_label"
-                      sourceName="rsi_short_tf"
-                    />
-                  </Grid> */}
-                </Grid>
-              </Grid>
-              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
-                <h3 style={{ marginTop: 0 }}>
-                  <Tooltip
-                    arrow
-                    leaveDelay={200}
-                    placement="right-start"
-                    title={translate(
-                      "common.pair_indicators_group_02_tooltip_title"
-                    )}
-                  >
-                    <InfoOutlinedIcon
-                      sx={{ mr: "0.3em", verticalAlign: "top" }}
-                    />
-                  </Tooltip>
-                  <span>
-                    {translate("common.pair_indicators_group_02_heading")}
-                  </span>
-                </h3>
-                {/* <BooleanInput source="use_ltf" /> */}
-                <Grid
-                  container
-                  sx={{
-                    borderStyle: "solid",
-                    borderWidth: "1px",
-                    borderColor: color01,
-                    marginBottom: 3,
-                    paddingTop: 3,
-                    paddingRight: 3,
-                    paddingLeft: 3,
-                  }}
-                >
-                  {/* <Grid item xs={12} md={6}>
-                    <TimeFramesSelectInput
-                      frameChoices={entryLongRsiTfToFilter}
-                      label="common.rsi_long_tf_label"
-                      sourceName="rsi_long_tf"
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={12} md={6}>
-                    <PeriodsSelectInput
-                      label="common.rsi_period_1h_label"
-                      periodChoices={rsiPeriodLongOptionsToFilter}
-                      sourceName="rsi_period_1h"
-                    />
-                  </Grid> */}
-                </Grid>
-                <Grid
-                  container
-                  spacing={1}
-                  sx={{
-                    marginBottom: 3,
-                    paddingRight: 3,
-                    paddingLeft: 3,
-                  }}
-                >
-                  {/* <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="rsi_min_1h"
-                      variant="standard"
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="rsi_max_1h"
-                      variant="standard"
-                    />
-                  </Grid> */}
-                </Grid>
-              </Grid>
-              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
-                <h3 style={{ marginTop: 0 }}>
-                  <Tooltip
-                    arrow
-                    leaveDelay={200}
-                    placement="right-start"
-                    title={translate(
-                      "common.pair_indicators_group_03_tooltip_title"
-                    )}
-                  >
-                    <InfoOutlinedIcon
-                      sx={{ mr: "0.3em", verticalAlign: "top" }}
-                    />
-                  </Tooltip>
-                  <span>
-                    {translate("common.pair_indicators_group_03_heading")}
-                  </span>
-                </h3>
-                {/* <BooleanInput label="Auto" source="is_auto" /> */}
-                {/* <BooleanInput source="rsi_sell" /> */}
-                {/* <NumberInput
-                  min={baseMin}
-                  source="rsi_diff"
-                  variant="standard"
-                /> */}
-                {/* <NumberInput
-                  min={baseMin}
-                  source="rsi_sell_diff"
-                  variant="standard"
-                /> */}
-              </Grid>
-              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
-                <h3 style={{ marginTop: 0 }}>
-                  <Tooltip
-                    arrow
-                    leaveDelay={200}
-                    placement="right-start"
-                    title={translate(
-                      "common.pair_indicators_group_04_tooltip_title"
-                    )}
-                  >
-                    <InfoOutlinedIcon
-                      sx={{ mr: "0.3em", verticalAlign: "top" }}
-                    />
-                  </Tooltip>
-                  <span>
-                    {translate("common.pair_indicators_group_04_heading")}
-                  </span>
-                </h3>
-                <Grid
-                  container
-                  sx={{
-                    borderStyle: "solid",
-                    borderWidth: "1px",
-                    borderColor: color01,
-                    marginBottom: 3,
-                    paddingTop: 3,
-                    paddingRight: 3,
-                    paddingLeft: 3,
-                  }}
-                >
-                  {/* <Grid item xs={12} md={6}>
-                    <TimeFramesSelectInput
-                      frameChoices={autoPairRsiTfToFilter}
-                      label="common.auto_pair_tf_label"
-                      sourceName="auto_pair_tf"
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={12} md={6}>
-                    <PeriodsSelectInput
-                      label="common.auto_sell_period_label"
-                      periodChoices={autoRsiSellPeriodOptionsToFilter}
-                      sourceName="auto_sell_period"
-                    />
-                  </Grid> */}
-                </Grid>
-                <Grid
-                  container
-                  spacing={1}
-                  sx={{
-                    marginBottom: 3,
-                    paddingRight: 3,
-                    paddingLeft: 3,
-                  }}
-                >
-                  {/* <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="auto_rsi_min_big"
-                      variant="standard"
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="auto_rsi_max_big"
-                      variant="standard"
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={12}>
-                    <TimeFramesSelectInput
-                      frameChoices={aiutoSellRsiTfToFilter}
-                      label="common.auto_sell_tf_label"
-                      sourceName="auto_sell_tf"
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="auto_rsi_min_sell"
-                      variant="standard"
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="auto_rsi_max_sell"
-                      variant="standard"
-                    />
-                  </Grid> */}
-                </Grid>
-              </Grid>
-              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
+              <Grid item xs={12} lg={4}>
                 <h3 style={{ marginTop: 0 }}>
                   <Tooltip
                     arrow
@@ -574,31 +255,14 @@ const Editform = () => {
                     {translate("common.pair_indicators_group_05_heading")}
                   </span>
                 </h3>
-                <Grid container spacing={1}>
-                  <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="pd_up"
-                      variant="standard"
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <NumberInput
-                      min={baseMin}
-                      source="pd_down"
-                      variant="standard"
-                    />
-                  </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                  <DateTimeInput
-                    readOnly={true}
-                    source="pause_until"
-                    variant="standard"
-                  />
-                </Grid>
+                <NumberInput min={baseMin} source="pd_up" variant="standard" />
+                <NumberInput
+                  min={baseMin}
+                  source="pd_down"
+                  variant="standard"
+                />
               </Grid>
-              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
+              <Grid item xs={12} lg={8}>
                 <h3 style={{ marginTop: 0 }}>
                   <Tooltip
                     arrow
@@ -627,20 +291,27 @@ const Editform = () => {
                   variant="standard"
                 />
               </Grid>
-            </Grid>
-            <hr/>
-            <Grid container spacing={1}>
-              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
-                <NumberInput
-                  min={baseMin}
-                  source="auto_add_step"
+              <Grid item xs={12}>
+                <hr />
+              </Grid>
+              <Grid item xs={12} md={4} xl={3}>
+                <DateTimeInput
+                  readOnly={true}
+                  source="pause_until"
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
+              <Grid item xs={12} md={4} xl={3}>
+                <DateTimeInput
+                  readOnly={true}
+                  source="last_buy"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={12} md={4} xl={3}>
                 <NumberInput
-                  min={baseMin}
-                  source="stoploss"
+                  readOnly={true}
+                  source="price"
                   variant="standard"
                 />
               </Grid>
@@ -652,7 +323,7 @@ const Editform = () => {
             <h2>{translate("common.pair_edit_tab_03_main_heading")}</h2>
           </Container>
           <Container maxWidth="md" sx={{ ml: 0 }}>
-            <ReferenceManyField reference="bot_pause" target="pair_id">
+            <ReferenceManyField reference="bot_fpause" target="pair_id">
               <Datagrid bulkActionButtons={false}>
                 <DateField source="pause_start" showTime sortable={false} />
                 <FunctionField
@@ -682,7 +353,7 @@ const Editform = () => {
         </TabbedForm.Tab>
         <TabbedForm.Tab
           label="common.pair_edit_tab_04"
-          path={`/fpairs/${record.id}/orders`}
+          path={`/fpairs/${record.id}/forders`}
         ></TabbedForm.Tab>
       </TabbedForm>
     </div>

@@ -41,7 +41,7 @@ import { UsersList } from "./resources/users/usersList";
 import { WhitelistCreate } from "./resources/whitelist/whitelistCreate";
 import { WhitelistEdit } from "./resources/whitelist/whitelistEdit";
 import { WhitelistList } from "./resources/whitelist/whitelistList";
-import FPairOrdersPage from "./resources/pairs/pairOrdersPage";
+import FPairOrdersPage from "./resources/fpairs/fpairOrdersPage";
 import FPairsListByBot from "./resources/fpairs/fpairsListByBot";
 import PairOrdersPage from "./resources/pairs/pairOrdersPage";
 import PairsListByBot from "./resources/pairs/pairsListByBot";

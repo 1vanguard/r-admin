@@ -1,7 +1,6 @@
 import * as React from "react";
 import {
   BooleanInput,
-  LinearProgress,
   NumberInput,
   required,
   SelectInput,
@@ -10,41 +9,40 @@ import {
 } from "react-admin";
 import { useWatch } from "react-hook-form";
 
-import { FBotIndicator, FBotIndicatorField, FBotPause } from "../types";
+import { FBotIndicator, FBotIndicatorField } from "../types";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
 type BotIndicatorsProps = {
-  botId: number;
+  botId?: number;
   botType: string;
   indicatorsData: FBotIndicator[] | any[];
   useStrategy?: boolean;
 };
 
-const baseMin = 0,
-  color01 = "#2196f3",
-  color02 = "rgba(33, 150, 243, 0.2)";
+type IndicatorFieldsProps = {
+  fieldsArr: FBotIndicatorField[] | any[];
+  indicatorIndex: number;
+  strategy?: boolean;
+};
 
-const IndicatorFields = ({ fieldsArr, indicatorIndex, strategy }) => {
+const color01 = "#2196f3"
+
+const IndicatorFields = ({
+  fieldsArr,
+  indicatorIndex,
+  strategy = false,
+}: IndicatorFieldsProps) => {
   const isIndicatorEnabled = useWatch({
     name: `indicators[${indicatorIndex}].enabled`,
   });
-
-  /* console.log("fieldsArr: ", fieldsArr);
-  console.log(
-    "fieldsArr filtered: ",
-    fieldsArr?.filter((field) => "value" in field)
-  ); */
-  /* if (fieldsArr.length === 0) {
-    return <LinearProgress />;
-  } */
 
   return isIndicatorEnabled ? (
     <Grid container spacing={1}>
       {fieldsArr
         ?.filter((field) => "value" in field)
-        .map((field: FBotIndicatorFields, fieldIndex: number) => (
+        .map((field: FBotIndicatorField, fieldIndex: number) => (
           <Grid
             item
             xs={12}
@@ -53,7 +51,6 @@ const IndicatorFields = ({ fieldsArr, indicatorIndex, strategy }) => {
             xl={3}
             key={`${indicatorIndex}-${fieldIndex}`}
           >
-            {/* {!field ? <LinearProgress /> : null} */}
             {field.values_list?.length > 0 ? (
               <SelectInput
                 choices={field.values_list}
@@ -66,7 +63,7 @@ const IndicatorFields = ({ fieldsArr, indicatorIndex, strategy }) => {
                 {...(field.required ? { validate: required() } : {})}
               />
             ) : (
-              <React.Fragment>
+              <>
                 {field.type === "text" && (
                   <TextInput
                     className={strategy ? "active useStrategy" : "useStrategy"}
@@ -97,7 +94,7 @@ const IndicatorFields = ({ fieldsArr, indicatorIndex, strategy }) => {
                     {...(field.required ? { validate: required() } : {})}
                   />
                 )}
-              </React.Fragment>
+              </>
             )}
           </Grid>
         ))}
@@ -111,11 +108,15 @@ const BotIndicators = ({
   indicatorsData,
   useStrategy = false,
 }: BotIndicatorsProps) => {
-  const translate = useTranslate();
-  const indicators = indicatorsData;
+  const translate = useTranslate(),
+    indicators = indicatorsData;
 
   if (!indicators) {
     return <Box>{translate("common.no_indicators")}</Box>;
+  }
+
+  if (botType !== "fbot") {
+    return <Box className="warning warning_01">{translate("warnings.indicators_warning_01")}</Box>;
   }
 
   return (

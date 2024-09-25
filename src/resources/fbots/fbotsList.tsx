@@ -68,9 +68,16 @@ export const FBotsList = () => {
   } = usePermissions();
 
   if (isLoadingPermissions) return <Loading />;
-  if (errorPermissions) return <div className="error loadPermissions">{translate("errors.loadPermissionsError")}</div>;
+  if (errorPermissions)
+    return (
+      <div className="error loadPermissions">
+        {translate("errors.loadPermissionsError")}
+      </div>
+    );
   permissions.role !== 1 && permissions.role !== 2 && (
-    <div className="warning notEnoughPermissions">{translate("warnings.not_enough_permissions")}</div>
+    <div className="warning notEnoughPermissions">
+      {translate("warnings.not_enough_permissions")}
+    </div>
   );
 
   return (
@@ -94,7 +101,9 @@ export const FBotsList = () => {
         />
         <FunctionField
           label={translate("common.bot")}
-          render={(record: FBot) => <ItemStateControlBar record={record} type="fbot" />}
+          render={(record: FBot) => (
+            <ItemStateControlBar record={record} type="fbot" />
+          )}
           source="title"
         />
         <ReferenceField reference="exchanges" source="exchange_id">
@@ -120,18 +129,25 @@ export const FBotsList = () => {
           />
         </ReferenceManyField>
         <TextField source="auto_start_sum" />
-        <TextField source="auto_profit" />
+        <FunctionField
+          source="auto_profit"
+          render={(record) => `${record.auto_profit}%`}
+        />
         <TextField source="botlimit" />
         <FunctionField
           label={translate("resources.bots.fields.in_trades")}
           render={(record: FBot) => {
-            return <GridData type="fbot" id={record.id} parameter="in_trades" />;
+            return (
+              <GridData type="fbot" id={record.id} parameter="in_trades" />
+            );
           }}
         />
         <FunctionField
           label={translate("resources.bots.fields.profit")}
           render={(record: FBot) => {
-            return <GridData type="fbot" id={record.id} parameter="profit" />;
+            return (
+              <GridData type="fbot" id={record.id} parameter="profit" />
+            ); /* Подставлять размерность, это поле base_curr (нашёл только у пары) */
           }}
         />
       </Datagrid>

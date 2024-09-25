@@ -12,7 +12,7 @@ import {
   useTranslate,
 } from "react-admin";
 import { DataProviderWithCustomMethods } from "../dataProvider";
-import { BotPair, Exchange, timeFrame } from "../types";
+import { BotPair, FBotPair, Exchange, timeFrame } from "../types";
 
 import { createChart, TimeScaleOptions } from "lightweight-charts";
 
@@ -62,7 +62,7 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
       data: timeframesData,
       isPending: isPendingTimeFrames,
       error: errorTimeFrames,
-    } = parentType === "pair"
+    } = !!parentType && ["pair", "fpair"].includes(parentType)
       ? useGetList("timeframes")
       : { data: [], isPending: false, error: null };
 
@@ -72,6 +72,8 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
     error: errorPairData,
   } = parentType === "pair"
     ? useGetOne<BotPair>("pairs", { id: parentId })
+    : parentType === "fpair"
+    ? useGetOne<FBotPair>("fpairs", { id: parentId })
     : { data: undefined, isLoading: false, error: null };
 
   const {
@@ -91,13 +93,14 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
       textColor: theme_textPrimaryColor,
     };
 
-
   const dataProvider = useDataProvider<DataProviderWithCustomMethods>();
   const chartContainerRef = useRef<HTMLDivElement>();
   const defaultTimeframe = 5;
   const defaultLimit = 60;
   const [selectedTimeframe, setSelectedTimeframe] = useState(defaultTimeframe);
-  const [timeframeChoices, setTimeframeChoices] = useState(timeframesData || []);
+  const [timeframeChoices, setTimeframeChoices] = useState(
+    timeframesData || []
+  );
   const [selectedLimit, setSelectedLimit] = useState(defaultLimit);
   const [limitChoices, setLimitChoices] = useState(limits || []);
   const [chart, setChart] = useState();
@@ -280,7 +283,7 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
         } else {
           return obj;
         }
-      })
+      });
 
       console.log("newLimitChoices: ", newLimitChoices);
 
