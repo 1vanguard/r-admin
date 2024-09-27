@@ -146,8 +146,8 @@ export const FBotsList = () => {
           label={translate("resources.bots.fields.profit")}
           render={(record: FBot) => {
             return (
-              <GridData type="fbot" id={record.id} parameter="profit" />
-            ); /* Подставлять размерность, это поле base_curr (нашёл только у пары) */
+              <GridData type="fbot" id={record.id} parameter="profit" dimension={record.baseAsset} />
+            );
           }}
         />
       </Datagrid>

@@ -195,7 +195,7 @@ const en = {
         use_indicator: 'Use indicator',
         use_strategy_desc: 'All selected bot settings will be overwritten from selected strategy while bot saving',
         use_strategy: 'Use strategy',
-        useBNB_label: 'Use BNB token for paying commission',
+        useBNB_label: 'Use the exchange token to pay commissions',
         user_create_heading: 'Create new user',
         user_edit_tab_01_main_heading: 'User main settings',
         user_edit_tab_01: 'Main settings',

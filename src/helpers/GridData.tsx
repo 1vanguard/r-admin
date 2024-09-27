@@ -9,9 +9,10 @@ interface GridDataProps {
   additionalFilters?: {
     [key: string]: any;
   };
+  dimension?: string;
 }
 
-const GridData: React.FC<GridDataProps> = ({ type, id, parameter }) => {
+const GridData: React.FC<GridDataProps> = ({ type, id, parameter, dimension }) => {
   const translate = useTranslate(),
     {
       data: GridDataLoaded,
@@ -45,6 +46,10 @@ const GridData: React.FC<GridDataProps> = ({ type, id, parameter }) => {
     } else if (parameter === "profit") {
       displayData = profit;
     }
+
+    if (dimension && displayData !== "-") {
+      displayData = `${displayData} ${dimension}`;
+    }
   }
 
   if (type === "pair" || type === "fpair") {
@@ -66,7 +71,7 @@ const GridData: React.FC<GridDataProps> = ({ type, id, parameter }) => {
     }
   }
 
-  return <span>{displayData}</span>;
+  return <span style={{ display: "inline-flex", flexWrap: "nowrap" }}>{displayData}</span>;
 };
 
 export default GridData;

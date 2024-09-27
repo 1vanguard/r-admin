@@ -79,6 +79,13 @@ const CreateForm = () => {
               />
             </ReferenceInput>
           </Grid>
+          <Grid item xs={12} md={4}>
+            <TextInput
+              source="baseAsset"
+              validate={required()}
+              variant="standard"
+            />
+          </Grid>
         </Grid>
       </Container>
     </SimpleForm>

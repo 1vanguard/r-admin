@@ -1203,7 +1203,8 @@ export const FBotEdit = () => {
       modified_by: parsedUserId,
     });
   return (
-    <Edit redirect={false} title={<BotTitle />} transform={transform}>
+    <Edit /* redirect={false} */ title={<BotTitle />} transform={transform}>
+      {/* Вернуть редирект, когда починится сохранение с индикаторамии */}
       <Editform />
     </Edit>
   );
