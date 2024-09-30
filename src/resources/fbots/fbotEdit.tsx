@@ -19,7 +19,9 @@ import {
   TextInput,
   useGetList,
   useGetManyReference,
+  useNotify,
   useRecordContext,
+  useRefresh,
   useTranslate,
 } from "react-admin";
 
@@ -1196,15 +1198,28 @@ const BotTitle = () => {
 };
 
 export const FBotEdit = () => {
-  const userId = localStorage.getItem("uid"),
+  const translate = useTranslate(),
+    userId = localStorage.getItem("uid"),
     parsedUserId = userId ? parseInt(userId) : null,
     transform = (data) => ({
       ...data,
       modified_by: parsedUserId,
-    });
+    }),
+    notify = useNotify(),
+    refresh = useRefresh(),
+    onSuccess = () => {
+      refresh();
+      notify(translate("ra.notification.updated", { smart_count: 1 }));
+    };
+
   return (
-    <Edit /* redirect={false} */ title={<BotTitle />} transform={transform}>
-      {/* Вернуть редирект, когда починится сохранение с индикаторамии */}
+    <Edit
+      redirect={false}
+      title={<BotTitle />}
+      transform={transform}
+      mutationOptions={{ onSuccess }}
+      mutationMode="pessimistic"
+    >
       <Editform />
     </Edit>
   );

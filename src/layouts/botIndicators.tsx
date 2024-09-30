@@ -27,7 +27,7 @@ type IndicatorFieldsProps = {
   strategy?: boolean;
 };
 
-const color01 = "#2196f3"
+const color01 = "#2196f3";
 
 const IndicatorFields = ({
   fieldsArr,
@@ -41,7 +41,7 @@ const IndicatorFields = ({
   return isIndicatorEnabled ? (
     <Grid container spacing={1}>
       {fieldsArr
-        ?.filter((field) => "value" in field)
+        ?.filter((field) => field.value !== null && field.value !== undefined)
         .map((field: FBotIndicatorField, fieldIndex: number) => (
           <Grid
             item
@@ -116,7 +116,11 @@ const BotIndicators = ({
   }
 
   if (botType !== "fbot") {
-    return <Box className="warning warning_01">{translate("warnings.indicators_warning_01")}</Box>;
+    return (
+      <Box className="warning warning_01">
+        {translate("warnings.indicators_warning_01")}
+      </Box>
+    );
   }
 
   return (
@@ -166,11 +170,13 @@ const BotIndicators = ({
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <IndicatorFields
-              fieldsArr={indicator.fields}
-              indicatorIndex={indIndex}
-              strategy={useStrategy}
-            />
+            <Grid container spacing={1}>
+              <IndicatorFields
+                fieldsArr={indicator.fields}
+                indicatorIndex={indIndex}
+                strategy={useStrategy}
+              />
+            </Grid>
           </Grid>
         </Grid>
       ))}
