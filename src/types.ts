@@ -189,7 +189,7 @@ export type PairOrder = {
   symbol: string;
 }
 
-export type FPairOrder = {
+export type FPairFOrder = {
   id: number;
   order_done: number;
   order_id: number;

@@ -2,7 +2,6 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import {
   AutocompleteInput,
-  BooleanInput,
   Datagrid,
   DateField,
   DateTimeInput,
@@ -22,9 +21,7 @@ import {
 } from "react-admin";
 
 import { FPairPause } from "../../types";
-// import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
-// import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
 import IdMark from "../../layouts/idMark";
 
 import { Box } from "@mui/material";
@@ -36,17 +33,7 @@ import Tooltip from "@mui/material/Tooltip";
 const botFilterToQuery = (searchText: any) => ({
     title_like: `${searchText}`,
   }),
-  color01 = "#2196f3",
-  color02 = "rgba(33, 150, 243, 0.2)",
   baseMin = 0;
-/* entryShortRsiTfToFilter = [5, 15, 30, 60, 240],
-  entryLongRsiTfToFilter = [5, 30, 60, 240],
-  autoPairRsiTfToFilter = [30, 60, 240, 1440],
-  rsiPeriodOptionsToFilter = [6, 8, 10, 12, 14],
-  rsiPeriodLongOptionsToFilter = [6, 8, 10, 12, 14],
-  rsiTimeframeOptionsToFilter = [1, 5, 15, 30, 60, 240, 1440, 10080, 43200],
-  aiutoSellRsiTfToFilter = [5, 15, 30, 60, 240, 1440],
-  autoRsiSellPeriodOptionsToFilter = [6, 8, 10, 12, 14], */
 
 const Editform = () => {
   const record = useRecordContext(),
@@ -163,7 +150,7 @@ const Editform = () => {
                 />
               </Grid>
 
-              {/* Скорее всего актуально */}
+              {/* Most likely the actual fields */}
               <Grid item xs={12} md={4} xl={3}>
                 <NumberInput
                   label="Martingale"

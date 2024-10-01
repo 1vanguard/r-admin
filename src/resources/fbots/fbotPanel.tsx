@@ -34,9 +34,12 @@ export const FBotPanel = () => {
     pagination: { page: 1, perPage: 1000000 },
   });
 
-  if (botPairsLoading) return <Loading />
-  if (botPairsError) return <div className="error dataError">{translate("errors.loadDataError")}</div>
-// console.log('botPairs: ', botPairs)
+  if (botPairsLoading) {
+    return <Loading />
+  }
+  if (botPairsError) {
+    return <div className="error dataError">{translate("errors.loadDataError")}</div>
+  }
   return (
     <div className="botPanel">
       <div className="header">

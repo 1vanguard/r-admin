@@ -2,9 +2,9 @@ import * as React from "react";
 import { useRecordContext, useTranslate } from "react-admin";
 
 import LogMaster from "../../layouts/logMaster";
-import PairOrders from "../../layouts/pairOrders";
 
 import Grid from "@mui/material/Grid";
+import FpairForders from "../../layouts/fpairForders";
 
 export const FPairPanel = () => {
   const record = useRecordContext(),
@@ -33,7 +33,7 @@ export const FPairPanel = () => {
         </Grid>
         <Grid item xs={7}>
           <div className="content">
-            <PairOrders autoUpdate={true} />
+            <FpairForders autoUpdate={true} />
           </div>
         </Grid>
       </Grid>

@@ -26,9 +26,7 @@ import {
 } from "react-admin";
 
 import { FBotPause } from "../../types";
-// import { PeriodsSelectInput } from "../../layouts/periodsSelectInput";
 import { PrymaryEditToolbar } from "../../layouts/primaryEditToolbar";
-// import { TimeFramesSelectInput } from "../../layouts/timeFramesSelectInput";
 import BotIndicators from "../../layouts/botIndicators";
 import BotPairsCounter from "../../layouts/botPairsCounter";
 import GridData from "../../helpers/GridData";
@@ -37,7 +35,6 @@ import IdMark from "../../layouts/idMark";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-// import LinearProgress from "@mui/material/LinearProgress";
 import {
   Table,
   TableBody,
@@ -46,18 +43,6 @@ import {
   TableRow,
 } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-
-/* const autoPairTfToFilter = [0, 5, 15, 30, 60, 240, 1440, 10080, 43200],
-  autoShortTfToFilter = [5, 15, 30, 60, 240],
-  autoLongTfToFilter = [30, 60, 240],
-  autoSellTfToFilter = [0, 5, 15, 30, 60, 240, 1440];
-
-const autoRsiPeriodOptionsToFilter = [6, 8, 10, 14],
-  autoRsiPeriod1hOptionsToFilter = [6, 8, 12, 14],
-  autoSellPeriodOptionsToFilter = [6, 8, 10, 12, 14];
-
-const timeframeToFilter = [1, 5, 15, 30, 60, 240, 1440, 10080, 43200];
-const periodToFilter = [6, 8, 10, 12, 14]; */
 
 const baseMin = 0,
   color01 = "#2196f3",
@@ -68,32 +53,6 @@ const baseMin = 0,
   usernameFilterToQuery = (searchText: any) => ({
     username_like: `${searchText}`,
   });
-
-/* 
-const StrategyInput = (props: any) => {
-  const [strategyId, setStrategyId] = useState(null);
-  const isStrategy = useWatch<{ is_strategy: boolean }>({ name: "is_strategy" });
-  //console.log("props.strategyChoices: ", props.strategyChoices);
-
-  const disableInput = props.isDisabled ? true : false;
-  console.log("props.isDisabled: ", props.isDisabled);
-  return (
-    <SelectInput
-      //choices={isStrategy ? [] : props.strategyChoices}
-      choices={props.strategyChoices}
-      // defaultValue={isStrategy ? "" : props.strategyChoices[0].id}
-      //disabled={props.isDisabled  ?? false}
-
-      margin="none"
-      optionText="title"
-      optionValue="id"
-      source="strategy"
-      resettable
-      variant="standard"
-      //value={strategyId}
-    />
-  );
-}; */
 
 const Editform = () => {
   const record = useRecordContext(),
@@ -354,27 +313,6 @@ const Editform = () => {
                       variant="standard"
                     />
                   </Grid>
-                  {/* <Grid item xs={12} md={6}>
-                    <TimeFramesSelectInput
-                      className={
-                        formData.use_strategy
-                          ? "active useStrategy"
-                          : "useStrategy"
-                      }
-                      frameChoices={timeframeToFilter}
-                      label="common.timeframe"
-                      sourceName="timeframe"
-                      required={true}
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={12} md={6}>
-                    <PeriodsSelectInput
-                      periodChoices={periodToFilter}
-                      label="common.period"
-                      sourceName="period"
-                      required={true}
-                    />
-                  </Grid> */}
                   <Grid item xs={12} md={6}>
                     <NumberInput
                       defaultValue={baseMin}
@@ -409,6 +347,96 @@ const Editform = () => {
                       label="common.auto_on_label"
                       source="auto_on"
                     />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <h3 style={{ marginTop: 0 }}>
+                      <Tooltip
+                        arrow
+                        leaveDelay={200}
+                        placement="right-start"
+                        title={translate(
+                          "common.bot_indicators_group_05_tooltip_title"
+                        )}
+                      >
+                        <InfoOutlinedIcon
+                          sx={{ mr: "0.3em", verticalAlign: "top" }}
+                        />
+                      </Tooltip>
+                      <span>
+                        {translate("common.bot_indicators_group_05_heading")}
+                      </span>
+                    </h3>
+                    <Grid container spacing={1}>
+                      <Grid item xs={12} md={6}>
+                        <NumberInput
+                          className={
+                            formData.use_strategy
+                              ? "active useStrategy"
+                              : "useStrategy"
+                          }
+                          defaultValue={baseMin}
+                          label="common.auto_pd_up_label"
+                          min={baseMin}
+                          source="auto_pd_up"
+                          variant="standard"
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <NumberInput
+                          className={
+                            formData.use_strategy
+                              ? "active useStrategy"
+                              : "useStrategy"
+                          }
+                          defaultValue={baseMin}
+                          label="common.auto_pd_down_label"
+                          min={baseMin}
+                          source="auto_pd_down"
+                          variant="standard"
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <DateTimeInput
+                          readOnly={true}
+                          source="pause_until"
+                          variant="standard"
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <h3 style={{ marginTop: 0 }}>
+                      <Tooltip
+                        arrow
+                        leaveDelay={200}
+                        placement="right-start"
+                        title={translate(
+                          "common.bot_indicators_group_06_tooltip_title"
+                        )}
+                      >
+                        <InfoOutlinedIcon
+                          sx={{ mr: "0.3em", verticalAlign: "top" }}
+                        />
+                      </Tooltip>
+                      <span>
+                        {translate("common.bot_indicators_group_06_heading")}
+                      </span>
+                    </h3>
+                    <NumberInput
+                      className={formData.use_strategy ? "active" : ""}
+                      min={baseMin}
+                      source="long_pump"
+                      variant="standard"
+                    />
+                    <NumberInput
+                      className={formData.use_strategy ? "active" : ""}
+                      min={baseMin}
+                      source="long_dump"
+                      variant="standard"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <hr />
                   </Grid>
                   <Grid item xs={12}>
                     <TextInput margin="none" source="apikey" />
@@ -656,481 +684,6 @@ const Editform = () => {
                       botType="fbot"
                       indicatorsData={botIndicators}
                       useStrategy={formData.use_strategy}
-                    />
-                  </Grid>
-                </Grid>
-              </Container>
-            )}
-          </FormDataConsumer>
-        </TabbedForm.Tab>
-        <TabbedForm.Tab label="common.bot_edit_tab_03" value={record}>
-          <Container maxWidth="xl" sx={{ ml: 0 }}>
-            <h2>{translate("common.bot_edit_tab_03_main_heading")}</h2>
-          </Container>
-          <FormDataConsumer>
-            {({ formData, ...rest }) => (
-              <Container sx={{ ml: 0, maxWidth: "1598px" }}>
-                <Grid container justifyContent={"space-between"} spacing={1}>
-                  <Grid item xs={12} lg={6} xl={5}>
-                    <h3 style={{ marginTop: 0 }}>
-                      <Tooltip
-                        arrow
-                        leaveDelay={200}
-                        placement="right-start"
-                        title={translate(
-                          "common.bot_indicators_group_01_tooltip_title"
-                        )}
-                      >
-                        <InfoOutlinedIcon
-                          sx={{ mr: "0.3em", verticalAlign: "top" }}
-                        />
-                      </Tooltip>
-                      <span>
-                        {translate("common.bot_indicators_group_01_heading")}
-                      </span>
-                    </h3>
-                    <Grid
-                      container
-                      sx={{
-                        borderStyle: "solid",
-                        borderWidth: "1px",
-                        borderColor: color01,
-                        marginBottom: 3,
-                        paddingTop: 3,
-                        paddingRight: 3,
-                        paddingLeft: 3,
-                      }}
-                    >
-                      {/* <Grid item xs={12} md={6}>
-                        <TimeFramesSelectInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          frameChoices={autoShortTfToFilter}
-                          label="common.auto_short_tf_label"
-                          sourceName="auto_short_tf"
-                        />
-                      </Grid> */}
-                      {/* <Grid item xs={12} md={6}>
-                        <PeriodsSelectInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          label="common.auto_rsi_period_label"
-                          periodChoices={autoRsiPeriodOptionsToFilter}
-                          sourceName="auto_rsi_period"
-                        />
-                      </Grid> */}
-                    </Grid>
-                    <Grid
-                      container
-                      spacing={1}
-                      sx={{
-                        marginBottom: 3,
-                        paddingRight: 3,
-                        paddingLeft: 3,
-                      }}
-                    >
-                      {/* <Grid item xs={12} md={6}>
-                        <NumberInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          label="common.auto_rsi_min_label"
-                          margin="none"
-                          min={baseMin}
-                          source="auto_rsi_min"
-                          variant="standard"
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
-                        <NumberInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          label="common.auto_rsi_max_label"
-                          margin="none"
-                          min={baseMin}
-                          source="auto_rsi_max"
-                          variant="standard"
-                        />
-                      </Grid> */}
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} lg={6} xl={5}>
-                    <h3 style={{ marginTop: 0 }}>
-                      <Tooltip
-                        arrow
-                        leaveDelay={200}
-                        placement="right-start"
-                        title={translate(
-                          "common.bot_indicators_group_02_tooltip_title"
-                        )}
-                      >
-                        <InfoOutlinedIcon
-                          sx={{ mr: "0.3em", verticalAlign: "top" }}
-                        />
-                      </Tooltip>
-                      <span>
-                        {translate("common.bot_indicators_group_02_heading")}
-                      </span>
-                    </h3>
-                    {/* <BooleanInput
-                      className={
-                        formData.use_strategy
-                          ? "active useStrategy"
-                          : "useStrategy"
-                      }
-                      source="auto_use_ltf"
-                    /> */}
-                    <Grid item xs={12}>
-                      <Grid
-                        container
-                        sx={{
-                          borderStyle: "solid",
-                          borderWidth: "1px",
-                          borderColor: color01,
-                          marginBottom: 3,
-                          paddingTop: 3,
-                          paddingRight: 3,
-                          paddingLeft: 3,
-                        }}
-                      >
-                        {/* <Grid item xs={12} md={6}>
-                          <TimeFramesSelectInput
-                            className={
-                              formData.use_strategy
-                                ? "active useStrategy"
-                                : "useStrategy"
-                            }
-                            frameChoices={autoLongTfToFilter}
-                            label="common.auto_long_tf_label"
-                            sourceName="auto_long_tf"
-                          />
-                        </Grid> */}
-                        {/* <Grid item xs={12} md={6}>
-                          <PeriodsSelectInput
-                            className={
-                              formData.use_strategy
-                                ? "active useStrategy"
-                                : "useStrategy"
-                            }
-                            label="resources.bots.fields.auto_rsi_period_1h"
-                            periodChoices={autoRsiPeriod1hOptionsToFilter}
-                            sourceName="auto_rsi_period_1h"
-                          />
-                        </Grid> */}
-                      </Grid>
-                    </Grid>
-                    <Grid
-                      container
-                      spacing={1}
-                      sx={{
-                        marginBottom: 3,
-                        paddingRight: 3,
-                        paddingLeft: 3,
-                      }}
-                    >
-                      {/* <Grid item xs={12} md={6}>
-                        <NumberInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          label="common.auto_rsi_min_1h_label"
-                          margin="none"
-                          min={baseMin}
-                          source="auto_rsi_min_1h"
-                          variant="standard"
-                        />
-                      </Grid> */}
-                      {/* <Grid item xs={12} md={6}>
-                        <NumberInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          margin="none"
-                          min={baseMin}
-                          source="auto_rsi_max_1h"
-                          variant="standard"
-                        />
-                      </Grid> */}
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
-                    <h3 style={{ marginTop: 0 }}>
-                      <Tooltip
-                        arrow
-                        leaveDelay={200}
-                        placement="right-start"
-                        title={translate(
-                          "common.bot_indicators_group_03_tooltip_title"
-                        )}
-                      >
-                        <InfoOutlinedIcon
-                          sx={{ mr: "0.3em", verticalAlign: "top" }}
-                        />
-                      </Tooltip>
-                      <span>
-                        {translate("common.bot_indicators_group_03_heading")}
-                      </span>
-                    </h3>
-                    {/* <NumberInput
-                      className={
-                        formData.use_strategy
-                          ? "active useStrategy"
-                          : "useStrategy"
-                      }
-                      margin="none"
-                      min={baseMin}
-                      source="auto_rsi_diff"
-                      variant="standard"
-                    /> */}
-                    {/* <NumberInput
-                      className={
-                        formData.use_strategy
-                          ? "active useStrategy"
-                          : "useStrategy"
-                      }
-                      margin="none"
-                      min={baseMin}
-                      source="rsi_sell_diff"
-                      variant="standard"
-                    /> */}
-                  </Grid>
-                  <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
-                    <h3 style={{ marginTop: 0 }}>
-                      <Tooltip
-                        arrow
-                        leaveDelay={200}
-                        placement="right-start"
-                        title={translate(
-                          "common.bot_indicators_group_04_tooltip_title"
-                        )}
-                      >
-                        <InfoOutlinedIcon
-                          sx={{ mr: "0.3em", verticalAlign: "top" }}
-                        />
-                      </Tooltip>
-                      <span>
-                        {translate("common.bot_indicators_group_04_heading")}
-                      </span>
-                    </h3>
-                    <Grid
-                      container
-                      sx={{
-                        borderStyle: "solid",
-                        borderWidth: "1px",
-                        borderColor: color01,
-                        marginBottom: 3,
-                        paddingTop: 3,
-                        paddingRight: 3,
-                        paddingLeft: 3,
-                      }}
-                    >
-                      {/* <Grid item xs={12} md={6}>
-                        <TimeFramesSelectInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          frameChoices={autoPairTfToFilter}
-                          label="common.auto_pair_tf_label"
-                          required={true}
-                          sourceName="auto_pair_tf"
-                        />
-                      </Grid> */}
-                      {/* <<Grid item xs={12} md={6}>
-                        PeriodsSelectInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          label="common.auto_sell_period_label"
-                          periodChoices={autoSellPeriodOptionsToFilter}
-                          sourceName="auto_sell_period"
-                        />
-                      </Grid> */}
-                    </Grid>
-                    <Grid
-                      container
-                      spacing={1}
-                      sx={{
-                        marginBottom: 3,
-                        paddingRight: 3,
-                        paddingLeft: 3,
-                      }}
-                    >
-                      {/* <Grid item xs={12} md={6}>
-                        <NumberInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          defaultValue={baseMin}
-                          label="common.auto_rsi_min_big_label"
-                          margin="none"
-                          min={baseMin}
-                          source="auto_rsi_min_big"
-                          variant="standard"
-                        />
-                      </Grid> */}
-                      {/* <Grid item xs={12} md={6}>
-                        <NumberInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          defaultValue={baseMin}
-                          label="common.auto_rsi_max_big_label"
-                          margin="none"
-                          min={baseMin}
-                          source="auto_rsi_max_big"
-                          variant="standard"
-                        />
-                      </Grid> */}
-                      {/* <Grid item xs={12}>
-                        <TimeFramesSelectInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          frameChoices={autoSellTfToFilter}
-                          label="common.auto_sell_tf_label"
-                          sourceName="auto_sell_tf"
-                        />
-                      </Grid> */}
-                      {/* <Grid item xs={12} md={6}>
-                        <NumberInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          label="common.auto_rsi_min_sell_label"
-                          margin="none"
-                          min={baseMin}
-                          source="auto_rsi_min_sell"
-                          variant="standard"
-                        />
-                      </Grid> */}
-                      {/* <Grid item xs={12} md={6}>
-                        <NumberInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          label="common.auto_rsi_max_sell_label"
-                          margin="none"
-                          min={baseMin}
-                          source="auto_rsi_max_sell"
-                          variant="standard"
-                        />
-                      </Grid> */}
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
-                    <h3 style={{ marginTop: 0 }}>
-                      <Tooltip
-                        arrow
-                        leaveDelay={200}
-                        placement="right-start"
-                        title={translate(
-                          "common.bot_indicators_group_05_tooltip_title"
-                        )}
-                      >
-                        <InfoOutlinedIcon
-                          sx={{ mr: "0.3em", verticalAlign: "top" }}
-                        />
-                      </Tooltip>
-                      <span>
-                        {translate("common.bot_indicators_group_05_heading")}
-                      </span>
-                    </h3>
-                    <Grid container spacing={1}>
-                      <Grid item xs={12} md={6}>
-                        <NumberInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          defaultValue={baseMin}
-                          label="common.auto_pd_up_label"
-                          min={baseMin}
-                          source="auto_pd_up"
-                          variant="standard"
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
-                        <NumberInput
-                          className={
-                            formData.use_strategy
-                              ? "active useStrategy"
-                              : "useStrategy"
-                          }
-                          defaultValue={baseMin}
-                          label="common.auto_pd_down_label"
-                          min={baseMin}
-                          source="auto_pd_down"
-                          variant="standard"
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <DateTimeInput
-                          readOnly={true}
-                          source="pause_until"
-                          variant="standard"
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} lg={6} xl={5} sx={{ paddingBottom: 5 }}>
-                    <h3 style={{ marginTop: 0 }}>
-                      <Tooltip
-                        arrow
-                        leaveDelay={200}
-                        placement="right-start"
-                        title={translate(
-                          "common.bot_indicators_group_06_tooltip_title"
-                        )}
-                      >
-                        <InfoOutlinedIcon
-                          sx={{ mr: "0.3em", verticalAlign: "top" }}
-                        />
-                      </Tooltip>
-                      <span>
-                        {translate("common.bot_indicators_group_06_heading")}
-                      </span>
-                    </h3>
-                    <NumberInput
-                      className={formData.use_strategy ? "active" : ""}
-                      min={baseMin}
-                      source="long_pump"
-                      variant="standard"
-                    />
-                    <NumberInput
-                      className={formData.use_strategy ? "active" : ""}
-                      min={baseMin}
-                      source="long_dump"
-                      variant="standard"
                     />
                   </Grid>
                 </Grid>

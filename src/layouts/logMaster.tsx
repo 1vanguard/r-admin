@@ -12,11 +12,8 @@ interface LogMasterProps {
 const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {
   const translate = useTranslate(),
     { logs } = useWebSocketDataContext();
-
   let targetEntityLogsArray: any[] = [];
-
   if (!logs) return translate("common.no_data");
-
   const baseLogs = Object.entries(logs);
 
   targetEntityLogsArray = baseLogs.flatMap(([key, value]) => {
@@ -56,7 +53,7 @@ const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {
               second: "numeric",
             })}
           </Grid>
-          <Grid item xs>
+          <Grid item sx={{ color: item.color }} xs>
             {item.message}
           </Grid>
         </Grid>
