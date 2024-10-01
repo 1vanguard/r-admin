@@ -53,7 +53,7 @@ const LogMaster: React.FC<LogMasterProps> = ({ entityType, entityId }) => {
               second: "numeric",
             })}
           </Grid>
-          <Grid item sx={{ color: item.color }} xs>
+          <Grid item sx={item.color ? { color: item.color } : {}} xs>
             {item.message}
           </Grid>
         </Grid>
