@@ -7,6 +7,7 @@ import {
   TextInput,
   useTranslate,
 } from "react-admin";
+import { useLocaleState } from 'react-admin';
 import { useWatch } from "react-hook-form";
 
 import { FBotIndicator, FBotIndicatorField } from "../types";
@@ -37,6 +38,7 @@ const IndicatorFields = ({
   const isIndicatorEnabled = useWatch({
     name: `indicators[${indicatorIndex}].enabled`,
   });
+  const [locale, setLocale] = useLocaleState();
 
   return isIndicatorEnabled ? (
     <Grid container spacing={1}>
@@ -55,8 +57,7 @@ const IndicatorFields = ({
               <SelectInput
                 choices={field.values_list}
                 className={strategy ? "active useStrategy" : "useStrategy"}
-                defaultValue={field.default}
-                label={field.name}
+                defaultValue={field.default}label={field[`title_${locale}`] || field.name}
                 optionValue="value"
                 source={`indicators[${indicatorIndex}].fields[${fieldIndex}].${field.name}`}
                 variant="standard"
@@ -67,8 +68,7 @@ const IndicatorFields = ({
                 {field.type === "text" && (
                   <TextInput
                     className={strategy ? "active useStrategy" : "useStrategy"}
-                    defaultValue={field.default}
-                    label={field.name}
+                    defaultValue={field.default}label={field[`title_${locale}`] || field.name}
                     source={`indicators[${indicatorIndex}].fields[${fieldIndex}].${field.name}`}
                     variant="standard"
                     {...(field.required ? { validate: required() } : {})}
@@ -78,7 +78,7 @@ const IndicatorFields = ({
                   <NumberInput
                     className={strategy ? "active useStrategy" : "useStrategy"}
                     defaultValue={field.default}
-                    label={field.name}
+                    label={field[`title_${locale}`] || field.name}
                     source={`indicators[${indicatorIndex}].fields[${fieldIndex}].${field.name}`}
                     variant="standard"
                     {...(field.required ? { validate: required() } : {})}
@@ -88,7 +88,7 @@ const IndicatorFields = ({
                   <BooleanInput
                     className={strategy ? "active useStrategy" : "useStrategy"}
                     defaultValue={field.default}
-                    label={field.name}
+                    label={field[`title_${locale}`] || field.name}
                     source={`indicators[${indicatorIndex}].fields[${fieldIndex}].${field.name}`}
                     variant="standard"
                     {...(field.required ? { validate: required() } : {})}
